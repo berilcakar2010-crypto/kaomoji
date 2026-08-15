@@ -7,7 +7,9 @@ data class Task(
     val text: String,
     val subject: String,
     val kind: String,
-    val minutes: Int
+    val minutes: Int,
+    val how: List<String> = emptyList(),
+    val deliverable: String? = null
 )
 
 data class CurriculumUnit(
@@ -36,7 +38,8 @@ data class ProjectDef(
     val goal: String,
     val phaseWork: Map<String, String>,
     val topics: List<String>,
-    val defaultNext: String
+    val defaultNext: String,
+    val milestones: List<String> = emptyList()
 )
 
 data class AssessmentDef(
