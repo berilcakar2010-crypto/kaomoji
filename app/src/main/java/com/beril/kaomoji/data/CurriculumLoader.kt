@@ -31,7 +31,9 @@ object CurriculumLoader {
                                 text = t.getString("t"),
                                 subject = t.getString("s"),
                                 kind = t.getString("k"),
-                                minutes = t.optInt("m", 30)
+                                minutes = t.optInt("m", 30),
+                                how = t.optJSONArray("h").strings(),
+                                deliverable = t.optStringOrNull("o")
                             )
                         }
                     )
@@ -50,7 +52,8 @@ object CurriculumLoader {
                 goal = j.getString("goal"),
                 phaseWork = m,
                 topics = j.optJSONArray("topics").strings(),
-                defaultNext = j.optString("next", "")
+                defaultNext = j.optString("next", ""),
+                milestones = j.optJSONArray("ms").strings()
             )
         }
 
