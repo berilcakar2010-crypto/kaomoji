@@ -1160,6 +1160,71 @@ kinds = [
     {"c": "produce", "n": "Üret", "e": "🌱"},
     {"c": "test", "n": "Sınav", "e": "📋"},
 ]
+# ══════════════════════════════════════════════════════════════════
+ 
+_unit_by_id = {uid: u for (uid, u) in units}
+ 
+ 
+def attach(uid, *tasks):
+    """Var olan bir birime görev ekler ve ID'leri yeniden numaralandırır."""
+    u = _unit_by_id[uid]
+    n = len(u["tasks"])
+    for i, t in enumerate(tasks):
+        t["i"] = "%s-t%02d" % (uid, n + i + 1)
+    u["tasks"].extend(tasks)
+ 
+ 
+def ESSAY(no, lang, title, prompt, words, minutes=70):
+    flag = "🇹🇷" if lang == "TR" else "🇬🇧"
+    return T("prod", "write", "P5 · Deneme %d/16 %s — %s" % (no, flag, title), minutes,
+             how=[
+                 "Soru: %s" % prompt,
+                 "Önce tek cümlelik tezini yaz — tez yoksa deneme yok",
+                 "Karşı argümanı da yaz ve ona dürüst bir cevap ver",
+                 "Hedef uzunluk: ~%d kelime" % words,
+                 "Bitince kendi metnini sesli oku; kulağa saçma gelen cümle saçmadır",
+             ],
+             out="P5 klasöründe deneme %d — başlık, tez, karşı argüman, sonuç" % no)
+ 
+ 
+# ── P5 · 16 DENEME (dört ayın omurgası) ───────────────────────────
+attach("u001", ESSAY(1, "TR", "Akhilleus kaplumbağayı geçebilir mi?",
+                     "Zenon'un paradoksunu limit kavramı gerçekten çözüyor mu, yoksa sadece hesaplanabilir mi kılıyor?", 400))
+attach("u022", ESSAY(2, "EN", "Was Newton→Einstein a paradigm shift?",
+                     "Kuhn'un ölçütlerine göre bu geçiş bir paradigma kayması mı, yoksa bir genişleme mi?", 500))
+attach("u026", ESSAY(3, "TR", "Anlatıcı kimin tarafını tutar?",
+                     "Seçtiğin bir hikâyede anlatıcının konumu okurun ahlaki yargısını nasıl yönlendiriyor?", 600))
+attach("u028", ESSAY(4, "EN", "Is scientific knowledge objective?",
+                     "Ölçüm, model ve yorum zincirinde nesnellik nerede kırılır?", 600))
+ 
+attach("u034", ESSAY(5, "TR", "Ölçmek ile anlamak aynı şey mi?",
+                     "Bir büyüklüğü ölçebilmek onu anladığın anlamına gelir mi? Sıcaklık örneği üzerinden tartış.", 600))
+attach("u038", ESSAY(6, "EN", "Why does nature reuse the same equation?",
+                     "Yay, sarkaç, RC, RLC — neden hepsi aynı diferansiyel denklem? Bu bir keşif mi, bir seçim mi?", 600))
+attach("u041", ESSAY(7, "TR", "Divan şiirinde mazmun: kalıp mı, dil mi?",
+                     "Kalıplaşmış imge özgünlüğü öldürür mü, yoksa ortak bir dil mi kurar?", 600))
+attach("u043", ESSAY(8, "EN", "What makes linear algebra the 'language' of quantum mechanics?",
+                     "Bir matematiksel yapının bir fizik alanının 'dili' olması ne demektir?", 700))
+ 
+attach("u046", ESSAY(9, "TR", "Fizik neden boşluğu doldurdu?",
+                     "Uzaktan etki fikrinden alan kavramına geçiş neyi çözdü, neyi getirdi?", 650))
+attach("u049", ESSAY(10, "EN", "Why is unification so powerful in physics?",
+                     "Maxwell dört denklemi birleştirdi ve ışığı buldu. Birleştirme neden bu kadar verimli?", 700))
+attach("u052", ESSAY(11, "TR", "Millet sistemi bir birlikte yaşama modeli miydi?",
+                     "Tarihsel bir çoğulculuk modelinin güçlü ve zayıf yanları neler? Bugüne ne söyler?", 650))
+attach("u055", ESSAY(12, "EN", "Simulation as a third mode of science",
+                     "Simülasyon teori mi, deney mi, yoksa üçüncü bir şey mi? Kendi 4006 projen üzerinden yaz.", 700))
+ 
+attach("u058", ESSAY(13, "TR", "Eşzamanlılık göreliyse 'şimdi' nedir?",
+                     "Evrensel bir 'şimdi' yoksa geçmiş ve gelecek arasındaki fark neye dayanır?", 700))
+attach("u062", ESSAY(14, "EN", "The uncertainty principle is not clumsy measurement",
+                     "'Gözlemci sistemi bozar' açıklaması neden yanlış? Doğru açıklama ne?", 700))
+attach("u064", ESSAY(15, "TR", "Entropi artarken düzen kurmak",
+                     "Canlılık ikinci yasaya bir istisna mı? Yerel düzenin bedeli nedir?", 700))
+attach("u067", ESSAY(16, "EN", "What I learned by building my own tools",
+                     "Dört ayda kendi kütüphaneni, atlasını ve SRS aracını yaptın. Bu seni nasıl değiştirdi? (UWC essay çekirdeği)", 800, 90))
+ 
+ 
 
 data = {
     "version": 1,
