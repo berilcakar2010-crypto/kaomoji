@@ -491,7 +491,7 @@ private fun CassetteCard(
                             fontWeight = if (player.speed == s) FontWeight.Bold else FontWeight.Normal
                         ),
                         modifier = Modifier
-                            .clickable { player.setSpeed(s) }
+                            .clickable { player.changeSpeed(s) }
                             .padding(horizontal = 5.dp)
                     )
                 }
