@@ -16,8 +16,13 @@ units = []
 _uc = [0]
 
 
-def T(subject, kind, text, minutes=30):
-    return {"s": subject, "k": kind, "t": text, "m": minutes}
+def T(subject, kind, text, minutes=30, how=None, out=None):
+    d = {"s": subject, "k": kind, "t": text, "m": minutes}
+    if how:
+        d["h"] = how if isinstance(how, list) else [how]
+    if out:
+        d["o"] = out
+    return d
 
 
 def U(title, kicker, tasks, feynman=None, bridges=None, note=None):
