@@ -15,17 +15,24 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.PointerInputScope
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.beril.kaomoji.ai.ApiKeyStore
+import com.beril.kaomoji.ai.GroqClient
 import com.beril.kaomoji.audio.Player
 import com.beril.kaomoji.audio.Recorder
 import com.beril.kaomoji.audio.fmtDuration
 import com.beril.kaomoji.data.Recording
 import com.beril.kaomoji.data.Store
 import com.beril.kaomoji.data.uid
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.io.File
 
 data class RecordRequest(
     val prompt: String? = null,
@@ -498,6 +505,113 @@ private fun CassetteCard(
                 Spacer(Modifier.weight(1f))
                 Text(fmtDuration(dur), style = Mono)
             }
+        }
+
+        // ── AI transkripsiyon + anlatım analizi ──
+        TranscriptSection(r, store)
+    }
+}
+
+/** Ses kaydını Groq Whisper ile yazıya döker, sonra Llama ile kısa bir geri bildirim üretir. */
+@Composable
+private fun TranscriptSection(r: Recording, store: Store) {
+    val ctx = LocalContext.current
+    val scope = rememberCoroutineScope()
+    var busyTranscribe by remember(r.id) { mutableStateOf(false) }
+    var busyAnalyze by remember(r.id) { mutableStateOf(false) }
+    var err by remember(r.id) { mutableStateOf<String?>(null) }
+
+    Spacer(Modifier.height(8.dp))
+    Column(
+        Modifier
+            .fillMaxWidth()
+            .background(J.paperDeep, RoundedCornerShape(12.dp))
+            .padding(10.dp)
+    ) {
+        if (r.transcript.isNullOrBlank()) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text(
+                    if (busyTranscribe) "📝 Transkribe ediliyor…" else "📝 Transkripsiyon yok",
+                    style = Tiny, modifier = Modifier.weight(1f)
+                )
+                if (!busyTranscribe) {
+                    GhostBtn("Transkribe et", {
+                        val key = ApiKeyStore.get(ctx)
+                        if (key.isNullOrBlank()) {
+                            err = "Önce Kartlar (Anki) ekranından Groq API anahtarını kaydet."
+                            return@GhostBtn
+                        }
+                        if (r.uri.isBlank()) {
+                            err = "Ses dosyası bulunamadı."
+                            return@GhostBtn
+                        }
+                        busyTranscribe = true
+                        err = null
+                        scope.launch {
+                            try {
+                                val tmp = withContext(Dispatchers.IO) {
+                                    val uri = android.net.Uri.parse(r.uri)
+                                    val input = if (uri.scheme == "content")
+                                        ctx.contentResolver.openInputStream(uri)
+                                    else File(uri.path ?: "").inputStream()
+                                    val f = File(ctx.cacheDir, "transcribe_${r.id}.m4a")
+                                    input?.use { ins -> f.outputStream().use { out -> ins.copyTo(out) } }
+                                    f
+                                }
+                                val text = withContext(Dispatchers.IO) {
+                                    GroqClient.transcribeAudio(key, tmp)
+                                }
+                                store.updateRecording(r.copy(transcript = text))
+                            } catch (e: Exception) {
+                                err = e.message ?: "Transkripsiyon başarısız"
+                            } finally {
+                                busyTranscribe = false
+                            }
+                        }
+                    })
+                }
+            }
+        } else {
+            Text("📝 Transkripsiyon", style = Tiny.copy(fontWeight = FontWeight.Bold, color = J.inkSoft))
+            Spacer(Modifier.height(4.dp))
+            Text(r.transcript!!, style = Small)
+
+            Spacer(Modifier.height(8.dp))
+            if (r.analysis.isNullOrBlank()) {
+                GhostBtn(
+                    if (busyAnalyze) "Analiz ediliyor…" else "🔎 Anlatımı analiz et",
+                    {
+                        if (busyAnalyze) return@GhostBtn
+                        val key = ApiKeyStore.get(ctx)
+                        if (key.isNullOrBlank()) {
+                            err = "Önce Kartlar (Anki) ekranından Groq API anahtarını kaydet."
+                            return@GhostBtn
+                        }
+                        busyAnalyze = true
+                        err = null
+                        scope.launch {
+                            try {
+                                val analysis = withContext(Dispatchers.IO) {
+                                    GroqClient.analyzeTranscript(key, r.transcript ?: "", r.title)
+                                }
+                                store.updateRecording(r.copy(analysis = analysis))
+                            } catch (e: Exception) {
+                                err = e.message ?: "Analiz başarısız"
+                            } finally {
+                                busyAnalyze = false
+                            }
+                        }
+                    }
+                )
+            } else {
+                Text("🔎 Analiz", style = Tiny.copy(fontWeight = FontWeight.Bold, color = J.inkSoft))
+                Spacer(Modifier.height(4.dp))
+                Text(r.analysis!!, style = Small)
+            }
+        }
+        err?.let {
+            Spacer(Modifier.height(6.dp))
+            Text("⚠️ $it", style = Tiny.copy(color = J.cherry))
         }
     }
 }

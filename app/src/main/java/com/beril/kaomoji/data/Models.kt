@@ -107,7 +107,20 @@ data class Recording(
     var favorite: Boolean = false,
     var needsReview: Boolean = false,
     var lastPositionMs: Long = 0L,
-    var isFeynman: Boolean = false
+    var isFeynman: Boolean = false,
+    var transcript: String? = null,
+    var analysis: String? = null,
+    var transcribing: Boolean = false
+)
+
+data class Flashcard(
+    val id: String,
+    var front: String,
+    var back: String,
+    var subject: String,
+    var unitId: String? = null,
+    var createdAt: Long,
+    var source: String = "manual" // "manual" | "auto"
 )
 
 data class Mistake(

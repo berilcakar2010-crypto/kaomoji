@@ -761,7 +761,9 @@ fun StudyBagScreen(store: Store, onGo: (Screen) -> Unit, onExplainIt: () -> Unit
         Triple("🍂", "Hata Defteri", Screen.Mistakes),
         Triple("📝", "Haftalık Değerlendirme", Screen.Review),
         Triple("📁", "Depolama ve Dosyalar", Screen.Storage),
-        Triple("📚", "Kaynaklar", Screen.Resources)
+        Triple("📚", "Kaynaklar", Screen.Resources),
+        Triple("🕸️", "Köprü Grafiği", Screen.BridgeGraph),
+        Triple("🃏", "Kartlar (Anki)", Screen.Flashcards)
     )
 
     LazyColumn(

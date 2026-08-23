@@ -1,4 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="ic_launcher_background">#EAF3DC</color>
+
+    <!-- Widget / bildirim paleti (Theme.kt · object J ile aynı) -->
+    <color name="widget_paper">#F6F1E4</color>
+    <color name="widget_paper_deep">#EDE6D4</color>
+    <color name="widget_ink">#2B2620</color>
+    <color name="widget_ink_soft">#6B6154</color>
+    <color name="widget_ink_faint">#9A9081</color>
+    <color name="widget_forest">#3F6B4A</color>
 </resources>

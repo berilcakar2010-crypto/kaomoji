@@ -18,6 +18,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.core.content.ContextCompat
 import androidx.core.view.WindowCompat
+import android.os.Build
+import androidx.lifecycle.lifecycleScope
 import com.beril.kaomoji.audio.Player
 import com.beril.kaomoji.audio.Recorder
 import com.beril.kaomoji.data.Store
@@ -26,6 +28,10 @@ import com.beril.kaomoji.ui.KaomojiTheme
 import com.beril.kaomoji.ui.J
 import com.beril.kaomoji.ui.Root
 import com.beril.kaomoji.ui.storeCtx
+import com.beril.kaomoji.widget.MissionNotifier
+import com.beril.kaomoji.widget.MissionWidget
+import kotlinx.coroutines.launch
+import androidx.glance.appwidget.updateAll
 
 class MainActivity : ComponentActivity() {
 
@@ -38,6 +44,10 @@ class MainActivity : ComponentActivity() {
     private val askPermission = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { granted -> permissionState = granted }
+
+    private val askNotifPermission = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { /* reddedilirse widget çalışmaya devam eder, sadece kilit ekranı bildirimi görünmez */ }
 
     private val pickFolder = registerForActivityResult(
         ActivityResultContracts.OpenDocumentTree()
@@ -67,6 +77,26 @@ class MainActivity : ComponentActivity() {
         permissionState = ContextCompat.checkSelfPermission(
             this, Manifest.permission.RECORD_AUDIO
         ) == PackageManager.PERMISSION_GRANTED
+
+        // Kilit ekranı bildirimi için Android 13+ üzerinde açık izin gerekiyor
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+            ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
+            != PackageManager.PERMISSION_GRANTED
+        ) {
+            askNotifPermission.launch(Manifest.permission.POST_NOTIFICATIONS)
+        }
+
+        // Görev her değiştiğinde widget'ı ve kilit ekranı bildirimini tazele
+        store.onStateChanged = {
+            MissionNotifier.refresh(applicationContext)
+            lifecycleScope.launch {
+                try {
+                    MissionWidget().updateAll(applicationContext)
+                } catch (_: Exception) {
+                }
+            }
+        }
+        MissionNotifier.refresh(applicationContext)
 
         setContent {
             KaomojiTheme {

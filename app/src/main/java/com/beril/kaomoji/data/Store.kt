@@ -29,9 +29,14 @@ class Store(private val ctx: Context) {
     val projectStates = mutableStateMapOf<String, ProjectState>()
     val assessmentStates = mutableStateMapOf<String, AssessmentState>()
     val skipped = mutableStateMapOf<String, Boolean>()
+    val flashcards = mutableStateListOf<Flashcard>()
 
     var storageUri by mutableStateOf<String?>(null)
     var missionOverride by mutableStateOf<String?>(null)
+
+    /** Widget/kilit ekranı bildirimini tazelemek isteyen dış taraflar için kanca.
+     *  Store, widget paketine bağımlı olmasın diye burada sadece bir callback var. */
+    var onStateChanged: (() -> Unit)? = null
 
     private val file: File get() = File(ctx.filesDir, "state.json")
 
@@ -132,6 +137,10 @@ class Store(private val ctx: Context) {
     }
     fun deleteMistake(id: String) { mistakes.removeAll { it.id == id }; save() }
 
+    fun addFlashcard(f: Flashcard) { flashcards.add(0, f); save() }
+    fun addFlashcards(list: List<Flashcard>) { flashcards.addAll(0, list); save() }
+    fun deleteFlashcard(id: String) { flashcards.removeAll { it.id == id }; save() }
+
     fun addInbox(text: String, cat: String) {
         inbox.add(0, InboxNote(uid(), text, cat, System.currentTimeMillis())); save()
     }
@@ -186,6 +195,8 @@ class Store(private val ctx: Context) {
                         put("tags", JSONArray(r.tags))
                         put("fav", r.favorite); put("rev", r.needsReview)
                         put("pos", r.lastPositionMs); put("fey", r.isFeynman)
+                        put("transcript", r.transcript ?: JSONObject.NULL)
+                        put("analysis", r.analysis ?: JSONObject.NULL)
                     })
                 }
             })
@@ -248,9 +259,20 @@ class Store(private val ctx: Context) {
                 }
             })
 
+            root.put("flashcards", JSONArray().also { arr ->
+                flashcards.forEach { f ->
+                    arr.put(JSONObject().apply {
+                        put("id", f.id); put("front", f.front); put("back", f.back)
+                        put("subject", f.subject); put("unitId", f.unitId ?: JSONObject.NULL)
+                        put("at", f.createdAt); put("src", f.source)
+                    })
+                }
+            })
+
             file.writeText(root.toString())
         } catch (_: Exception) {
         }
+        onStateChanged?.invoke()
     }
 
     private fun load() {
@@ -285,7 +307,9 @@ class Store(private val ctx: Context) {
                             favorite = o.optBoolean("fav"),
                             needsReview = o.optBoolean("rev"),
                             lastPositionMs = o.optLong("pos"),
-                            isFeynman = o.optBoolean("fey")
+                            isFeynman = o.optBoolean("fey"),
+                            transcript = o.optNull("transcript"),
+                            analysis = o.optNull("analysis")
                         )
                     )
                 }
@@ -369,6 +393,23 @@ class Store(private val ctx: Context) {
                     )
                 }
             }
+
+            root.optJSONArray("flashcards")?.let { a ->
+                for (i in 0 until a.length()) {
+                    val o = a.getJSONObject(i)
+                    flashcards.add(
+                        Flashcard(
+                            id = o.getString("id"),
+                            front = o.getString("front"),
+                            back = o.getString("back"),
+                            subject = o.optString("subject", "phys"),
+                            unitId = o.optNull("unitId"),
+                            createdAt = o.optLong("at"),
+                            source = o.optString("src", "manual")
+                        )
+                    )
+                }
+            }
         } catch (_: Exception) {
         }
     }
@@ -385,7 +426,7 @@ class Store(private val ctx: Context) {
 
     fun resetAll() {
         done.clear(); skipped.clear(); recordings.clear(); mistakes.clear()
-        inbox.clear(); problems.clear(); reviews.clear()
+        inbox.clear(); problems.clear(); reviews.clear(); flashcards.clear()
         projectStates.clear(); assessmentStates.clear()
         curriculum.projects.forEach { projectStates[it.id] = ProjectState(nextAction = it.defaultNext) }
         curriculum.assessments.forEach { assessmentStates[it.id] = AssessmentState() }

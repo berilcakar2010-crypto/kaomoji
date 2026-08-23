@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">(≧▽≦)</string>
+    <string name="widget_description">Bugünün küçük görevini ana ekranda ve kilit ekranı bildiriminde gösterir.</string>
+    <string name="notif_channel_name">Bugünün Küçük Görevi</string>
+    <string name="notif_channel_desc">Güncel görevini kilit ekranından görebilmen ve tek dokunuşla tamamlayabilmen için.</string>
 </resources>
