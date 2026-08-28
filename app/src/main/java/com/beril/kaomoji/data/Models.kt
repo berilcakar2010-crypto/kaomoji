@@ -165,7 +165,10 @@ data class WeeklyReview(
     var canExplain: String,
     var stillNeedsBook: String,
     var declining: Boolean,
-    var createdAt: Long
+    var createdAt: Long,
+    var checklist: Map<String, Boolean> = emptyMap(), // subject code -> o hafta checkpoint tamam mı
+    var videoUri: String? = null,                     // haftalık video günlüğü dosyası
+    var videoWatched: Boolean = false                  // ay sonu toplu izleme için işaretleniyor
 )
 
 data class ProjectState(

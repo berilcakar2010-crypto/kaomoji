@@ -20,8 +20,8 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.beril.kaomoji.ai.AiClient
 import com.beril.kaomoji.ai.ApiKeyStore
-import com.beril.kaomoji.ai.GroqClient
 import com.beril.kaomoji.audio.Player
 import com.beril.kaomoji.audio.Recorder
 import com.beril.kaomoji.audio.fmtDuration
@@ -383,12 +383,53 @@ fun AudioLibraryScreen(
     editing?.let { rec ->
         androidx.compose.ui.window.Dialog(onDismissRequest = { editing = null }) {
             var t by remember { mutableStateOf(rec.title) }
+            var subj by remember { mutableStateOf(rec.subject) }
+            var lang by remember { mutableStateOf(rec.language) }
+            var proj by remember { mutableStateOf(rec.projectId) }
+            var review by remember { mutableStateOf(rec.needsReview) }
             Sheet("Anlatımı düzenle", { editing = null }) {
                 Field(t, { t = it }, "Başlık", single = true)
                 Spacer(Modifier.height(10.dp))
+                Text("Ders", style = Small)
+                Spacer(Modifier.height(5.dp))
+                Selector(
+                    listOf("—") + c.subjects.map { it.code },
+                    subj ?: "—",
+                    { subj = if (it == "—") null else it },
+                    labels = { code -> if (code == "—") "yok" else c.subject(code)?.let { "${it.emoji} ${it.name}" } ?: code }
+                )
+                Spacer(Modifier.height(10.dp))
+                Text("Dil", style = Small)
+                Spacer(Modifier.height(5.dp))
+                Selector(listOf("EN", "TR", "JP", "DE"), lang, { lang = it })
+                Spacer(Modifier.height(10.dp))
+                Text("Proje", style = Small)
+                Spacer(Modifier.height(5.dp))
+                Selector(
+                    listOf("—") + c.projects.map { it.id },
+                    proj ?: "—",
+                    { proj = if (it == "—") null else it },
+                    labels = { id ->
+                        if (id == "—") "yok"
+                        else c.projects.firstOrNull { it.id == id }?.let { "${it.emoji} ${it.name}" } ?: id
+                    }
+                )
+                Spacer(Modifier.height(10.dp))
+                Row(
+                    Modifier.clickable { review = !review },
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Checkbox(review, { review = !review }, J.butter)
+                    Spacer(Modifier.width(9.dp))
+                    Text("Gözden geçirilmeli", style = Body)
+                }
+                Spacer(Modifier.height(10.dp))
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     Btn("Kaydet", {
-                        store.updateRecording(rec.copy(title = t)); editing = null
+                        store.updateRecording(
+                            rec.copy(title = t, subject = subj, language = lang, projectId = proj, needsReview = review)
+                        )
+                        editing = null
                     }, Modifier.weight(1f), J.forest)
                     GhostBtn("Sil", {
                         store.deleteRecording(rec.id); editing = null
@@ -512,7 +553,8 @@ private fun CassetteCard(
     }
 }
 
-/** Ses kaydını Groq Whisper ile yazıya döker, sonra Llama ile kısa bir geri bildirim üretir. */
+/** Ses kaydını seçili sağlayıcıyla (Groq Whisper veya Gemini) yazıya döker, sonra kısa bir geri bildirim üretir.
+ *  Transkript ve analiz her zaman yeniden üretilebilir; transkript elle de düzenlenebilir. */
 @Composable
 private fun TranscriptSection(r: Recording, store: Store) {
     val ctx = LocalContext.current
@@ -520,6 +562,78 @@ private fun TranscriptSection(r: Recording, store: Store) {
     var busyTranscribe by remember(r.id) { mutableStateOf(false) }
     var busyAnalyze by remember(r.id) { mutableStateOf(false) }
     var err by remember(r.id) { mutableStateOf<String?>(null) }
+    var editingTranscript by remember(r.id) { mutableStateOf(false) }
+    var draft by remember(r.id) { mutableStateOf(r.transcript ?: "") }
+
+    fun runTranscribe() {
+        val provider = ApiKeyStore.provider(ctx)
+        val key = ApiKeyStore.get(ctx, provider)
+        if (key.isNullOrBlank()) {
+            err = "Önce Kartlar (Anki) ekranından ${provider.label} API anahtarını kaydet."
+            return
+        }
+        if (r.uri.isBlank()) {
+            err = "Ses dosyası bulunamadı."
+            return
+        }
+        busyTranscribe = true
+        err = null
+        scope.launch {
+            try {
+                val tmp = withContext(Dispatchers.IO) {
+                    val uri = android.net.Uri.parse(r.uri)
+                    val input = if (uri.scheme == "content")
+                        ctx.contentResolver.openInputStream(uri)
+                    else File(uri.path ?: "").inputStream()
+                    val f = File(ctx.cacheDir, "transcribe_${r.id}.m4a")
+                    input?.use { ins -> f.outputStream().use { out -> ins.copyTo(out) } }
+                    f
+                }
+                if (!tmp.exists() || tmp.length() == 0L) {
+                    err = "Ses dosyası okunamadı ya da boş."
+                    return@launch
+                }
+                val text = withContext(Dispatchers.IO) {
+                    AiClient.transcribeAudio(ctx, key, tmp)
+                }
+                if (text.isBlank()) {
+                    err = "Model boş bir transkript döndürdü, tekrar dene."
+                } else {
+                    // Yeni transkript eskisiyle uyuşmayacağı için önceki analiz de geçersiz.
+                    store.updateRecording(r.copy(transcript = text, analysis = null))
+                    draft = text
+                }
+            } catch (e: Exception) {
+                err = e.message ?: "Transkripsiyon başarısız"
+            } finally {
+                busyTranscribe = false
+            }
+        }
+    }
+
+    fun runAnalyze() {
+        if (busyAnalyze) return
+        val provider = ApiKeyStore.provider(ctx)
+        val key = ApiKeyStore.get(ctx, provider)
+        if (key.isNullOrBlank()) {
+            err = "Önce Kartlar (Anki) ekranından ${provider.label} API anahtarını kaydet."
+            return
+        }
+        busyAnalyze = true
+        err = null
+        scope.launch {
+            try {
+                val analysis = withContext(Dispatchers.IO) {
+                    AiClient.analyzeTranscript(ctx, key, r.transcript ?: "", r.title)
+                }
+                store.updateRecording(r.copy(analysis = analysis))
+            } catch (e: Exception) {
+                err = e.message ?: "Analiz başarısız"
+            } finally {
+                busyAnalyze = false
+            }
+        }
+    }
 
     Spacer(Modifier.height(8.dp))
     Column(
@@ -535,76 +649,65 @@ private fun TranscriptSection(r: Recording, store: Store) {
                     style = Tiny, modifier = Modifier.weight(1f)
                 )
                 if (!busyTranscribe) {
-                    GhostBtn("Transkribe et", {
-                        val key = ApiKeyStore.get(ctx)
-                        if (key.isNullOrBlank()) {
-                            err = "Önce Kartlar (Anki) ekranından Groq API anahtarını kaydet."
-                            return@GhostBtn
-                        }
-                        if (r.uri.isBlank()) {
-                            err = "Ses dosyası bulunamadı."
-                            return@GhostBtn
-                        }
-                        busyTranscribe = true
-                        err = null
-                        scope.launch {
-                            try {
-                                val tmp = withContext(Dispatchers.IO) {
-                                    val uri = android.net.Uri.parse(r.uri)
-                                    val input = if (uri.scheme == "content")
-                                        ctx.contentResolver.openInputStream(uri)
-                                    else File(uri.path ?: "").inputStream()
-                                    val f = File(ctx.cacheDir, "transcribe_${r.id}.m4a")
-                                    input?.use { ins -> f.outputStream().use { out -> ins.copyTo(out) } }
-                                    f
-                                }
-                                val text = withContext(Dispatchers.IO) {
-                                    GroqClient.transcribeAudio(key, tmp)
-                                }
-                                store.updateRecording(r.copy(transcript = text))
-                            } catch (e: Exception) {
-                                err = e.message ?: "Transkripsiyon başarısız"
-                            } finally {
-                                busyTranscribe = false
-                            }
-                        }
-                    })
+                    GhostBtn("Transkribe et", { runTranscribe() })
                 }
             }
         } else {
-            Text("📝 Transkripsiyon", style = Tiny.copy(fontWeight = FontWeight.Bold, color = J.inkSoft))
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text(
+                    "📝 Transkripsiyon", style = Tiny.copy(fontWeight = FontWeight.Bold, color = J.inkSoft),
+                    modifier = Modifier.weight(1f)
+                )
+                if (!busyTranscribe && !editingTranscript) {
+                    Text(
+                        "✏️", style = TextStyle(fontSize = 13.sp),
+                        modifier = Modifier.clickable { draft = r.transcript ?: ""; editingTranscript = true }.padding(4.dp)
+                    )
+                    Spacer(Modifier.width(6.dp))
+                    Text(
+                        "🔁", style = TextStyle(fontSize = 13.sp),
+                        modifier = Modifier.clickable { runTranscribe() }.padding(4.dp)
+                    )
+                }
+                if (busyTranscribe) Text("yenileniyor…", style = Tiny)
+            }
             Spacer(Modifier.height(4.dp))
-            Text(r.transcript!!, style = Small)
+            if (editingTranscript) {
+                Field(draft, { draft = it }, "Transkript")
+                Spacer(Modifier.height(6.dp))
+                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Btn("Kaydet", {
+                        store.updateRecording(r.copy(transcript = draft))
+                        editingTranscript = false
+                    }, bg = J.forest, emoji = "✓")
+                    GhostBtn("Vazgeç", {
+                        draft = r.transcript ?: ""
+                        editingTranscript = false
+                    })
+                }
+            } else {
+                Text(r.transcript!!, style = Small)
+            }
 
             Spacer(Modifier.height(8.dp))
             if (r.analysis.isNullOrBlank()) {
                 GhostBtn(
                     if (busyAnalyze) "Analiz ediliyor…" else "🔎 Anlatımı analiz et",
-                    {
-                        if (busyAnalyze) return@GhostBtn
-                        val key = ApiKeyStore.get(ctx)
-                        if (key.isNullOrBlank()) {
-                            err = "Önce Kartlar (Anki) ekranından Groq API anahtarını kaydet."
-                            return@GhostBtn
-                        }
-                        busyAnalyze = true
-                        err = null
-                        scope.launch {
-                            try {
-                                val analysis = withContext(Dispatchers.IO) {
-                                    GroqClient.analyzeTranscript(key, r.transcript ?: "", r.title)
-                                }
-                                store.updateRecording(r.copy(analysis = analysis))
-                            } catch (e: Exception) {
-                                err = e.message ?: "Analiz başarısız"
-                            } finally {
-                                busyAnalyze = false
-                            }
-                        }
-                    }
+                    { runAnalyze() }
                 )
             } else {
-                Text("🔎 Analiz", style = Tiny.copy(fontWeight = FontWeight.Bold, color = J.inkSoft))
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(
+                        "🔎 Analiz", style = Tiny.copy(fontWeight = FontWeight.Bold, color = J.inkSoft),
+                        modifier = Modifier.weight(1f)
+                    )
+                    if (!busyAnalyze) {
+                        Text(
+                            "🔁", style = TextStyle(fontSize = 13.sp),
+                            modifier = Modifier.clickable { runAnalyze() }.padding(4.dp)
+                        )
+                    } else Text("yenileniyor…", style = Tiny)
+                }
                 Spacer(Modifier.height(4.dp))
                 Text(r.analysis!!, style = Small)
             }
