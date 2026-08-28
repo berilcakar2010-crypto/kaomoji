@@ -20,8 +20,8 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.beril.kaomoji.ai.AiClient
 import com.beril.kaomoji.ai.ApiKeyStore
-import com.beril.kaomoji.ai.GroqClient
 import com.beril.kaomoji.audio.Player
 import com.beril.kaomoji.audio.Recorder
 import com.beril.kaomoji.audio.fmtDuration
@@ -512,7 +512,7 @@ private fun CassetteCard(
     }
 }
 
-/** Ses kaydını Groq Whisper ile yazıya döker, sonra Llama ile kısa bir geri bildirim üretir. */
+/** Ses kaydını seçili sağlayıcıyla (Groq Whisper veya Gemini) yazıya döker, sonra kısa bir geri bildirim üretir. */
 @Composable
 private fun TranscriptSection(r: Recording, store: Store) {
     val ctx = LocalContext.current
@@ -536,9 +536,10 @@ private fun TranscriptSection(r: Recording, store: Store) {
                 )
                 if (!busyTranscribe) {
                     GhostBtn("Transkribe et", {
-                        val key = ApiKeyStore.get(ctx)
+                        val provider = ApiKeyStore.provider(ctx)
+                        val key = ApiKeyStore.get(ctx, provider)
                         if (key.isNullOrBlank()) {
-                            err = "Önce Kartlar (Anki) ekranından Groq API anahtarını kaydet."
+                            err = "Önce Kartlar (Anki) ekranından ${provider.label} API anahtarını kaydet."
                             return@GhostBtn
                         }
                         if (r.uri.isBlank()) {
@@ -559,7 +560,7 @@ private fun TranscriptSection(r: Recording, store: Store) {
                                     f
                                 }
                                 val text = withContext(Dispatchers.IO) {
-                                    GroqClient.transcribeAudio(key, tmp)
+                                    AiClient.transcribeAudio(ctx, key, tmp)
                                 }
                                 store.updateRecording(r.copy(transcript = text))
                             } catch (e: Exception) {
@@ -582,9 +583,10 @@ private fun TranscriptSection(r: Recording, store: Store) {
                     if (busyAnalyze) "Analiz ediliyor…" else "🔎 Anlatımı analiz et",
                     {
                         if (busyAnalyze) return@GhostBtn
-                        val key = ApiKeyStore.get(ctx)
+                        val provider = ApiKeyStore.provider(ctx)
+                        val key = ApiKeyStore.get(ctx, provider)
                         if (key.isNullOrBlank()) {
-                            err = "Önce Kartlar (Anki) ekranından Groq API anahtarını kaydet."
+                            err = "Önce Kartlar (Anki) ekranından ${provider.label} API anahtarını kaydet."
                             return@GhostBtn
                         }
                         busyAnalyze = true
@@ -592,7 +594,7 @@ private fun TranscriptSection(r: Recording, store: Store) {
                         scope.launch {
                             try {
                                 val analysis = withContext(Dispatchers.IO) {
-                                    GroqClient.analyzeTranscript(key, r.transcript ?: "", r.title)
+                                    AiClient.analyzeTranscript(ctx, key, r.transcript ?: "", r.title)
                                 }
                                 store.updateRecording(r.copy(analysis = analysis))
                             } catch (e: Exception) {

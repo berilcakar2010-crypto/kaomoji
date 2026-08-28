@@ -21,8 +21,9 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.beril.kaomoji.ai.AiClient
+import com.beril.kaomoji.ai.AiProvider
 import com.beril.kaomoji.ai.ApiKeyStore
-import com.beril.kaomoji.ai.GroqClient
 import com.beril.kaomoji.data.Flashcard
 import com.beril.kaomoji.data.Store
 import com.beril.kaomoji.data.uid
@@ -41,8 +42,9 @@ fun FlashcardsScreen(store: Store, vault: FileVault, onBack: () -> Unit) {
     val c = store.curriculum
     val unit = store.currentUnit
 
-    var apiKey by remember { mutableStateOf(ApiKeyStore.get(ctx) ?: "") }
-    var showKeyField by remember { mutableStateOf(ApiKeyStore.get(ctx).isNullOrBlank()) }
+    var provider by remember { mutableStateOf(ApiKeyStore.provider(ctx)) }
+    var apiKey by remember(provider) { mutableStateOf(ApiKeyStore.get(ctx, provider) ?: "") }
+    var showKeyField by remember(provider) { mutableStateOf(ApiKeyStore.get(ctx, provider).isNullOrBlank()) }
     var generating by remember { mutableStateOf(false) }
     var error by remember { mutableStateOf<String?>(null) }
     var lastExportPath by remember { mutableStateOf<String?>(null) }
@@ -77,24 +79,34 @@ fun FlashcardsScreen(store: Store, vault: FileVault, onBack: () -> Unit) {
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        if (ApiKeyStore.get(ctx).isNullOrBlank()) "🔑 Groq API anahtarı gerekli"
-                        else "🔑 Groq API anahtarı kayıtlı",
+                        if (ApiKeyStore.get(ctx, provider).isNullOrBlank()) "🔑 ${provider.label} API anahtarı gerekli"
+                        else "🔑 ${provider.label} API anahtarı kayıtlı",
                         style = TitleM, modifier = Modifier.weight(1f)
                     )
                     Text(if (showKeyField) "▲" else "▼", style = Small)
                 }
                 if (showKeyField) {
                     Spacer(Modifier.height(8.dp))
-                    Text(
-                        "console.groq.com üzerinden ücretsiz — FocusLock'ta kullandığın anahtarla aynısını kullanabilirsin.",
-                        style = Tiny
-                    )
+                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        AiProvider.entries.forEach { p ->
+                            GhostBtn(
+                                p.label,
+                                {
+                                    provider = p
+                                    ApiKeyStore.setProvider(ctx, p)
+                                },
+                                emoji = if (p == provider) "●" else "○"
+                            )
+                        }
+                    }
+                    Spacer(Modifier.height(6.dp))
+                    Text("${provider.keySource} — anahtarını gir ve kaydet.", style = Tiny)
                     Spacer(Modifier.height(6.dp))
                     OutlinedTextField(
                         value = apiKey,
                         onValueChange = { apiKey = it },
                         modifier = Modifier.fillMaxWidth(),
-                        placeholder = { Text("gsk_...") },
+                        placeholder = { Text(provider.keyHint) },
                         visualTransformation = PasswordVisualTransformation(),
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
                         singleLine = true,
@@ -102,7 +114,7 @@ fun FlashcardsScreen(store: Store, vault: FileVault, onBack: () -> Unit) {
                     )
                     Spacer(Modifier.height(6.dp))
                     Btn("Kaydet", {
-                        ApiKeyStore.set(ctx, apiKey)
+                        ApiKeyStore.set(ctx, apiKey, provider)
                         showKeyField = false
                     }, bg = J.forest, emoji = "✓")
                 }
@@ -130,11 +142,11 @@ fun FlashcardsScreen(store: Store, vault: FileVault, onBack: () -> Unit) {
                     if (generating) "Üretiliyor…" else "🍀 8 kart üret",
                     {
                         val u = unit
-                        val key = ApiKeyStore.get(ctx)
+                        val key = ApiKeyStore.get(ctx, provider)
                         if (u == null) {
                             error = "Açık bir birim yok."
                         } else if (key.isNullOrBlank()) {
-                            error = "Önce yukarıdan Groq API anahtarını kaydet."
+                            error = "Önce yukarıdan ${provider.label} API anahtarını kaydet."
                             showKeyField = true
                         } else {
                             error = null
@@ -144,7 +156,7 @@ fun FlashcardsScreen(store: Store, vault: FileVault, onBack: () -> Unit) {
                             scope.launch {
                                 try {
                                     val pairs = withContext(Dispatchers.IO) {
-                                        GroqClient.generateFlashcards(key, sourceText, subjName, 8)
+                                        AiClient.generateFlashcards(ctx, key, sourceText, subjName, 8)
                                     }
                                     if (pairs.isEmpty()) {
                                         error = "Model kart üretemedi, tekrar dene."
