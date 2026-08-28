@@ -1,5 +1,6 @@
 package com.beril.kaomoji.ui
 
+import android.content.Intent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -12,6 +13,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -19,6 +21,9 @@ import androidx.compose.ui.unit.sp
 import com.beril.kaomoji.data.*
 import com.beril.kaomoji.storage.FileVault
 import com.beril.kaomoji.storage.humanSize
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 // ══════════════════════════ BRAIN INBOX ══════════════════════════
 
@@ -670,8 +675,11 @@ fun StorageScreen(
     onPickFolder: () -> Unit,
     onBack: () -> Unit
 ) {
+    val ctx = LocalContext.current
+    val scope = rememberCoroutineScope()
     var usage by remember { mutableStateOf<Map<String, Long>>(emptyMap()) }
     var msg by remember { mutableStateOf<String?>(null) }
+    var sharing by remember { mutableStateOf(false) }
 
     LaunchedEffect(store.storageUri, store.recordings.size) {
         usage = try { vault.usage() } catch (_: Exception) { emptyMap() }
@@ -762,6 +770,41 @@ fun StorageScreen(
                         msg = if (uri != null) "Dışa aktarıldı ✓" else "Aktarılamadı"
                     }, Modifier.weight(1f), J.forest, emoji = "📤")
                 }
+                Spacer(Modifier.height(8.dp))
+                Btn(
+                    if (sharing) "Yedek hazırlanıyor…" else "Başka bir yere kaydet",
+                    {
+                        if (!sharing) {
+                            sharing = true
+                            msg = null
+                            val stateJson = store.exportJson()
+                            scope.launch {
+                                val zip = withContext(Dispatchers.IO) {
+                                    vault.createFullBackupZip(stateJson)
+                                }
+                                sharing = false
+                                if (zip == null) {
+                                    msg = "Yedek oluşturulamadı"
+                                } else {
+                                    val shareUri = vault.shareUriFor(zip)
+                                    val send = Intent(Intent.ACTION_SEND).apply {
+                                        type = "application/zip"
+                                        putExtra(Intent.EXTRA_STREAM, shareUri)
+                                        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                                    }
+                                    ctx.startActivity(Intent.createChooser(send, "Yedeği kaydet / paylaş"))
+                                }
+                            }
+                        }
+                    },
+                    bg = J.lilac, emoji = "☁️", enabled = !sharing
+                )
+                Spacer(Modifier.height(4.dp))
+                Text(
+                    "Tüm ses/video/transkript dosyalarını ve ilerlemeni tek bir zip'te toplayıp " +
+                        "Drive, e-posta, başka bir klasör gibi istediğin herhangi bir yere kaydetmeni sağlar.",
+                    style = Tiny
+                )
                 msg?.let { Spacer(Modifier.height(8.dp)); Text(it, style = Small.copy(color = J.forest)) }
             }
 

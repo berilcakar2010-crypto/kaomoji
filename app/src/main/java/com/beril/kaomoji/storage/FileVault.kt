@@ -4,6 +4,8 @@ import android.content.Context
 import android.net.Uri
 import androidx.documentfile.provider.DocumentFile
 import java.io.File
+import java.util.zip.ZipEntry
+import java.util.zip.ZipOutputStream
 
 /**
  * User files (audio, exports, backups) live wherever the user chooses via SAF.
@@ -133,6 +135,59 @@ class FileVault(private val ctx: Context, private val treeUriString: String?) {
             null
         }
     }
+
+    /** Tüm dosyaları (ses, video, transkript, dışa aktarım) ve uygulama durumunu tek bir
+     *  zip'te toplar — böylece "Backups" klasörünün ötesinde, Drive, e-posta, başka bir
+     *  klasör gibi başka bir kaynağa da paylaşılıp kaydedilebilir (bkz. shareUriFor). */
+    fun createFullBackupZip(stateJson: String): File? = try {
+        val outDir = File(ctx.cacheDir, "backup_tmp").apply { mkdirs() }
+        outDir.listFiles()?.forEach { it.delete() }
+        val zipFile = File(outDir, "kaomoji_yedek_${System.currentTimeMillis()}.zip")
+        ZipOutputStream(zipFile.outputStream()).use { zip ->
+            zip.putNextEntry(ZipEntry("durum.json"))
+            zip.write(stateJson.toByteArray())
+            zip.closeEntry()
+            FOLDERS.filter { it != "Backups" }.forEach { addFolderToZip(zip, it) }
+        }
+        zipFile
+    } catch (_: Exception) {
+        null
+    }
+
+    private fun addFolderToZip(zip: ZipOutputStream, folderName: String) {
+        val extDir = folder(folderName)
+        if (extDir != null) {
+            extDir.listFiles().forEach { doc ->
+                if (!doc.isFile) return@forEach
+                val name = doc.name ?: return@forEach
+                try {
+                    ctx.contentResolver.openInputStream(doc.uri)?.use { input ->
+                        zip.putNextEntry(ZipEntry("$folderName/$name"))
+                        input.copyTo(zip)
+                        zip.closeEntry()
+                    }
+                } catch (_: Exception) {
+                }
+            }
+            return
+        }
+        val local = File(ctx.getExternalFilesDir(null) ?: ctx.filesDir, "$ROOT/$folderName")
+        if (!local.exists()) return
+        local.listFiles()?.forEach { f ->
+            if (!f.isFile) return@forEach
+            try {
+                zip.putNextEntry(ZipEntry("$folderName/${f.name}"))
+                f.inputStream().use { it.copyTo(zip) }
+                zip.closeEntry()
+            } catch (_: Exception) {
+            }
+        }
+    }
+
+    /** Önbellekteki bir dosyayı (örn. yedek zip'i) başka uygulamalarla paylaşılabilir
+     *  bir content Uri'sine çevirir (FileProvider üzerinden). */
+    fun shareUriFor(file: File): Uri =
+        androidx.core.content.FileProvider.getUriForFile(ctx, "${ctx.packageName}.fileprovider", file)
 
     fun readText(uri: Uri): String? = try {
         if (uri.scheme == "content")

@@ -109,21 +109,27 @@ class Recorder(private val ctx: Context) {
         return dur
     }
 
-    private fun moveToTarget(tmp: File, target: Uri): String? = try {
-        if (target.scheme == "content") {
-            ctx.contentResolver.openOutputStream(target)?.use { out ->
-                tmp.inputStream().use { it.copyTo(out) }
-            } ?: return null
-        } else {
-            val path = target.path ?: return null
-            File(path).outputStream().use { out ->
-                tmp.inputStream().use { it.copyTo(out) }
+    private fun moveToTarget(tmp: File, target: Uri): String? {
+        return try {
+            val ok = if (target.scheme == "content") {
+                ctx.contentResolver.openOutputStream(target)?.use { out ->
+                    tmp.inputStream().use { it.copyTo(out) }
+                } != null
+            } else {
+                val path = target.path
+                if (path == null) false else {
+                    File(path).outputStream().use { out ->
+                        tmp.inputStream().use { it.copyTo(out) }
+                    }
+                    true
+                }
             }
+            if (!ok) return null
+            tmp.delete()
+            target.toString()
+        } catch (_: Exception) {
+            null
         }
-        tmp.delete()
-        target.toString()
-    } catch (_: Exception) {
-        null
     }
 
     fun cancel() {
