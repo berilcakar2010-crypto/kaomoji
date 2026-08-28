@@ -41,6 +41,9 @@ object GeminiClient {
     // ── 1. Ses transkripsiyonu ────────────────────────────────────────
     fun transcribeAudio(apiKey: String?, audioFile: File): String {
         val key = requireKey(apiKey)
+        if (!audioFile.exists() || audioFile.length() == 0L) {
+            throw GeminiException("Ses dosyası okunamadı ya da boş. Kaydı tekrar dinleyip deneyebilirsin.")
+        }
         val b64 = Base64.encodeToString(audioFile.readBytes(), Base64.NO_WRAP)
         val payload = JSONObject().apply {
             put("contents", JSONArray().put(JSONObject().apply {

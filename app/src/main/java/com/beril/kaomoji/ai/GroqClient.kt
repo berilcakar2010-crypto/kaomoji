@@ -44,7 +44,10 @@ object GroqClient {
     // ── 1. Ses transkripsiyonu ────────────────────────────────────────
     fun transcribeAudio(apiKey: String?, audioFile: File): String {
         val key = requireKey(apiKey)
-        val mediaType = "audio/m4a".toMediaType()
+        if (!audioFile.exists() || audioFile.length() == 0L) {
+            throw GroqException("Ses dosyası okunamadı ya da boş. Kaydı tekrar dinleyip deneyebilirsin.")
+        }
+        val mediaType = "audio/mp4".toMediaType()
         val body = MultipartBody.Builder()
             .setType(MultipartBody.FORM)
             .addFormDataPart("model", WHISPER_MODEL)

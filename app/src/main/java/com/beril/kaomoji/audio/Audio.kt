@@ -5,7 +5,6 @@ import android.media.MediaPlayer
 import android.media.MediaRecorder
 import android.net.Uri
 import android.os.Build
-import android.os.ParcelFileDescriptor
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -16,7 +15,8 @@ import java.io.File
 class Recorder(private val ctx: Context) {
 
     private var recorder: MediaRecorder? = null
-    private var pfd: ParcelFileDescriptor? = null
+    private var tempFile: File? = null
+    private var targetUri: Uri? = null
     private var startedAt = 0L
     private var pausedTotal = 0L
     private var pausedAt = 0L
@@ -40,7 +40,12 @@ class Recorder(private val ctx: Context) {
         stopQuietly()
         return try {
             val target = vault.createAudioFile(fileName) ?: return false
-            outputUri = target.toString()
+            // MediaRecorder her zaman yerel (uygulama önbelleği) bir dosyaya kaydediyor.
+            // Doğrudan bir SAF/content Uri'sine yazmak çoğu sağlayıcıda seek desteklenmediği
+            // için MPEG-4 muxer'ın kayıt sonunda moov atom'unu yazamamasına, dolayısıyla
+            // bozuk ve transkribe edilemeyen m4a dosyalarına yol açıyordu. Kayıt bittiğinde
+            // bu geçici dosya asıl hedefe (target) kopyalanıyor (bkz. stop()).
+            val tmp = File(ctx.cacheDir, "rec_${System.currentTimeMillis()}.m4a")
 
             val r = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
                 MediaRecorder(ctx) else @Suppress("DEPRECATION") MediaRecorder()
@@ -50,19 +55,13 @@ class Recorder(private val ctx: Context) {
             r.setAudioEncoder(MediaRecorder.AudioEncoder.AAC)
             r.setAudioEncodingBitRate(96000)
             r.setAudioSamplingRate(44100)
-
-            if (target.scheme == "content") {
-                val d = ctx.contentResolver.openFileDescriptor(target, "w")
-                    ?: return false
-                pfd = d
-                r.setOutputFile(d.fileDescriptor)
-            } else {
-                r.setOutputFile(target.path)
-            }
+            r.setOutputFile(tmp.absolutePath)
 
             r.prepare()
             r.start()
             recorder = r
+            tempFile = tmp
+            targetUri = target
             startedAt = System.currentTimeMillis()
             pausedTotal = 0L
             isRecording = true
@@ -101,8 +100,30 @@ class Recorder(private val ctx: Context) {
             recorder?.stop()
         } catch (_: Exception) {
         }
+        val tmp = tempFile
+        val target = targetUri
+        outputUri = if (tmp != null && tmp.exists() && tmp.length() > 0 && target != null) {
+            moveToTarget(tmp, target)
+        } else null
         stopQuietly()
         return dur
+    }
+
+    private fun moveToTarget(tmp: File, target: Uri): String? = try {
+        if (target.scheme == "content") {
+            ctx.contentResolver.openOutputStream(target)?.use { out ->
+                tmp.inputStream().use { it.copyTo(out) }
+            } ?: return null
+        } else {
+            val path = target.path ?: return null
+            File(path).outputStream().use { out ->
+                tmp.inputStream().use { it.copyTo(out) }
+            }
+        }
+        tmp.delete()
+        target.toString()
+    } catch (_: Exception) {
+        null
     }
 
     fun cancel() {
@@ -113,9 +134,10 @@ class Recorder(private val ctx: Context) {
 
     private fun stopQuietly() {
         try { recorder?.release() } catch (_: Exception) {}
-        try { pfd?.close() } catch (_: Exception) {}
+        tempFile?.delete()
         recorder = null
-        pfd = null
+        tempFile = null
+        targetUri = null
         isRecording = false
         isPaused = false
     }
