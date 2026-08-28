@@ -14,7 +14,7 @@ class FileVault(private val ctx: Context, private val treeUriString: String?) {
 
     companion object {
         const val ROOT = "(≧▽≦)"
-        val FOLDERS = listOf("Audio", "Transcripts", "Exports", "Backups", "Generated", "Projects")
+        val FOLDERS = listOf("Audio", "Video", "Transcripts", "Exports", "Backups", "Generated", "Projects")
     }
 
     private val tree: DocumentFile?
@@ -93,6 +93,41 @@ class FileVault(private val ctx: Context, private val treeUriString: String?) {
         return try {
             val f = File(localDir(sub), fileName)
             f.writeText(content)
+            Uri.fromFile(f)
+        } catch (_: Exception) {
+            null
+        }
+    }
+
+    /** Kamera uygulamasının EXTRA_OUTPUT olarak yazacağı geçici (cache) dosya — FileProvider üzerinden paylaşılıyor. */
+    fun createVideoCaptureTarget(fileName: String): Uri? = try {
+        val dir = File(ctx.cacheDir, "camera_tmp").apply { mkdirs() }
+        val f = File(dir, "$fileName.mp4")
+        androidx.core.content.FileProvider.getUriForFile(ctx, "${ctx.packageName}.fileprovider", f)
+    } catch (_: Exception) {
+        null
+    }
+
+    /** Kamera uygulaması cache'e yazdıktan sonra dosyayı kalıcı Video klasörüne taşır. */
+    fun importVideoFromCache(cacheUri: Uri, fileName: String): Uri? {
+        folder("Video")?.let { dir ->
+            try {
+                val existing = dir.findFile("$fileName.mp4"); existing?.delete()
+                val f = dir.createFile("video/mp4", "$fileName.mp4")
+                if (f != null) {
+                    ctx.contentResolver.openInputStream(cacheUri)?.use { input ->
+                        ctx.contentResolver.openOutputStream(f.uri)?.use { output -> input.copyTo(output) }
+                    }
+                    return f.uri
+                }
+            } catch (_: Exception) {
+            }
+        }
+        return try {
+            val f = File(localDir("Video"), "$fileName.mp4")
+            ctx.contentResolver.openInputStream(cacheUri)?.use { input ->
+                f.outputStream().use { output -> input.copyTo(output) }
+            }
             Uri.fromFile(f)
         } catch (_: Exception) {
             null

@@ -528,12 +528,26 @@ fun AssessmentsScreen(store: Store, onBack: () -> Unit) {
 // ══════════════════════════ WEEKLY REVIEW ══════════════════════════
 
 @Composable
-fun ReviewScreen(store: Store, onBack: () -> Unit) {
+fun ReviewScreen(store: Store, vault: FileVault, onBack: () -> Unit) {
     var produced by remember { mutableStateOf("") }
     var canExplain by remember { mutableStateOf("") }
     var needsBook by remember { mutableStateOf("") }
     var declining by remember { mutableStateOf(false) }
     var saved by remember { mutableStateOf(false) }
+    val checklist = remember { mutableStateMapOf<String, Boolean>() }
+    var pendingVideoUri by remember { mutableStateOf<android.net.Uri?>(null) }
+    var savedVideoUri by remember { mutableStateOf<String?>(null) }
+    val videoLauncher = androidx.activity.compose.rememberLauncherForActivityResult(
+        androidx.activity.result.contract.ActivityResultContracts.CaptureVideo()
+    ) { success ->
+        if (success) {
+            pendingVideoUri?.let { cacheUri ->
+                savedVideoUri = vault.importVideoFromCache(
+                    cacheUri, "haftalik-gunluk-${System.currentTimeMillis()}"
+                )?.toString()
+            }
+        }
+    }
 
     LazyColumn(
         Modifier.fillMaxSize(),
@@ -589,9 +603,47 @@ fun ReviewScreen(store: Store, onBack: () -> Unit) {
             }
         }
         item {
+            Card {
+                Text("Bu haftanın checkpoint'leri", style = TitleM)
+                Spacer(Modifier.height(6.dp))
+                store.curriculum.subjects.filter { it.code != "self" }.forEach { subj ->
+                    val checked = checklist[subj.code] == true
+                    Row(
+                        Modifier.fillMaxWidth().clickable { checklist[subj.code] = !checked },
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Checkbox(checked, { checklist[subj.code] = !checked }, J.forest)
+                        Spacer(Modifier.width(10.dp))
+                        Text("${subj.emoji} ${subj.name}", style = Body)
+                    }
+                }
+            }
+        }
+        item {
+            Card {
+                Text("Video günlüğü (10 dk, serbest anlatım)", style = TitleM)
+                Spacer(Modifier.height(6.dp))
+                Text(
+                    "Sadece kaydet — izleme yok. Ay sonunda o ayın 4 videosu art arda izlenip kısa bir not yazılacak.",
+                    style = Small
+                )
+                Spacer(Modifier.height(9.dp))
+                Btn(if (savedVideoUri != null) "Video kaydedildi ✓" else "Video günlüğü kaydet", {
+                    val target = vault.createVideoCaptureTarget("haftalik-gunluk-${System.currentTimeMillis()}")
+                    if (target != null) {
+                        pendingVideoUri = target
+                        videoLauncher.launch(target)
+                    }
+                }, bg = J.lilac, emoji = "🎥")
+            }
+        }
+        item {
             Btn(if (saved) "Kaydedildi ✓" else "Değerlendirmeyi kaydet", {
                 store.addReview(
-                    WeeklyReview(uid(), produced, canExplain, needsBook, declining, System.currentTimeMillis())
+                    WeeklyReview(
+                        uid(), produced, canExplain, needsBook, declining, System.currentTimeMillis(),
+                        checklist = checklist.toMap(), videoUri = savedVideoUri
+                    )
                 )
                 saved = true
             }, bg = J.forest, emoji = "📝")

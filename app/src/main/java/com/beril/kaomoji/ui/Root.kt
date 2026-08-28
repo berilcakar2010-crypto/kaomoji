@@ -173,7 +173,7 @@ private fun Body(
         }
         is Screen.Mistakes -> MistakesScreen(store, mistakeUnit, onBack)
         is Screen.Assessments -> AssessmentsScreen(store, onBack)
-        is Screen.Review -> ReviewScreen(store, onBack)
+        is Screen.Review -> ReviewScreen(store, vault, onBack)
         is Screen.Storage -> StorageScreen(store, vault, compact, onPickFolder, onBack)
         is Screen.Resources -> ResourcesScreen(store, onBack)
         is Screen.ExplainIt -> ExplainItScreen(store, onBack, onRecord)
