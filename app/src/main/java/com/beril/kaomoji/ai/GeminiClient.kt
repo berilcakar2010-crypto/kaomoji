@@ -33,6 +33,11 @@ object GeminiClient {
         .writeTimeout(120, TimeUnit.SECONDS)
         .build()
 
+    // Müfredat üretimi büyük bir JSON döndürebiliyor — daha uzun okuma süresi tanı.
+    private val longClient = client.newBuilder()
+        .readTimeout(180, TimeUnit.SECONDS)
+        .build()
+
     private fun requireKey(apiKey: String?): String {
         if (apiKey.isNullOrBlank()) throw GeminiException("Gemini API anahtarı girilmemiş. Çanta → Kartlar (Anki) veya Anlatımlar ekranından ekleyebilirsin.")
         return apiKey
@@ -90,6 +95,28 @@ object GeminiClient {
         return parseFlashcardJson(raw)
     }
 
+    // ── 4. Yüklenen belgeden özel müfredat üretimi ───────────────────
+    /** @return ham JSON metni (henüz doğrulanmamış — bkz. CurriculumLoader.saveCustom) */
+    fun generateCurriculum(apiKey: String?, docTitle: String, docText: String): String {
+        val key = requireKey(apiKey)
+        val payload = JSONObject().apply {
+            put("systemInstruction", JSONObject().apply {
+                put("parts", JSONArray().put(JSONObject().apply { put("text", CurriculumPrompt.SYSTEM) }))
+            })
+            put("contents", JSONArray().put(JSONObject().apply {
+                put("parts", JSONArray().put(JSONObject().apply {
+                    put("text", CurriculumPrompt.userMessage(docTitle, docText))
+                }))
+            }))
+            put("generationConfig", JSONObject().apply {
+                put("temperature", 0.3)
+                put("maxOutputTokens", 8192)
+            })
+        }
+        val raw = generateContent(key, payload, longClient)
+        return CurriculumPrompt.extractJson(raw)
+    }
+
     private fun parseFlashcardJson(raw: String): List<Pair<String, String>> {
         // model bazen ```json ... ``` ile sarmalıyor, temizle
         val cleaned = raw.trim().removePrefix("```json").removePrefix("```").removeSuffix("```").trim()
@@ -124,7 +151,7 @@ object GeminiClient {
         return generateContent(apiKey, payload)
     }
 
-    private fun generateContent(apiKey: String, payload: JSONObject): String {
+    private fun generateContent(apiKey: String, payload: JSONObject, httpClient: OkHttpClient = client): String {
         val body = payload.toString().toRequestBody("application/json".toMediaType())
         val req = Request.Builder()
             .url("$BASE/$MODEL:generateContent")
@@ -133,7 +160,7 @@ object GeminiClient {
             .post(body)
             .build()
 
-        client.newCall(req).execute().use { resp ->
+        httpClient.newCall(req).execute().use { resp ->
             val text = resp.body?.string() ?: ""
             if (!resp.isSuccessful) throw GeminiException("İstek başarısız (${resp.code}): ${extractError(text)}")
             val json = JSONObject(text)

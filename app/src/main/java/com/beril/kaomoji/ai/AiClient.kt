@@ -24,4 +24,12 @@ object AiClient {
             AiProvider.GEMINI -> GeminiClient.generateFlashcards(apiKey, sourceText, subjectName, n)
             AiProvider.GROQ -> GroqClient.generateFlashcards(apiKey, sourceText, subjectName, n)
         }
+
+    /** Yüklenen bir .md/.pdf belgesinden CurriculumLoader şemasına uygun ham JSON üretir
+     *  (henüz doğrulanmamış — çağıran taraf CurriculumLoader.saveCustom ile doğrulayıp kaydeder). */
+    fun generateCurriculum(ctx: Context, apiKey: String?, docTitle: String, docText: String): String =
+        when (ApiKeyStore.provider(ctx)) {
+            AiProvider.GEMINI -> GeminiClient.generateCurriculum(apiKey, docTitle, docText)
+            AiProvider.GROQ -> GroqClient.generateCurriculum(apiKey, docTitle, docText)
+        }
 }

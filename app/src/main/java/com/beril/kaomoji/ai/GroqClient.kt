@@ -36,6 +36,11 @@ object GroqClient {
         .writeTimeout(120, TimeUnit.SECONDS)
         .build()
 
+    // Müfredat üretimi büyük bir JSON döndürebiliyor — daha uzun okuma süresi tanı.
+    private val longClient = client.newBuilder()
+        .readTimeout(180, TimeUnit.SECONDS)
+        .build()
+
     private fun requireKey(apiKey: String?): String {
         if (apiKey.isNullOrBlank()) throw GroqException("Groq API anahtarı girilmemiş. Çanta → Kartlar (Anki) veya Anlatımlar ekranından ekleyebilirsin.")
         return apiKey
@@ -97,6 +102,38 @@ object GroqClient {
         val user = "Konu alanı: $subjectName\nKaynak metin:\n$sourceText\n\n$n adet kart üret."
         val raw = chatCompletion(key, system, user)
         return parseFlashcardJson(raw)
+    }
+
+    // ── 4. Yüklenen belgeden özel müfredat üretimi ───────────────────
+    /** @return ham JSON metni (henüz doğrulanmamış — bkz. CurriculumLoader.saveCustom) */
+    fun generateCurriculum(apiKey: String?, docTitle: String, docText: String): String {
+        val key = requireKey(apiKey)
+        val payload = JSONObject().apply {
+            put("model", CHAT_MODEL)
+            put("temperature", 0.3)
+            put("max_tokens", 8000)
+            put("messages", JSONArray().apply {
+                put(JSONObject().apply { put("role", "system"); put("content", CurriculumPrompt.SYSTEM) })
+                put(JSONObject().apply { put("role", "user"); put("content", CurriculumPrompt.userMessage(docTitle, docText)) })
+            })
+        }
+        val body = payload.toString().toRequestBody("application/json".toMediaType())
+        val req = Request.Builder()
+            .url("$BASE/chat/completions")
+            .addHeader("Authorization", "Bearer $key")
+            .addHeader("Content-Type", "application/json")
+            .post(body)
+            .build()
+
+        longClient.newCall(req).execute().use { resp ->
+            val text = resp.body?.string() ?: ""
+            if (!resp.isSuccessful) throw GroqException("Müfredat üretimi başarısız (${resp.code}): ${extractError(text)}")
+            val json = JSONObject(text)
+            val choices = json.optJSONArray("choices") ?: throw GroqException("Beklenmeyen yanıt biçimi")
+            if (choices.length() == 0) throw GroqException("Boş yanıt")
+            val content = choices.getJSONObject(0).getJSONObject("message").getString("content").trim()
+            return CurriculumPrompt.extractJson(content)
+        }
     }
 
     private fun parseFlashcardJson(raw: String): List<Pair<String, String>> {
