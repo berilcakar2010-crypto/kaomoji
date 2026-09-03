@@ -89,7 +89,7 @@ fun RecordScreen(
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
-                if (stage == "meta") "🍎 Anlatımı kaydet" else "🎙️ Anlat",
+                if (stage == "meta") "💾 Anlatımı kaydet" else "🎙️ Anlat",
                 style = TitleL, modifier = Modifier.weight(1f)
             )
             if (stage != "recording") Text(
@@ -130,7 +130,14 @@ fun RecordScreen(
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Text("(≧▽≦)", style = TextStyle(fontSize = 30.sp, color = J.forest))
+                    Text(
+                        "● KAYDA HAZIR",
+                        style = TextStyle(
+                            fontSize = 15.sp, fontWeight = FontWeight.Bold, color = J.cherry,
+                            fontFamily = androidx.compose.ui.text.font.FontFamily.Monospace,
+                            letterSpacing = 1.sp
+                        )
+                    )
                     Spacer(Modifier.height(8.dp))
                     Text("dinliyor…", style = Small)
                     Spacer(Modifier.height(26.dp))
@@ -270,7 +277,7 @@ fun RecordScreen(
                                 )
                                 request.taskId?.let { if (store.done[it] != true) store.toggleTask(it) }
                                 onDone()
-                            }, Modifier.weight(1f), J.forest, emoji = "🍎")
+                            }, Modifier.weight(1f), J.forest, emoji = "💾")
                             GhostBtn("Sonra düzenle", {
                                 store.addRecording(
                                     Recording(
@@ -372,7 +379,7 @@ fun AudioLibraryScreen(
         }
 
         if (list.isEmpty()) {
-            item { Empty("🍃", "Kayıt yok", "Anlatmadığın şeyi bilmiyorsundur.") }
+            item { Empty("📼", "Kayıt yok", "Anlatmadığın şeyi bilmiyorsundur.") }
         }
 
         items(list) { r ->

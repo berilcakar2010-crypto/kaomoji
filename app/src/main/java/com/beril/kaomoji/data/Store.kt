@@ -85,7 +85,7 @@ class Store(private val ctx: Context) {
 
     val totalDone: Int get() = curriculum.allUnits.sumOf { u -> u.tasks.count { done[it.id] == true } }
 
-    /** Garden growth stage 0..4 based on units completed. */
+    /** Lab experiment stage 0..4 based on units completed. */
     val growthStage: Int
         get() {
             val ratio = currentUnitIndex.toFloat() / curriculum.allUnits.size.coerceAtLeast(1)

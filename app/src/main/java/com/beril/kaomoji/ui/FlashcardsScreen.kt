@@ -127,7 +127,7 @@ fun FlashcardsScreen(store: Store, vault: FileVault, onBack: () -> Unit) {
                     Spacer(Modifier.height(6.dp))
                 }
                 Btn(
-                    if (generating) "Üretiliyor…" else "🍀 8 kart üret",
+                    if (generating) "Üretiliyor…" else "🃏 8 kart üret",
                     {
                         val u = unit
                         val key = ApiKeyStore.get(ctx)
@@ -225,7 +225,7 @@ fun FlashcardsScreen(store: Store, vault: FileVault, onBack: () -> Unit) {
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Text(
-                        c.subject(f.subject)?.emoji ?: "🌱",
+                        c.subject(f.subject)?.emoji ?: "⚗️",
                         style = TextStyle(fontSize = 14.sp)
                     )
                     Spacer(Modifier.width(6.dp))

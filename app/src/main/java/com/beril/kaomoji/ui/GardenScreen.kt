@@ -23,11 +23,11 @@ import com.beril.kaomoji.audio.fmtDuration
 import com.beril.kaomoji.data.*
 
 private val stages = listOf(
-    "🌰" to "tohum",
-    "🌱" to "filiz",
-    "🪴" to "fidan",
-    "🌳" to "ağaç",
-    "🍎" to "meyve"
+    "🧊" to "ham numune",
+    "⚗️" to "tepkimede",
+    "🧪" to "stabilize",
+    "🔬" to "analiz",
+    "💠" to "sonuçlandı"
 )
 
 @Composable
@@ -69,7 +69,7 @@ fun GardenScreen(
                 )
                 Spacer(Modifier.height(3.dp))
                 Text(
-                    "küçük adımlar, büyük ağaçlar",
+                    "küçük ölçümler, kesin sonuçlar",
                     style = Small.copy(color = J.inkFaint)
                 )
             }
@@ -80,7 +80,7 @@ fun GardenScreen(
 
         // ── TODAY'S TINY MISSION ──
         item {
-            SectionLabel("bugünün küçük görevi", "🍀")
+            SectionLabel("bugünün küçük görevi", "🎯")
             Spacer(Modifier.height(8.dp))
             MissionCard(
                 mission = mission,
@@ -140,7 +140,7 @@ fun GardenScreen(
         // ── continue ──
         if (unit != null) {
             item {
-                SectionLabel("devam et", "🌱")
+                SectionLabel("devam et", "⚗️")
                 Spacer(Modifier.height(8.dp))
                 ContinueCard(store, unit, phase) { onOpenUnit(unit.id) }
             }
@@ -155,11 +155,11 @@ fun GardenScreen(
                 )
                 Btn(
                     "Yakala", { onGo(Screen.Inbox) },
-                    Modifier.weight(1f), J.bark, emoji = "🧺"
+                    Modifier.weight(1f), J.bark, emoji = "📥"
                 )
                 Btn(
                     "Hata", { onGo(Screen.Mistakes) },
-                    Modifier.weight(1f), J.butter, Color(0xFF1A0E05), emoji = "🍂"
+                    Modifier.weight(1f), J.butter, Color(0xFF1A0E05), emoji = "⚠️"
                 )
             }
         }
@@ -173,7 +173,7 @@ fun GardenScreen(
                 StatTile("${store.problemsSolved}", "problem", "✏️", J.cherry)
                 StatTile("${store.recordings.size}", "anlatım", "🎙️", J.lilac)
                 StatTile(
-                    "${store.mistakes.count { !it.resolved }}", "açık hata", "🍂", J.butter
+                    "${store.mistakes.count { !it.resolved }}", "açık hata", "⚠️", J.butter
                 )
             }
         }
@@ -222,7 +222,7 @@ fun GardenScreen(
 
         // ── active projects ──
         item {
-            SectionLabel("aktif projeler", "🌿")
+            SectionLabel("aktif projeler", "🧪")
             Spacer(Modifier.height(8.dp))
             LazyRow(horizontalArrangement = Arrangement.spacedBy(9.dp)) {
                 items(c.projects) { p ->
@@ -254,7 +254,7 @@ fun GardenScreen(
         // ── inbox peek ──
         item {
             val open = store.inbox.filter { !it.done }
-            SectionLabel("brain inbox", "🧺")
+            SectionLabel("brain inbox", "📥")
             Spacer(Modifier.height(8.dp))
             Card(Modifier.clickable { onGo(Screen.Inbox) }, border = J.bark.copy(alpha = 0.3f)) {
                 if (open.isEmpty()) {
@@ -312,7 +312,7 @@ private fun GardenStrip(store: Store) {
             Text(emoji, style = TextStyle(fontSize = 40.sp))
             Spacer(Modifier.width(12.dp))
             Column(Modifier.weight(1f)) {
-                Text(store.currentPhase?.name ?: "Bahçe", style = TitleL)
+                Text(store.currentPhase?.name ?: "Laboratuvar", style = TitleL)
                 Text(
                     "$doneUnits / $total birim · $name aşaması",
                     style = Small

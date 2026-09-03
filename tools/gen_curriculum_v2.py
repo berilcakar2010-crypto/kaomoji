@@ -5,11 +5,26 @@
 7 aylık, hesaplamalı nörobilim hedefine göre şekillenmiş müfredat.
 26 Ağustos 2026 – Mart 2027.
 
-TIMELESS: tarih yok, birim bitince sıradaki açılır. 1 hafta = 1 birim.
+Her birim kendi takvim haftasını taşır (net referans), ama gecikme cezası yok:
+birim bitince sıradaki açılır, hız sana bağlı. 1 hafta = 1 birim.
+Tamamen bağımsız çalışma — okula/harici bir programa bağlı görev yok.
 Bu script app/src/main/assets/curriculum.json'ı ÜRETİR — schema önceki
 sürümle birebir aynı (Models.kt / CurriculumLoader.kt DEĞİŞMEDİ).
 """
-import json, os
+import json, os, datetime
+
+MONTHS_TR = ["Oca", "Şub", "Mar", "Nis", "May", "Haz", "Tem", "Ağu", "Eyl", "Eki", "Kas", "Ara"]
+TERM_START = datetime.date(2026, 8, 26)
+
+def week_range(wk):
+    """1 hafta = 1 birim; her birim kendi takvim aralığını taşır (net, ama esnek — geç kalmak diye bir şey yok)."""
+    start = TERM_START + datetime.timedelta(days=7 * (wk - 1))
+    end = start + datetime.timedelta(days=6)
+    def fmt(d):
+        return "%d %s" % (d.day, MONTHS_TR[d.month - 1])
+    if start.month == end.month:
+        return "%d–%s" % (start.day, fmt(end))
+    return "%s–%s" % (fmt(start), fmt(end))
 
 # ── 1. Haftalık konu yol haritaları (30 hafta) ──────────────────────
 physics = (
@@ -59,6 +74,72 @@ bio = (
 )
 assert len(physics) == len(math) == len(bio) == 30
 
+# 10. sınıf zorunlu dersleri — kendi başına çalışılır, gerçek MEB konu başlıklarıyla.
+# Her ders KENDİ ayrı dersi olarak kalır (Okul Matematik, Okul Fizik, ...) —
+# derinlemesine kendi çalışman (Halliday/Stewart/Campbell) ile karışmaz, okulun
+# kendi kitabı ve temposu ayrı bir ders olarak takip edilir.
+OKUL_DERSLERI = [
+    {"c": "okmat", "n": "Okul Matematik", "e": "📐", "col": "#B48CFF", "topics": [
+        "Trigonometri — Dar Açı Trigonometrisi", "Üçgenlerde Alan ve Açı Bağıntıları",
+        "Çokgenler ve Dörtgenler", "Çember ve Daire",
+        "Permütasyon, Kombinasyon, Olasılık", "Veri, Sayma ve Olasılık — Karışık Problemler",
+        "İkinci Dereceden Denklemler ve Fonksiyonlar", "Polinomlar",
+    ]},
+    {"c": "okfiz", "n": "Okul Fizik", "e": "⚛️", "col": "#FF5C7A", "topics": [
+        "Vektörler ve Bağıl Hareket (MEB müfredatı)", "Newton'un Hareket Yasaları — Ders Kitabı Problemleri",
+        "Elektrostatik — Yük ve Coulomb Yasası", "Elektrik Akımı ve Basit Devreler",
+        "Manyetizma — Temel Kavramlar", "Basınç — Katı, Sıvı, Gaz Basıncı",
+        "Kaldırma Kuvveti (Arşimet İlkesi)", "İş, Güç, Enerji — Ders Kitabı Soru Tipleri",
+    ]},
+    {"c": "okkim", "n": "Okul Kimya", "e": "🧪", "col": "#FFC98C", "topics": [
+        "Kimyasal Türler Arası Etkileşimler", "Maddenin Halleri — Gazlar",
+        "Sıvılar ve Katılar", "Karışımlar — Homojen/Heterojen",
+        "Karışımların Ayrılması", "Asitler, Bazlar ve Tuzlar",
+        "Kimya Her Yerde — Endüstriyel Kimya",
+    ]},
+    {"c": "okbio", "n": "Okul Biyoloji", "e": "🧬", "col": "#8B93E8", "topics": [
+        "Mitoz ve Eşeysiz Üreme", "Mayoz ve Eşeyli Üreme",
+        "Kalıtımın Genel İlkeleri — Mendel Kalıtımı", "Kalıtım ve Biyolojik Çeşitlilik",
+        "Ekosistem Ekolojisi — Madde Döngüleri", "Güncel Çevre Sorunları ve İnsan",
+    ]},
+    {"c": "okede", "n": "Okul Edebiyat", "e": "📖", "col": "#E0A8C4", "topics": [
+        "Anlatım Biçimleri ve Türleri", "Şiir İnceleme Yöntemi — Divan Şiiri",
+        "Halk Şiiri ve Âşık Tarzı Şiir", "Roman İncelemesi — Yapı ve Anlatım",
+        "Hikâye (Öykü) İncelemesi", "Tiyatro Metinleri — Geleneksel Türk Tiyatrosu",
+        "Deneme, Sohbet, Eleştiri", "Dil Bilgisi — Cümlenin Ögeleri ve Anlam",
+    ]},
+    {"c": "oktar", "n": "Okul Tarih", "e": "🏛️", "col": "#C9793D", "topics": [
+        "Yerleşme ve Devletleşme Sürecinde Selçuklu Türkiyesi", "Beylikten Devlete Osmanlı Siyaseti",
+        "Devletleşme Sürecinde Savaşçılar ve Askerler", "Beylikten Devlete Osmanlı Medeniyeti",
+        "Dünya Gücü Osmanlı (1453-1595)", "Değişen Dünya Dengeleri Karşısında Osmanlı Siyaseti",
+        "Değişim Çağında Osmanlı Devleti", "Uluslararası İlişkilerde Denge Stratejisi (1774-1914)",
+    ]},
+    {"c": "okcog", "n": "Okul Coğrafya", "e": "🗺️", "col": "#D9A6FF", "topics": [
+        "Ekosistem ve Ekosistem Türleri", "Beşerî Sistemler — Göç",
+        "Ekonomik Faaliyetler ve Doğal Kaynaklar", "Nüfus Politikaları",
+        "Şehirleşme ve Şehirlerin Fonksiyonları", "Türkiye'de Tarım, Sanayi, Ulaşım",
+        "Bölgeler ve Ülkeler",
+    ]},
+    {"c": "okdin", "n": "Okul Din Kültürü", "e": "🕊️", "col": "#8C6FBF", "topics": [
+        "Dünya ve Ahiret", "Kur'an'a Göre Hz. Muhammed",
+        "Din ve Hayat", "Ahlaki Tutum ve Davranışlar",
+        "İslam Düşüncesinde Yorumlar", "Yahudilik ve Hristiyanlık", "İslam ve Bilim",
+    ]},
+]
+OKUL_BY_CODE = {d["c"]: d for d in OKUL_DERSLERI}
+_okul_use_count = {d["c"]: 0 for d in OKUL_DERSLERI}
+_okul_slot_counter = [0]  # kaç "sch" yuvası dolduruldu — dersler arası round-robin için
+
+def resolve_sch_slot():
+    """Her 'sch' yuvasını okul derslerine round-robin dağıtır; konu kendi listesinde ilerler."""
+    d = OKUL_DERSLERI[_okul_slot_counter[0] % len(OKUL_DERSLERI)]
+    _okul_slot_counter[0] += 1
+    code = d["c"]
+    n = _okul_use_count[code]
+    _okul_use_count[code] = n + 1
+    topic = d["topics"][n % len(d["topics"])]
+    return code, topic
+
 def phase_of(wk):
     if wk <= 3: return "p1"
     if wk <= 14: return "p2"
@@ -83,9 +164,9 @@ SRC = {
     "py": "Python (proje kodu)",
     "jp": "Genki I-II / Minna no Nihongo",
     "de": "Menschen A1-A2",
-    "sch": "Okul müfredatı (MEB)",
     "prod": "P1/P2/P3 üretim",
 }
+SRC.update({d["c"]: "%s ders kitabı (MEB 10. sınıf)" % d["n"] for d in OKUL_DERSLERI})
 
 # ── 2. Haftalık gün şablonları (subject, dakika) ────────────────────
 template_faz1 = [
@@ -129,8 +210,6 @@ TOPIC_LIST = {"phys": physics, "math": math, "bio": bio}
 def topic_for(subj, wk_idx, phid):
     if subj in TOPIC_LIST:
         return TOPIC_LIST[subj][wk_idx]
-    if subj == "sch":
-        return "Okul programına göre haftalık ödev/sınav takibi"
     if subj == "jp":
         return {"p1": "Hiragana/Katakana pekiştirme", "p2": "Genki I Ch1-6 (temel gramer)",
                 "p3": "Genki I Ch7-12", "p4": "Genki II başlangıç + N3 kelime tekrarı"}[phid]
@@ -141,17 +220,18 @@ def topic_for(subj, wk_idx, phid):
     return ""
 
 KIND = {"phys": "problem", "math": "problem", "bio": "read", "py": "code",
-        "sch": "study", "jp": "study", "de": "study", "prod": "produce"}
+        "jp": "study", "de": "study", "prod": "produce"}
+KIND.update({d["c"]: "study" for d in OKUL_DERSLERI})
 
 def task_text(subj, topic):
     if subj == "phys":
-        return "Fizik — %s: konu anlatımı + örnek problemler + bölüm sonu 8-10 soru" % topic
+        return "Fizik — %s: konu anlatımı + türetimler + 10-14 problem (ileri seviye dahil)" % topic
     if subj == "math":
-        return "Matematik — %s: teori + 10-12 alıştırma + 2 türetim" % topic
+        return "Matematik — %s: teori + ispat/türetim + 12-15 alıştırma" % topic
     if subj == "bio":
-        return "Biyoloji/Nörobilim — %s: oku, özetle, 5-6 kavrama sorusu" % topic
-    if subj == "sch":
-        return topic
+        return "Biyoloji/Nörobilim — %s: birincil kaynaktan oku, kendi cümlenle özetle, 6-8 kavrama + uygulama sorusu" % topic
+    if subj in OKUL_BY_CODE:
+        return "%s — %s: ders kitabından oku, kendi özetini çıkar, 6-8 kazanım sorusu çöz" % (OKUL_BY_CODE[subj]["n"], topic)
     if subj == "jp":
         return "Japonca — %s" % topic
     if subj == "de":
@@ -168,15 +248,20 @@ for wk in range(1, 31):
     phid = phase_of(wk)
     tmpl = TEMPLATES[phid]
     tasks = []
+    used_subjects = []
     for i, (subj, mins) in enumerate(tmpl):
-        topic = topic_for(subj, idx, phid)
+        if subj == "sch":
+            real_subj, topic = resolve_sch_slot()
+        else:
+            real_subj, topic = subj, topic_for(subj, idx, phid)
+        used_subjects.append(real_subj)
         tasks.append({
             "i": "p%s-u%02d-t%02d" % (phid[1], wk, i + 1),
-            "s": subj, "k": KIND[subj], "t": task_text(subj, topic), "m": mins,
+            "s": real_subj, "k": KIND[real_subj], "t": task_text(real_subj, topic), "m": mins,
         })
-    title = "Hafta %d · %s" % (wk, physics[idx].split(" — ")[0])
+    title = "Hafta %d · %s · %s" % (wk, week_range(wk), physics[idx].split(" — ")[0])
     kicker = "%s · %s" % (PHASE_META[phid]["name"], math[idx].split(" (")[0])
-    note = "Kaynaklar: " + "; ".join(sorted({SRC[s] for s, _ in tmpl if s in SRC}))
+    note = "Kaynaklar: " + "; ".join(sorted({SRC[s] for s in used_subjects if s in SRC}))
     bridges = []
     if idx >= 13 and any(s == "bio" and "Python" in topic_for("bio", idx, phid) or "HH" in topic_for("bio", idx, phid) for s in ["bio"]):
         bridges = ["Hesaplamalı Nörobilim Köprüsü"]
@@ -280,15 +365,14 @@ resources = [
 
 subjects = [
     {"c": "math", "n": "Matematik", "e": "📐", "col": "#9D5CFF"},
-    {"c": "phys", "n": "Fizik", "e": "🍎", "col": "#E12A44"},
+    {"c": "phys", "n": "Fizik", "e": "⚛️", "col": "#E12A44"},
     {"c": "py", "n": "Python", "e": "🐍", "col": "#FFA23C"},
     {"c": "bio", "n": "Biyoloji + Nörobilim", "e": "🧠", "col": "#7C86E0"},
     {"c": "jp", "n": "Japonca", "e": "🌸", "col": "#CE6E8C"},
     {"c": "de", "n": "Almanca", "e": "🥨", "col": "#B4102E"},
-    {"c": "sch", "n": "10. Sınıf", "e": "🏫", "col": "#AE8CFB"},
     {"c": "uwc", "n": "UWC", "e": "🍀", "col": "#C7B4EF"},
-    {"c": "prod", "n": "Üretim", "e": "🌱", "col": "#6425B8"},
-]
+    {"c": "prod", "n": "Üretim", "e": "🛠️", "col": "#6425B8"},
+] + [{"c": d["c"], "n": d["n"], "e": d["e"], "col": d["col"]} for d in OKUL_DERSLERI]
 
 kinds = [
     {"c": "study", "n": "Öğren", "e": "📚"},
@@ -298,7 +382,7 @@ kinds = [
     {"c": "write", "n": "Yaz", "e": "✍️"},
     {"c": "read", "n": "Oku", "e": "📖"},
     {"c": "review", "n": "Tekrar", "e": "🔁"},
-    {"c": "produce", "n": "Üret", "e": "🌱"},
+    {"c": "produce", "n": "Üret", "e": "🛠️"},
     {"c": "test", "n": "Sınav", "e": "📋"},
 ]
 

@@ -36,7 +36,7 @@ fun InboxScreen(store: Store) {
         verticalArrangement = Arrangement.spacedBy(9.dp)
     ) {
         item {
-            Text("🧺 Brain Inbox", style = Display)
+            Text("📥 Brain Inbox", style = Display)
             Text("Yakala şimdi, düzenle sonra.", style = Small)
         }
         item {
@@ -47,7 +47,7 @@ fun InboxScreen(store: Store) {
                 Spacer(Modifier.height(10.dp))
                 Btn("Kaydet", {
                     if (text.isNotBlank()) { store.addInbox(text.trim(), cat); text = "" }
-                }, bg = J.bark, emoji = "🧺")
+                }, bg = J.bark, emoji = "📥")
             }
         }
         item {
@@ -65,7 +65,7 @@ fun InboxScreen(store: Store) {
             }
         }
 
-        if (list.isEmpty()) item { Empty("🍃", "Inbox boş", "Temiz bir kafa iyi bir şey.") }
+        if (list.isEmpty()) item { Empty("🗒️", "Inbox boş", "Temiz bir kafa iyi bir şey.") }
 
         items(list) { n ->
             Row(
@@ -111,7 +111,7 @@ fun ProjectsScreen(store: Store, onOpen: (String) -> Unit) {
         verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
         item {
-            Text("🌱 Projeler", style = Display)
+            Text("⚗️ Projeler", style = Display)
             Text("Dersler projelere hizmet eder, tersi değil.", style = Small)
         }
         items(c.projects) { p ->
@@ -289,7 +289,7 @@ fun MistakesScreen(store: Store, presetUnit: String?, onBack: () -> Unit) {
         item {
             GhostBtn("Geri", onBack, emoji = "←")
             Spacer(Modifier.height(10.dp))
-            Text("🍂 Hata Defteri", style = Display)
+            Text("⚠️ Hata Defteri", style = Display)
             Text("Hata bir başarısızlık değil, bir adres.", style = Small)
         }
 
@@ -325,7 +325,7 @@ fun MistakesScreen(store: Store, presetUnit: String?, onBack: () -> Unit) {
 
         item { Selector(listOf("Açık", "Çözüldü", "Tümü"), filter, { filter = it }) }
 
-        if (list.isEmpty()) item { Empty("🍃", "Hata yok", "Ya çok iyisin ya da kaydetmiyorsun.") }
+        if (list.isEmpty()) item { Empty("🗒️", "Hata yok", "Ya çok iyisin ya da kaydetmiyorsun.") }
 
         items(list) { m ->
             Column(
@@ -408,7 +408,7 @@ private fun MistakeForm(store: Store, presetUnit: String?, onDone: () -> Unit) {
                 )
                 onDone()
             }
-        }, bg = J.butter, fg = Color(0xFF1A0E05), emoji = "🍂")
+        }, bg = J.butter, fg = Color(0xFF1A0E05), emoji = "⚠️")
     }
 }
 
@@ -489,7 +489,7 @@ fun AssessmentsScreen(store: Store, onBack: () -> Unit) {
                     .padding(13.dp)
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text(if (st.taken) "🍎" else "📋", style = TextStyle(fontSize = 20.sp))
+                    Text(if (st.taken) "💠" else "📋", style = TextStyle(fontSize = 20.sp))
                     Spacer(Modifier.width(10.dp))
                     Column(Modifier.weight(1f)) {
                         Text(a.name, style = TitleL.copy(fontSize = 17.sp))
@@ -758,7 +758,7 @@ fun StudyBagScreen(store: Store, onGo: (Screen) -> Unit, onExplainIt: () -> Unit
     val items = listOf(
         Triple("🎙️", "Anlatımlarım", Screen.Audio),
         Triple("📋", "Sınavlar", Screen.Assessments),
-        Triple("🍂", "Hata Defteri", Screen.Mistakes),
+        Triple("⚠️", "Hata Defteri", Screen.Mistakes),
         Triple("📝", "Haftalık Değerlendirme", Screen.Review),
         Triple("📁", "Depolama ve Dosyalar", Screen.Storage),
         Triple("📚", "Kaynaklar", Screen.Resources),
@@ -785,10 +785,10 @@ fun StudyBagScreen(store: Store, onGo: (Screen) -> Unit, onExplainIt: () -> Unit
                     .clickable { onExplainIt() }
                     .padding(14.dp)
             ) {
-                Text("(≧▽≦) anlamıyor", style = TitleL)
+                Text("// GİRDİ EKSİK", style = TitleL)
                 Spacer(Modifier.height(4.dp))
                 Text(
-                    "Küçük yaratığa bir konuyu anlat. Sınav değil, sohbet.",
+                    "Boş bir kayda bir konuyu anlat. Sınav değil, log tutmak.",
                     style = Small.copy(color = J.ink)
                 )
             }
@@ -889,40 +889,40 @@ fun ExplainItScreen(store: Store, onBack: () -> Unit, onRecord: (RecordRequest) 
             Modifier.fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(
-                "(≧▽≦)",
-                style = TextStyle(
-                    fontSize = 38.sp, fontWeight = FontWeight.Bold, color = J.forest,
-                    fontFamily = androidx.compose.ui.text.font.FontFamily.Monospace
-                )
-            )
-            Spacer(Modifier.height(10.dp))
             Column(
                 Modifier
+                    .fillMaxWidth()
                     .background(J.card, RoundedCornerShape(18.dp))
                     .border(1.dp, J.line, RoundedCornerShape(18.dp))
                     .padding(14.dp)
             ) {
                 Text(
-                    if (sent) "aa! şimdi biraz anladım galiba… ama şunu tekrar söyler misin?"
-                    else "\"${unit?.title ?: "bu konu"}\" nedir? ben hiç anlamadım…",
-                    style = Body
+                    "KAYIT DEFTERİ · GİRDİ TERMİNALİ",
+                    style = Tiny.copy(color = J.inkFaint, fontWeight = FontWeight.Bold)
+                )
+                Spacer(Modifier.height(8.dp))
+                Text(
+                    if (sent)
+                        "// KISMEN AYRIŞTIRILDI — belirsiz kaldı, daha net tanımla"
+                    else
+                        "> \"${unit?.title ?: "bu konu"}\" nedir?\n// GİRDİ BEKLENİYOR",
+                    style = Mono.copy(color = J.butter, fontSize = 13.sp, lineHeight = 19.sp)
                 )
             }
         }
 
         Spacer(Modifier.height(20.dp))
-        Field(text, { text = it }, "Ona anlat…", minLines = 6)
+        Field(text, { text = it }, "Kayda geç…", minLines = 6)
         Spacer(Modifier.height(12.dp))
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            Btn("Anlattım", { sent = true }, Modifier.weight(1f), J.forest, emoji = "💬")
-            Btn("Sesli anlat", {
-                onRecord(RecordRequest("(≧▽≦)'ye ${unit?.title ?: "konuyu"} anlat", unit?.id, null, false))
+            Btn("Kaydet", { sent = true }, Modifier.weight(1f), J.forest, emoji = "💾")
+            Btn("Sesli kaydet", {
+                onRecord(RecordRequest("Kayda ${unit?.title ?: "konuyu"} anlat", unit?.id, null, false))
             }, Modifier.weight(1f), J.cherry, emoji = "🎙️")
         }
         Spacer(Modifier.height(14.dp))
         Text(
-            "Bir şeyi küçük bir yaratığa anlatabiliyorsan, gerçekten biliyorsundur. "
+            "Bir şeyi hiçbir ön bilgisi olmayan bir kayda anlatabiliyorsan, gerçekten biliyorsundur. "
                 + "Takıldığın yer, henüz kapanmamış yerdir.",
             style = Small
         )

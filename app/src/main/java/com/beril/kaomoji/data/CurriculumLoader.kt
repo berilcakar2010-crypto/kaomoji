@@ -48,7 +48,7 @@ object CurriculumLoader {
             ProjectDef(
                 id = j.getString("id"),
                 name = j.getString("name"),
-                emoji = j.optString("emoji", "🌱"),
+                emoji = j.optString("emoji", "⚗️"),
                 goal = j.getString("goal"),
                 phaseWork = m,
                 topics = j.optJSONArray("topics").strings(),

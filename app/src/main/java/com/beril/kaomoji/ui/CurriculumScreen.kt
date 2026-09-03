@@ -125,10 +125,10 @@ private fun UnitRow(
     ) {
         Text(
             when {
-                complete -> "🍎"
-                current -> "🌱"
-                unlocked -> "🌿"
-                else -> "🌰"
+                complete -> "💠"
+                current -> "⚗️"
+                unlocked -> "🧪"
+                else -> "🧊"
             },
             style = TextStyle(fontSize = 21.sp)
         )
@@ -267,10 +267,10 @@ fun UnitDetailScreen(
 
         item {
             Spacer(Modifier.height(6.dp))
-            SectionLabel("bu birim için", "🍂")
+            SectionLabel("bu birim için", "⚠️")
             Spacer(Modifier.height(8.dp))
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                Btn("Hata ekle", { onAddMistake(u.id) }, Modifier.weight(1f), J.butter, Color(0xFF1A0E05), "🍂")
+                Btn("Hata ekle", { onAddMistake(u.id) }, Modifier.weight(1f), J.butter, Color(0xFF1A0E05), "⚠️")
                 Btn("Problem kaydet", { onLogProblems(u.id) }, Modifier.weight(1f), J.cherry, emoji = "✏️")
             }
         }

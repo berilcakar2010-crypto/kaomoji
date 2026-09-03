@@ -43,10 +43,10 @@ sealed class Screen {
 private data class Tab(val emoji: String, val label: String, val screen: Screen)
 
 private val tabs = listOf(
-    Tab("🍎", "Bahçe", Screen.Garden),
+    Tab("🔬", "Lab", Screen.Garden),
     Tab("📚", "Müfredat", Screen.Curriculum),
-    Tab("🧺", "Inbox", Screen.Inbox),
-    Tab("🌱", "Projeler", Screen.Projects),
+    Tab("📥", "Inbox", Screen.Inbox),
+    Tab("⚗️", "Projeler", Screen.Projects),
     Tab("🎒", "Çanta", Screen.Bag)
 )
 
@@ -282,7 +282,7 @@ private fun SidePane(store: Store, onRecord: (RecordRequest) -> Unit) {
     val unit = store.currentUnit
 
     Column(Modifier.fillMaxSize().padding(14.dp)) {
-        SectionLabel("bugünün küçük görevi", "🍀")
+        SectionLabel("bugünün küçük görevi", "🎯")
         Spacer(Modifier.height(9.dp))
         Column(
             Modifier
@@ -307,7 +307,7 @@ private fun SidePane(store: Store, onRecord: (RecordRequest) -> Unit) {
 
         Spacer(Modifier.height(16.dp))
         if (unit != null) {
-            SectionLabel("şu anki birim", "🌱")
+            SectionLabel("şu anki birim", "⚗️")
             Spacer(Modifier.height(8.dp))
             Text(unit.title, style = TitleM)
             Spacer(Modifier.height(7.dp))
@@ -370,19 +370,19 @@ private fun CoverIntent(
                 .border(1.dp, J.cherry.copy(alpha = 0.3f), RoundedCornerShape(15.dp))
                 .padding(11.dp)
         ) {
-            Text("🍀 BUGÜNÜN GÖREVİ", style = Tiny.copy(color = J.cherry, fontWeight = FontWeight.Bold))
+            Text("🎯 BUGÜNÜN GÖREVİ", style = Tiny.copy(color = J.cherry, fontWeight = FontWeight.Bold))
             Spacer(Modifier.height(5.dp))
             Text(mission.title, style = Body, maxLines = 4)
         }
 
         Spacer(Modifier.height(14.dp))
-        Btn("Devam et", onContinue, Modifier.fillMaxWidth(), J.forest, emoji = "🌱")
+        Btn("Devam et", onContinue, Modifier.fillMaxWidth(), J.forest, emoji = "⚗️")
         Spacer(Modifier.height(7.dp))
         Btn("Anlat", onRecord, Modifier.fillMaxWidth(), J.cherry, emoji = "🎙️")
         Spacer(Modifier.height(7.dp))
         Row(horizontalArrangement = Arrangement.spacedBy(7.dp)) {
-            GhostBtn("Yakala", onCapture, Modifier.weight(1f), "🧺")
-            GhostBtn("Bahçe", onStudy, Modifier.weight(1f), "🍎")
+            GhostBtn("Yakala", onCapture, Modifier.weight(1f), "📥")
+            GhostBtn("Lab", onStudy, Modifier.weight(1f), "🔬")
         }
 
         unit?.let {

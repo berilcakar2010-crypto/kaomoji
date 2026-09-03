@@ -3,7 +3,7 @@
 Kişisel akademik işletim sistemi.
 
 > **"Daha çok çalışma. Sırada ne olduğunu bil."**
-> *Küçük adımlar, büyük ağaçlar.*
+> *Küçük ölçümler, kesin sonuçlar.*
 
 Bu bir üretkenlik uygulaması değil. Pomodoro yok, seri (streak) yok, puan yok, geri sayım yok.
 Tek bir soruya cevap verir: **şimdi ne yapmalıyım?**
@@ -56,10 +56,10 @@ Beş alan. Onlarca sekme yok — tek bir küçük dünya.
 
 | | Alan | Ne yapar |
 |---|---|---|
-| 🍎 | **Bahçe** | Ana ekran. Bugünün küçük görevi, büyüme durumu, devam et, son anlatım, projeler, köprüler |
+| 🔬 | **Laboratuvar** | Ana ekran. Bugünün küçük görevi, deney aşaması, devam et, son anlatım, projeler, köprüler |
 | 📚 | **Müfredat** | 4 faz, 67 birim, 657 görev. Zamansız akış |
-| 🧺 | **Brain Inbox** | Hızlı yakalama. Düzenleme sonra |
-| 🌱 | **Projeler** | Beş üretim projesi. En önemli alan: SIRADAKİ EYLEM |
+| 📥 | **Brain Inbox** | Hızlı yakalama. Düzenleme sonra |
+| ⚗️ | **Projeler** | Beş üretim projesi. En önemli alan: SIRADAKİ EYLEM |
 | 🎒 | **Çanta** | Anlatımlar, sınavlar, hata defteri, değerlendirme, depolama, kaynaklar |
 
 ---
@@ -79,11 +79,11 @@ Faz 3 · Elektromanyetizma 12 birim   ~175 saat
 Faz 4 · Sentez ve Üretim  12 birim   ~180 saat
 ```
 
-Bahçe metaforu XP değil, gerçek durum: 🌰 tohum → 🌱 filiz → 🪴 fidan → 🌳 ağaç → 🍎 meyve
+Laboratuvar metaforu XP değil, gerçek durum: 🧊 ham numune → ⚗️ tepkimede → 🧪 stabilize → 🔬 analiz → 💠 sonuçlandı
 
 ---
 
-## 🍀 Bugünün Küçük Görevi
+## 🎯 Bugünün Küçük Görevi
 
 Rastgele değil. Şunlara bakıp **tek bir anlamlı eylem** seçer ve **neden seçtiğini söyler**:
 
@@ -116,7 +116,7 @@ Sıradan bir ses kaydedici değil. Kendi sesinle kurduğun sözlü bilgi arşivi
 
 ---
 
-## 🍂 Hata Defteri
+## ⚠️ Hata Defteri
 
 Müfredatın en yüksek getirili aracı. Her hata üç sütun:
 
@@ -131,7 +131,7 @@ Uygulama örüntü arar ama suçlamaz:
 
 ---
 
-## 🌱 Beş Üretim Projesi
+## ⚗️ Beş Üretim Projesi
 
 Müfredat açıkça söylüyor: **dersler projelere hizmet eder, tersi değil.**
 
@@ -174,7 +174,7 @@ Bunlar hem birim sayfalarında görünür hem görev seçimini etkiler.
 **Kapalı ekran (< 380dp)** — tek bir soru:
 
 > (≧▽≦) — *ne yapıyoruz?*
-> Devam et · Anlat · Yakala · Bahçe
+> Devam et · Anlat · Yakala · Lab
 
 Bugünün görevi tek satır olarak görünür. Dashboard yok, utandırma yok.
 Asla *"X dakika boşa harcadın"* demez.
@@ -253,10 +253,10 @@ python3 tools/gen_curriculum.py
 
 Hepsi çalışıyor:
 
-Bahçe · Müfredat · Bugünün Küçük Görevi · Brain Inbox · Projeler · Ses kaydı ·
+Laboratuvar · Müfredat · Bugünün Küçük Görevi · Brain Inbox · Projeler · Ses kaydı ·
 Ses kütüphanesi · Oynatma · Müfredat↔Ses ilişkileri · Hata Defteri · Sınavlar ·
 Haftalık değerlendirme · Kullanıcı seçimli klasör · Depolama yönetimi · Katlanabilir arayüz ·
-Problem takibi · Kaynaklar · (≧▽≦)'ye Anlat
+Problem takibi · Kaynaklar · Kayda Anlat
 
 ### Sonraya bırakılanlar
 
