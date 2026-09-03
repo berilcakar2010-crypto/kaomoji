@@ -1,5 +1,6 @@
 package com.beril.kaomoji.ui
 
+import android.content.Intent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -12,6 +13,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -19,6 +21,9 @@ import androidx.compose.ui.unit.sp
 import com.beril.kaomoji.data.*
 import com.beril.kaomoji.storage.FileVault
 import com.beril.kaomoji.storage.humanSize
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 // ══════════════════════════ BRAIN INBOX ══════════════════════════
 
@@ -36,7 +41,7 @@ fun InboxScreen(store: Store) {
         verticalArrangement = Arrangement.spacedBy(9.dp)
     ) {
         item {
-            Text("🧺 Brain Inbox", style = Display)
+            Text("📥 Brain Inbox", style = Display)
             Text("Yakala şimdi, düzenle sonra.", style = Small)
         }
         item {
@@ -47,7 +52,7 @@ fun InboxScreen(store: Store) {
                 Spacer(Modifier.height(10.dp))
                 Btn("Kaydet", {
                     if (text.isNotBlank()) { store.addInbox(text.trim(), cat); text = "" }
-                }, bg = J.bark, emoji = "🧺")
+                }, bg = J.bark, emoji = "📥")
             }
         }
         item {
@@ -65,7 +70,7 @@ fun InboxScreen(store: Store) {
             }
         }
 
-        if (list.isEmpty()) item { Empty("🍃", "Inbox boş", "Temiz bir kafa iyi bir şey.") }
+        if (list.isEmpty()) item { Empty("🗒️", "Inbox boş", "Temiz bir kafa iyi bir şey.") }
 
         items(list) { n ->
             Row(
@@ -111,7 +116,7 @@ fun ProjectsScreen(store: Store, onOpen: (String) -> Unit) {
         verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
         item {
-            Text("🌱 Projeler", style = Display)
+            Text("⚗️ Projeler", style = Display)
             Text("Dersler projelere hizmet eder, tersi değil.", style = Small)
         }
         items(c.projects) { p ->
@@ -289,7 +294,7 @@ fun MistakesScreen(store: Store, presetUnit: String?, onBack: () -> Unit) {
         item {
             GhostBtn("Geri", onBack, emoji = "←")
             Spacer(Modifier.height(10.dp))
-            Text("🍂 Hata Defteri", style = Display)
+            Text("⚠️ Hata Defteri", style = Display)
             Text("Hata bir başarısızlık değil, bir adres.", style = Small)
         }
 
@@ -317,7 +322,7 @@ fun MistakesScreen(store: Store, presetUnit: String?, onBack: () -> Unit) {
         item {
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 Btn(if (adding) "Kapat" else "Hata ekle", { adding = !adding },
-                    Modifier.weight(1f), J.butter, Color(0xFF3A2F16), if (adding) "✕" else "＋")
+                    Modifier.weight(1f), J.butter, Color(0xFF1A0E05), if (adding) "✕" else "＋")
             }
         }
 
@@ -325,7 +330,7 @@ fun MistakesScreen(store: Store, presetUnit: String?, onBack: () -> Unit) {
 
         item { Selector(listOf("Açık", "Çözüldü", "Tümü"), filter, { filter = it }) }
 
-        if (list.isEmpty()) item { Empty("🍃", "Hata yok", "Ya çok iyisin ya da kaydetmiyorsun.") }
+        if (list.isEmpty()) item { Empty("🗒️", "Hata yok", "Ya çok iyisin ya da kaydetmiyorsun.") }
 
         items(list) { m ->
             Column(
@@ -408,7 +413,7 @@ private fun MistakeForm(store: Store, presetUnit: String?, onDone: () -> Unit) {
                 )
                 onDone()
             }
-        }, bg = J.butter, fg = Color(0xFF3A2F16), emoji = "🍂")
+        }, bg = J.butter, fg = Color(0xFF1A0E05), emoji = "⚠️")
     }
 }
 
@@ -489,7 +494,7 @@ fun AssessmentsScreen(store: Store, onBack: () -> Unit) {
                     .padding(13.dp)
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text(if (st.taken) "🍎" else "📋", style = TextStyle(fontSize = 20.sp))
+                    Text(if (st.taken) "💠" else "📋", style = TextStyle(fontSize = 20.sp))
                     Spacer(Modifier.width(10.dp))
                     Column(Modifier.weight(1f)) {
                         Text(a.name, style = TitleL.copy(fontSize = 17.sp))
@@ -528,12 +533,26 @@ fun AssessmentsScreen(store: Store, onBack: () -> Unit) {
 // ══════════════════════════ WEEKLY REVIEW ══════════════════════════
 
 @Composable
-fun ReviewScreen(store: Store, onBack: () -> Unit) {
+fun ReviewScreen(store: Store, vault: FileVault, onBack: () -> Unit) {
     var produced by remember { mutableStateOf("") }
     var canExplain by remember { mutableStateOf("") }
     var needsBook by remember { mutableStateOf("") }
     var declining by remember { mutableStateOf(false) }
     var saved by remember { mutableStateOf(false) }
+    val checklist = remember { mutableStateMapOf<String, Boolean>() }
+    var pendingVideoUri by remember { mutableStateOf<android.net.Uri?>(null) }
+    var savedVideoUri by remember { mutableStateOf<String?>(null) }
+    val videoLauncher = androidx.activity.compose.rememberLauncherForActivityResult(
+        androidx.activity.result.contract.ActivityResultContracts.CaptureVideo()
+    ) { success ->
+        if (success) {
+            pendingVideoUri?.let { cacheUri ->
+                savedVideoUri = vault.importVideoFromCache(
+                    cacheUri, "haftalik-gunluk-${System.currentTimeMillis()}"
+                )?.toString()
+            }
+        }
+    }
 
     LazyColumn(
         Modifier.fillMaxSize(),
@@ -589,9 +608,47 @@ fun ReviewScreen(store: Store, onBack: () -> Unit) {
             }
         }
         item {
+            Card {
+                Text("Bu haftanın checkpoint'leri", style = TitleM)
+                Spacer(Modifier.height(6.dp))
+                store.curriculum.subjects.filter { it.code != "self" }.forEach { subj ->
+                    val checked = checklist[subj.code] == true
+                    Row(
+                        Modifier.fillMaxWidth().clickable { checklist[subj.code] = !checked },
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Checkbox(checked, { checklist[subj.code] = !checked }, J.forest)
+                        Spacer(Modifier.width(10.dp))
+                        Text("${subj.emoji} ${subj.name}", style = Body)
+                    }
+                }
+            }
+        }
+        item {
+            Card {
+                Text("Video günlüğü (10 dk, serbest anlatım)", style = TitleM)
+                Spacer(Modifier.height(6.dp))
+                Text(
+                    "Sadece kaydet — izleme yok. Ay sonunda o ayın 4 videosu art arda izlenip kısa bir not yazılacak.",
+                    style = Small
+                )
+                Spacer(Modifier.height(9.dp))
+                Btn(if (savedVideoUri != null) "Video kaydedildi ✓" else "Video günlüğü kaydet", {
+                    val target = vault.createVideoCaptureTarget("haftalik-gunluk-${System.currentTimeMillis()}")
+                    if (target != null) {
+                        pendingVideoUri = target
+                        videoLauncher.launch(target)
+                    }
+                }, bg = J.lilac, emoji = "🎥")
+            }
+        }
+        item {
             Btn(if (saved) "Kaydedildi ✓" else "Değerlendirmeyi kaydet", {
                 store.addReview(
-                    WeeklyReview(uid(), produced, canExplain, needsBook, declining, System.currentTimeMillis())
+                    WeeklyReview(
+                        uid(), produced, canExplain, needsBook, declining, System.currentTimeMillis(),
+                        checklist = checklist.toMap(), videoUri = savedVideoUri
+                    )
                 )
                 saved = true
             }, bg = J.forest, emoji = "📝")
@@ -618,8 +675,11 @@ fun StorageScreen(
     onPickFolder: () -> Unit,
     onBack: () -> Unit
 ) {
+    val ctx = LocalContext.current
+    val scope = rememberCoroutineScope()
     var usage by remember { mutableStateOf<Map<String, Long>>(emptyMap()) }
     var msg by remember { mutableStateOf<String?>(null) }
+    var sharing by remember { mutableStateOf(false) }
 
     LaunchedEffect(store.storageUri, store.recordings.size) {
         usage = try { vault.usage() } catch (_: Exception) { emptyMap() }
@@ -710,6 +770,41 @@ fun StorageScreen(
                         msg = if (uri != null) "Dışa aktarıldı ✓" else "Aktarılamadı"
                     }, Modifier.weight(1f), J.forest, emoji = "📤")
                 }
+                Spacer(Modifier.height(8.dp))
+                Btn(
+                    if (sharing) "Yedek hazırlanıyor…" else "Başka bir yere kaydet",
+                    {
+                        if (!sharing) {
+                            sharing = true
+                            msg = null
+                            val stateJson = store.exportJson()
+                            scope.launch {
+                                val zip = withContext(Dispatchers.IO) {
+                                    vault.createFullBackupZip(stateJson)
+                                }
+                                sharing = false
+                                if (zip == null) {
+                                    msg = "Yedek oluşturulamadı"
+                                } else {
+                                    val shareUri = vault.shareUriFor(zip)
+                                    val send = Intent(Intent.ACTION_SEND).apply {
+                                        type = "application/zip"
+                                        putExtra(Intent.EXTRA_STREAM, shareUri)
+                                        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                                    }
+                                    ctx.startActivity(Intent.createChooser(send, "Yedeği kaydet / paylaş"))
+                                }
+                            }
+                        }
+                    },
+                    bg = J.lilac, emoji = "☁️", enabled = !sharing
+                )
+                Spacer(Modifier.height(4.dp))
+                Text(
+                    "Tüm ses/video/transkript dosyalarını ve ilerlemeni tek bir zip'te toplayıp " +
+                        "Drive, e-posta, başka bir klasör gibi istediğin herhangi bir yere kaydetmeni sağlar.",
+                    style = Tiny
+                )
                 msg?.let { Spacer(Modifier.height(8.dp)); Text(it, style = Small.copy(color = J.forest)) }
             }
 
@@ -758,12 +853,13 @@ fun StudyBagScreen(store: Store, onGo: (Screen) -> Unit, onExplainIt: () -> Unit
     val items = listOf(
         Triple("🎙️", "Anlatımlarım", Screen.Audio),
         Triple("📋", "Sınavlar", Screen.Assessments),
-        Triple("🍂", "Hata Defteri", Screen.Mistakes),
+        Triple("⚠️", "Hata Defteri", Screen.Mistakes),
         Triple("📝", "Haftalık Değerlendirme", Screen.Review),
         Triple("📁", "Depolama ve Dosyalar", Screen.Storage),
         Triple("📚", "Kaynaklar", Screen.Resources),
         Triple("🕸️", "Köprü Grafiği", Screen.BridgeGraph),
-        Triple("🃏", "Kartlar (Anki)", Screen.Flashcards)
+        Triple("🃏", "Kartlar (Anki)", Screen.Flashcards),
+        Triple("🗂️", "Müfredat Oluştur", Screen.CurriculumGen)
     )
 
     LazyColumn(
@@ -785,10 +881,10 @@ fun StudyBagScreen(store: Store, onGo: (Screen) -> Unit, onExplainIt: () -> Unit
                     .clickable { onExplainIt() }
                     .padding(14.dp)
             ) {
-                Text("(≧▽≦) anlamıyor", style = TitleL)
+                Text("// GİRDİ EKSİK", style = TitleL)
                 Spacer(Modifier.height(4.dp))
                 Text(
-                    "Küçük yaratığa bir konuyu anlat. Sınav değil, sohbet.",
+                    "Boş bir kayda bir konuyu anlat. Sınav değil, log tutmak.",
                     style = Small.copy(color = J.ink)
                 )
             }
@@ -889,40 +985,40 @@ fun ExplainItScreen(store: Store, onBack: () -> Unit, onRecord: (RecordRequest) 
             Modifier.fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(
-                "(≧▽≦)",
-                style = TextStyle(
-                    fontSize = 38.sp, fontWeight = FontWeight.Bold, color = J.forest,
-                    fontFamily = androidx.compose.ui.text.font.FontFamily.Monospace
-                )
-            )
-            Spacer(Modifier.height(10.dp))
             Column(
                 Modifier
+                    .fillMaxWidth()
                     .background(J.card, RoundedCornerShape(18.dp))
                     .border(1.dp, J.line, RoundedCornerShape(18.dp))
                     .padding(14.dp)
             ) {
                 Text(
-                    if (sent) "aa! şimdi biraz anladım galiba… ama şunu tekrar söyler misin?"
-                    else "\"${unit?.title ?: "bu konu"}\" nedir? ben hiç anlamadım…",
-                    style = Body
+                    "KAYIT DEFTERİ · GİRDİ TERMİNALİ",
+                    style = Tiny.copy(color = J.inkFaint, fontWeight = FontWeight.Bold)
+                )
+                Spacer(Modifier.height(8.dp))
+                Text(
+                    if (sent)
+                        "// KISMEN AYRIŞTIRILDI — belirsiz kaldı, daha net tanımla"
+                    else
+                        "> \"${unit?.title ?: "bu konu"}\" nedir?\n// GİRDİ BEKLENİYOR",
+                    style = Mono.copy(color = J.butter, fontSize = 13.sp, lineHeight = 19.sp)
                 )
             }
         }
 
         Spacer(Modifier.height(20.dp))
-        Field(text, { text = it }, "Ona anlat…", minLines = 6)
+        Field(text, { text = it }, "Kayda geç…", minLines = 6)
         Spacer(Modifier.height(12.dp))
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            Btn("Anlattım", { sent = true }, Modifier.weight(1f), J.forest, emoji = "💬")
-            Btn("Sesli anlat", {
-                onRecord(RecordRequest("(≧▽≦)'ye ${unit?.title ?: "konuyu"} anlat", unit?.id, null, false))
+            Btn("Kaydet", { sent = true }, Modifier.weight(1f), J.forest, emoji = "💾")
+            Btn("Sesli kaydet", {
+                onRecord(RecordRequest("Kayda ${unit?.title ?: "konuyu"} anlat", unit?.id, null, false))
             }, Modifier.weight(1f), J.cherry, emoji = "🎙️")
         }
         Spacer(Modifier.height(14.dp))
         Text(
-            "Bir şeyi küçük bir yaratığa anlatabiliyorsan, gerçekten biliyorsundur. "
+            "Bir şeyi hiçbir ön bilgisi olmayan bir kayda anlatabiliyorsan, gerçekten biliyorsundur. "
                 + "Takıldığın yer, henüz kapanmamış yerdir.",
             style = Small
         )

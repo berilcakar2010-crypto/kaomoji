@@ -19,29 +19,29 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
-// ── JUMINOCore palette ──────────────────────────────────────────────
+// ── VOIDLAB palette — laboratuvar karanlığı, mor devre ışığı, nixie kırmızısı ──
 object J {
-    val paper = Color(0xFFF6F1E4)        // warm cream
-    val paperDeep = Color(0xFFEDE6D4)
-    val card = Color(0xFFFFFBF2)
-    val ink = Color(0xFF2B2620)
-    val inkSoft = Color(0xFF6B6154)
-    val inkFaint = Color(0xFF9A9081)
+    val paper = Color(0xFF0B0710)        // void — near-black, faint violet undertone
+    val paperDeep = Color(0xFF140C1E)
+    val card = Color(0xFF1B1228)
+    val ink = Color(0xFFF3EEFA)          // chalk white
+    val inkSoft = Color(0xFFB6ABC9)      // muted lavender-gray
+    val inkFaint = Color(0xFF6D6280)     // faint violet-gray
 
-    val apple = Color(0xFF7BB661)        // apple green
-    val forest = Color(0xFF3F6B4A)       // forest green
-    val mint = Color(0xFFA9D8B8)
-    val lime = Color(0xFFC5DE8F)
-    val cherry = Color(0xFFC8402F)       // cherry / strawberry red
-    val berry = Color(0xFFE06C5A)
-    val blush = Color(0xFFEFA9B6)        // soft pink
-    val butter = Color(0xFFEFC75E)       // muted yellow
-    val bark = Color(0xFF8A6647)         // warm brown
-    val sky = Color(0xFF8FB4CC)
-    val lilac = Color(0xFFB9AFD6)
+    val apple = Color(0xFF9D5CFF)        // electric violet — primary
+    val forest = Color(0xFF6425B8)       // deep violet — primary (pressed/strong)
+    val mint = Color(0xFFDCCBFA)         // pale violet glow
+    val lime = Color(0xFFC7B4EF)         // soft lavender
+    val cherry = Color(0xFFE12A44)       // signal red — secondary / error
+    val berry = Color(0xFFB4102E)        // deep crimson
+    val blush = Color(0xFFCE6E8C)        // muted rose
+    val butter = Color(0xFFFFA23C)       // nixie amber glow — warnings / highlights
+    val bark = Color(0xFF43223A)         // dark plum-brown
+    val sky = Color(0xFF7C86E0)          // cool blue-violet
+    val lilac = Color(0xFFAE8CFB)        // violet accent
 
-    val line = Color(0xFFDCD2BE)
-    val lineSoft = Color(0xFFE8E0CF)
+    val line = Color(0xFF352745)         // dark violet-gray border
+    val lineSoft = Color(0xFF241A33)
 }
 
 fun subjectColor(hex: String): Color = try {
@@ -50,17 +50,17 @@ fun subjectColor(hex: String): Color = try {
     J.apple
 }
 
-// ── Typography ──────────────────────────────────────────────────────
+// ── Typography — laboratuvar konsolu: monospace başlıklar, sade gövde ─
 val Display = TextStyle(
-    fontFamily = FontFamily.Serif, fontWeight = FontWeight.Bold,
-    fontSize = 26.sp, lineHeight = 32.sp, color = J.ink
+    fontFamily = FontFamily.Monospace, fontWeight = FontWeight.Bold,
+    fontSize = 26.sp, lineHeight = 32.sp, color = J.ink, letterSpacing = 0.4.sp
 )
 val TitleL = TextStyle(
-    fontFamily = FontFamily.Serif, fontWeight = FontWeight.Bold,
-    fontSize = 20.sp, lineHeight = 26.sp, color = J.ink
+    fontFamily = FontFamily.Monospace, fontWeight = FontWeight.Bold,
+    fontSize = 20.sp, lineHeight = 26.sp, color = J.ink, letterSpacing = 0.3.sp
 )
 val TitleM = TextStyle(
-    fontFamily = FontFamily.Serif, fontWeight = FontWeight.SemiBold,
+    fontFamily = FontFamily.Monospace, fontWeight = FontWeight.SemiBold,
     fontSize = 16.sp, lineHeight = 22.sp, color = J.ink
 )
 val Body = TextStyle(
@@ -81,8 +81,8 @@ val Mono = TextStyle(
     fontSize = 12.sp, color = J.inkSoft
 )
 
-private val LightScheme = lightColorScheme(
-    primary = J.forest,
+private val VoidScheme = darkColorScheme(
+    primary = J.apple,
     onPrimary = Color.White,
     secondary = J.cherry,
     onSecondary = Color.White,
@@ -99,7 +99,7 @@ private val LightScheme = lightColorScheme(
 @Composable
 fun KaomojiTheme(content: @Composable () -> Unit) {
     MaterialTheme(
-        colorScheme = LightScheme,
+        colorScheme = VoidScheme,
         typography = Typography(
             bodyLarge = Body, bodyMedium = Body, bodySmall = Small,
             titleLarge = TitleL, titleMedium = TitleM, labelSmall = Tiny
@@ -110,34 +110,34 @@ fun KaomojiTheme(content: @Composable () -> Unit) {
 
 // ── Decorative building blocks ──────────────────────────────────────
 
-/** Faint gingham/check pattern — the app's paper texture. */
+/** Faint schematic grid — laboratuvar defteri / osiloskop ızgarası. */
 fun Modifier.gingham(
-    color: Color = J.apple.copy(alpha = 0.055f),
+    color: Color = J.apple.copy(alpha = 0.05f),
     cell: Float = 26f
 ): Modifier = this.drawBehind {
     var x = 0f
     while (x < size.width) {
-        drawRect(color, topLeft = Offset(x, 0f), size = Size(cell, size.height))
-        x += cell * 2
+        drawLine(color, Offset(x, 0f), Offset(x, size.height), strokeWidth = 1f)
+        x += cell
     }
     var y = 0f
     while (y < size.height) {
-        drawRect(color, topLeft = Offset(0f, y), size = Size(size.width, cell))
-        y += cell * 2
+        drawLine(color, Offset(0f, y), Offset(size.width, y), strokeWidth = 1f)
+        y += cell
     }
 }
 
-/** Dashed hand-cut sticker border. */
+/** Dashed containment-panel border — hücre/sinyal çerçevesi. */
 fun Modifier.dashed(
     color: Color = J.line,
-    width: Float = 2f,
-    radius: Float = 18f
+    width: Float = 1.4f,
+    radius: Float = 14f
 ): Modifier = this.drawBehind {
     drawRoundRect(
         color = color,
         style = Stroke(
             width = width,
-            pathEffect = PathEffect.dashPathEffect(floatArrayOf(9f, 7f), 0f)
+            pathEffect = PathEffect.dashPathEffect(floatArrayOf(6f, 5f), 0f)
         ),
         cornerRadius = androidx.compose.ui.geometry.CornerRadius(radius, radius)
     )

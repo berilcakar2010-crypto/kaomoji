@@ -60,9 +60,12 @@ dependencies {
     implementation("androidx.glance:glance-material3:1.1.1")
     implementation("androidx.work:work-runtime-ktx:2.9.1")
 
-    // Groq API (transkripsiyon, anlatım analizi, otomatik soru üretimi)
+    // Groq/Gemini API (transkripsiyon, anlatım analizi, otomatik soru + müfredat üretimi)
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.7")
+
+    // Yüklenen .pdf belgelerinden metin çıkarmak için (müfredat üretici)
+    implementation("com.tom-roush:pdfbox-android:2.0.27.0")
 
     implementation(platform("androidx.compose:compose-bom:2024.10.01"))
     implementation("androidx.compose.ui:ui")
