@@ -21,6 +21,12 @@ v2'den farkları:
      (bkz. UNIT_TITLES). Ünite sırası her ders için kendi cadence'ine göre
      ilerler ve liste bitince başa sarar — okulun kendi yıllık planındaki
      sıralama farklıysa UNIT_TITLES'taki listeyi buna göre düzenle.
+  7. Müfredat tanımı 2026-2027 güncellemesi: P2 artık "Fizik & Olimpiyat
+     Problem Portföyü" değil (fizik/biyoloji olimpiyatına girilmiyor) —
+     "Hopfield Ağı ile İlişkisel Bellek Modellemesi" (bkz. PREP_SUBJECTS
+     için ayrı ray: SAT/AP hazırlığı + Brain Bee hazırlığı). Ayrıca tek
+     seferlik idari/karar milestone'ları (RAM, BEP, Hat A/B/C kararı,
+     TÜBİTAK 2204-A, UWC mülakat) MILESTONES sözlüğünde haftaya bağlı.
 
 Schema, v2 ile birebir aynı (Models.kt / CurriculumLoader.kt DEĞİŞMEDİ).
 """
@@ -42,12 +48,12 @@ physics = (
      "Ch17 Dalgalar II — tekrar", "Genel tekrar (Ch1-13 mekanik)", "Sınav sonrası toparlama",
      "Ch18 Sıcaklık ve Isı", "Ch19 Gazların Kinetik Teorisi", "Ch20 Entropi ve 2. Yasa",
      "Ch21 Elektrik Yükü", "Ch22 Elektrik Alanlar", "Genel tekrar (Ch14-22)",
-     "P2 portföy toparlama (Faz 3)"] +
+     "Faz 3 toparlama (mekanik + termodinamik)"] +
     ["Ch23 Gauss Yasası", "Ch24 Elektrik Potansiyeli", "Ch25 Kapasitans",
      "Ch26 Akım ve Direnç", "Ch27 Devreler", "Ch28 Manyetik Alanlar",
      "Ch29 Akım Kaynaklı Manyetik Alan", "Genel tekrar (elektromanyetizma)",
      "Ch33 Elektromanyetik Dalgalar", "Ch34 Görüntüler (Geometrik Optik)",
-     "Ch35 Girişim", "Genel tekrar (optik)", "P2 portföy final derlemesi"]
+     "Ch35 Girişim", "Genel tekrar (optik)", "Fizik — final tekrar ve toparlama"]
 )
 math = (
     ["Ch1 Fonksiyonlar ve Modeller (tekrar)", "Ch2 Limit ve Türev — başlangıç", "Ch2 Limit ve Türev — bitiş",
@@ -115,7 +121,9 @@ PHASE_META = {
     "p2": {"name": "Faz 2 · Çok Bölmeli Model", "sub": "Eki – Kas", "hours": 178,
            "goal": "Çok bölmeli (multi-compartment) HH modeli kuruluyor, Allen Brain Atlas verisiyle ilk parametre eşleştirme."},
     "p3": {"name": "Faz 3 · Güz Konsolidasyonu", "sub": "Ara – Oca", "hours": 84,
-           "goal": "Sınav dönemi — tempo bilerek düşük. Tek nöron modeli + gerçek veriyle karşılaştırma raporu (BEP güz değerlendirmesi)."},
+           "goal": "Sınav dönemi — tempo bilerek düşük. Tek nöron modeli + gerçek veriyle karşılaştırma raporu "
+                   "(BEP güz değerlendirmesi). Bu fazın sonunda Hat A/B/C (Kyoto Fizik / Almanya Bilişsel "
+                   "Bilim / ABD) vasıta kararı netleştirilmiş olmalı."},
     "p4": {"name": "Faz 4 · Stokastik Genişleme", "sub": "Şub – Mar", "hours": 189,
            "goal": "Stokastik iyon kanalı gürültüsü ve iki sinaptik bağlı nöron modele ekleniyor."},
     "p5": {"name": "Faz 5 · Senkronizasyon ve Sentez", "sub": "Nis – May", "hours": 189,
@@ -152,14 +160,23 @@ UNIT_TITLES = {
             "Family Life & Home", "Life in the Neighbourhood, City & Social Life",
             "Life in the World & Culture", "Life in Nature & Global Problems",
             "Life in the Universe & The Future"],  # B2.2 (hazırlık sonrası 10. sınıf)
+    # Hat C (ABD) hazırlığı — SAT + AP portföyü, bkz. müfredat tanımı §2.1
+    "satap": ["SAT — Reading & Writing pratik seti", "SAT — Math pratik seti",
+              "AP Calculus BC — pratik problemleri", "AP Physics C (Mechanics) — pratik problemleri",
+              "AP Computer Science A — pratik problemleri", "AP Psychology — konu tekrarı",
+              "AP Statistics — konu tekrarı"],
+    # Brain Bee (Uluslararası Beyin Olimpiyatı) — öncelikli olimpiyat adayı, bkz. §4
+    "brainbee": ["Nöroanatomi — temel yapılar", "Nörofizyoloji — sinaptik iletim ve nöral kodlama",
+                 "Nörolojik Hastalıklar", "Psikiyatrik Bozukluklar", "Duyu Sistemleri",
+                 "Motor Sistemler ve Kontrol", "Nöroetik ve Özel Konular"],
 }
 SCHOOL_SUBJECTS = {
     "msch": {"name": "Matematik (okul)", "emoji": "📐", "col": "#B48CFF", "cadence": 3,
              "kind": "write", "unit_label": "köprü notu",
              "text": "Matematik (okul) — {u}: MEB konusunu Ray A'daki ileri versiyona bağlayan kısa köprü notu"},
     "psch": {"name": "Fizik (okul)", "emoji": "🔺", "col": "#FF5C7A", "cadence": 4,
-             "kind": "produce", "unit_label": "olimpiyat sorusu",
-             "text": "Fizik (okul) — {u}: konuyu bir olimpiyat sorusuna dönüştür + çöz (P2 portföyüne ekle)"},
+             "kind": "write", "unit_label": "köprü notu",
+             "text": "Fizik (okul) — {u}: MEB konusunu Ray A'daki (Halliday) karşılığına bağlayan kısa köprü notu — olimpiyat hedefi yok, sadece temel pekiştirme"},
     "kim": {"name": "Kimya", "emoji": "🧪", "col": "#FFC98C", "cadence": 4,
             "kind": "write", "unit_label": "vaka analizi",
             "text": "Kimya — {u}: gerçek dünya vakası analizi (tek sayfa)"},
@@ -189,8 +206,21 @@ SCHOOL_SUBJECTS = {
 
 BAK_GROUP = {"name": "Beden/Sanat/Sağlık", "emoji": "🎨", "col": "#8C6FBF"}  # bakım grubu, üretim baskısı yok
 
+# Olimpiyat/vasıta hazırlığı — okulun zorunlu dersleri DEĞİL, ayrı bir ray.
+# Hat C (ABD) henüz "olası" statüsünde → satap düşük cadence (nadir, ek yük az).
+# Brain Bee "öncelikli aday" → brainbee daha sık.
+PREP_SUBJECTS = {
+    "satap": {"name": "SAT/AP Hazırlığı", "emoji": "🎓", "col": "#FFD08A", "cadence": 6,
+              "kind": "problem", "unit_label": "pratik seti",
+              "text": "SAT/AP Hazırlığı — {u}: pratik seti çöz + hata analizi (Hat C açık kaldığı sürece, tam efor değil)"},
+    "brainbee": {"name": "Brain Bee Hazırlığı", "emoji": "🥼", "col": "#7A8FE0", "cadence": 3,
+                 "kind": "study", "unit_label": "konu çalışması",
+                 "text": "Brain Bee Hazırlığı — {u}: konu çalışması + örnek soru seti (BAD müfredatına göre)"},
+}
+ROTATING_SUBJECTS = {**SCHOOL_SUBJECTS, **PREP_SUBJECTS}
+
 def school_task_for(code, occurrence_n):
-    d = SCHOOL_SUBJECTS[code]
+    d = ROTATING_SUBJECTS[code]
     titles = UNIT_TITLES[code]
     unit_title = titles[(occurrence_n - 1) % len(titles)]
     return {"s": code, "k": d["kind"], "t": d["text"].format(u=unit_title), "m": 45}
@@ -218,10 +248,30 @@ def bak_task(wk):
 
 def prod_task():
     return {"s": "prod", "k": "produce",
-            "t": "P1 (destek eğitim odası — çok bölmeli HH modeli) / P2 (fizik portföyü) / P3 (UWC & felsefe kulübü) — dönüşümlü",
+            "t": "P1 (destek eğitim odası — çok bölmeli HH modeli) / P2 (Hopfield ağı modeli) / P3 (UWC & felsefe kulübü) — dönüşümlü",
             "m": 60}
 
+# ── 3b. Tek seferlik idari/karar milestone'ları (müfredat tanımı §9) ───
+# hafta → [(görev metni, kind), ...]. 26 Ağu 2026 = hafta 1.
+MILESTONES = {
+    2: [("Çocuk-ergen psikiyatri randevusu al (üstün zeka raporu — RAM başvurusunun ön adımı). "
+         "Aynı görüşmede YKS/ÖSYM ek süre hakkının sadece üstün zeka tanısıyla sağlanıp sağlanmadığını sor.",
+         "produce")],
+    3: [("Matematik ve Bilgisayar/Informatik olimpiyatlarından geçmiş yıl 1. aşama sorularını test et — "
+         "devam kararını buna göre ver.", "test")],
+    5: [("Brain Bee için BAD (Beyin Araştırmaları Derneği) sitesini takip et, başvuru koşullarını netleştir.",
+         "review")],
+    12: [("RAM randevusu ve değerlendirme sürecini takip et (üstün zeka raporuyla başvuru).", "produce")],
+    19: [("BEP hazırlığı ve Destek Eğitim Odası resmileşme sürecini tamamla.", "produce")],
+    21: [("KARAR: Hat A (Kyoto, Fizik) vs Hat B (Almanya, Bilişsel Bilim) vs Hat C (ABD) — 1. dönem sonu "
+          "son tarih. Soyut düşünmek yerine gerçek ders sillabuslarını (nonlinear dynamics/condensed matter "
+          "vs. computational neuroscience) karşılaştırarak karar ver.", "review")],
+    24: [("TÜBİTAK 2204-A başvurusunu P1 (çok bölmeli HH modeli) ile hazırla ve gönder.", "produce")],
+    25: [("UWC mülakat sürecini takip et.", "review")],
+}
+
 SRC = {
+    "idari": "Müfredat tanımı §9 (idari/karar milestone'ları)",
     "phys": "Halliday, Fundamentals of Physics (EN)",
     "math": "Stewart Calculus / Strang Lineer Cebir / MEB",
     "bio": "Campbell Biology / Kandel Principles of Neural Science (6.bs) / NeuroMorpho.org / Allen Brain Atlas",
@@ -234,10 +284,12 @@ for c, d in SCHOOL_SUBJECTS.items():
     SRC[c] = "Okul müfredatı (Maarif Model 10. sınıf, MEB)"
 SRC["bak"] = "Okul müfredatı (MEB)"
 SRC["self"] = "Haftalık öz değerlendirme protokolü"
+SRC["satap"] = "Official SAT Practice (Khan Academy) / AP Classroom (College Board)"
+SRC["brainbee"] = "Brain Bee resmi müfredatı / Beyin Araştırmaları Derneği (BAD)"
 
 # ── 4. Haftalık birimleri üret ──────────────────────────────────────
 units_by_phase = {p: [] for p in PHASE_META}
-school_occurrence = {c: 0 for c in SCHOOL_SUBJECTS}
+school_occurrence = {c: 0 for c in ROTATING_SUBJECTS}
 
 for wk in range(1, WEEKS + 1):
     idx = wk - 1
@@ -254,8 +306,9 @@ for wk in range(1, WEEKS + 1):
     p_t = prod_task(); p_t["i"] = "u%02d-t04" % wk
     tasks.append(p_t)
 
-    # Ray B — rotasyonla dağıtılan okul dersleri (cadence'e göre bu hafta sırası gelenler)
-    for code, d in SCHOOL_SUBJECTS.items():
+    # Ray B — rotasyonla dağıtılan okul dersleri + olimpiyat/vasıta hazırlığı
+    # (cadence'e göre bu hafta sırası gelenler)
+    for code, d in ROTATING_SUBJECTS.items():
         if wk % d["cadence"] == 0 or wk == 1:
             school_occurrence[code] += 1
             t = school_task_for(code, school_occurrence[code])
@@ -268,6 +321,10 @@ for wk in range(1, WEEKS + 1):
     if wk % 4 == 0:
         bak_t = bak_task(wk); bak_t["i"] = "u%02d-t-bak" % wk; tasks.append(bak_t)
     self_t = self_task(); self_t["i"] = "u%02d-t-self" % wk; tasks.append(self_t)
+
+    # idari/karar milestone'ları (varsa)
+    for j, (mtext, mkind) in enumerate(MILESTONES.get(wk, [])):
+        tasks.append({"i": "u%02d-t-idari%d" % (wk, j), "s": "idari", "k": mkind, "t": mtext, "m": 30})
 
     title = "Hafta %d · %s" % (wk, physics[idx].split(" — ")[0].split(" (")[0])
     kicker = "%s · %s" % (PHASE_META[phid]["name"], math[idx].split(" (")[0])
@@ -307,15 +364,30 @@ projects = [
             "İki nöron sinaptik olarak bağlandı", "Senkronizasyon analizi tamamlandı",
             "Gerçek veriyle nihai karşılaştırma + biyolojik gerçeklik değerlendirmesi yazıldı",
             "Final rapor + BEP sunumu tamam"]},
-    {"id": "P2", "name": "Fizik & Olimpiyat Problem Portföyü", "emoji": "⚛️",
-     "goal": "Halliday + okul fiziğinden dönüştürülen + olimpiyat seviyesi problemlerden bir çözüm/türetim defteri.",
-     "phases": {"p1": "Mekanik temel problemleri", "p2": "Enerji, momentum, dönme problemleri",
-                "p3": "Salınım ve dalga problemleri", "p4": "Elektromanyetizma problemleri",
-                "p5": "Optik + portföy derlemesi", "p6": "Final portföy PDF"},
-     "topics": ["Mekanik", "Enerji", "Salınım", "Dalgalar", "Elektromanyetizma", "Optik"],
-     "next": "İlk 5 mekanik problemini seç ve çözüm defterini aç",
-     "ms": ["Faz 1-2 problemleri tamam", "Faz 3 problemleri tamam", "Faz 4 problemleri tamam",
-            "Faz 5 problemleri tamam", "Final portföy PDF hazır"]},
+    {"id": "P2", "name": "Hopfield Ağı ile İlişkisel Bellek Modellemesi", "emoji": "🕸️",
+     "goal": ("Fizik olimpiyatı hedefi iptal edildiği için eski 'fizik portföyü' tanımı bırakıldı. "
+              "Yerine P1'i tamamlayan, ağ/sistem seviyesinde çalışan bir hesaplamalı nörobilim projesi: "
+              "klasik Hopfield ağı (istatistiksel mekanik kökenli, ilişkisel bellek/attractor network modeli). "
+              "P1 tek/çift nöron seviyesinde (kablo teorisi, biyofiziksel detay) çalışırken, P2 ağ seviyesinde "
+              "çalışıyor — portföyde ölçek çeşitliliği sağlıyor. Matematiksel temeli (enerji fonksiyonları, "
+              "istatistiksel mekanik) hem Hat A'nın (Kyoto, Statistical Physics/Complex Systems) hem Hat B/C'nin "
+              "(Bilişsel Bilim, öğrenme/bellek modelleme) ilgi alanıyla örtüşüyor. Güncel uzantısı: 2020'de "
+              "Hopfield ağlarının Transformer dikkat (attention) mekanizmasıyla matematiksel eşdeğerliği "
+              "gösterildi ('Hopfield Networks is All You Need') — klasik teorik nörobilimi güncel yapay zeka "
+              "araştırmasına bağlıyor."),
+     "phases": {"p1": "Klasik Hopfield ağı implementasyonu — depolama kapasitesi, enerji manzarası",
+                "p2": "Sahte durumlar (spurious states) + biyolojik bellek fenomenleriyle karşılaştırma",
+                "p3": "Örüntü tamamlama (pattern completion) analizi + Faz 1-3 toparlama",
+                "p4": "Kapasite sınırının aşılmasında 'katastrofik unutma' incelemesi",
+                "p5": "(İleri, opsiyonel) Modern Dense Associative Memory / Transformer-attention bağlantısına giriş",
+                "p6": "Final portföy: kod + rapor + Transformer bağlantısı notu"},
+     "topics": ["Hopfield Ağı", "İstatistiksel Mekanik", "Attractor Network", "İlişkisel Bellek",
+                "Transformer/Attention", "Python"],
+     "next": "Klasik Hopfield ağının Python implementasyonuna başla: Hebbian öğrenme kuralıyla ağırlık matrisi kurulumu",
+     "ms": ["Klasik Hopfield ağı çalışıyor (depolama + geri çağırma)", "Enerji manzarası görselleştirildi",
+            "Sahte durumlar (spurious states) analiz edildi", "Biyolojik bellek fenomenleriyle karşılaştırma yazıldı",
+            "Kapasite sınırı + katastrofik unutma incelemesi tamam",
+            "(Opsiyonel) Transformer-attention bağlantısı notu yazıldı", "Final portföy (kod+rapor) hazır"]},
     {"id": "P3", "name": "UWC Başvurusu & Felsefe Kulübü Üretimi", "emoji": "🍀",
      "goal": "Felsefe kulübünü sürdür, UWC başvurusunu somut çıktılarla besle.",
      "phases": {"p1": "Kurucu çekirdek toplama, idareyle görüşme", "p2": "Kulüp ilk oturumları, düzenli ritim",
@@ -347,6 +419,11 @@ bridges = [
     {"n": "Kalkülüs ↔ Felsefe", "e": "♾️",
      "d": "Zenon paradoksları ve limit kavramı — felsefe kulübünün ilk oturum konusu.",
      "t": ["Limit", "Felsefe"]},
+    {"n": "Hopfield Ağı ↔ Transformer Attention", "e": "🕸️",
+     "d": "2020'de Hopfield ağlarının modern Transformer dikkat (attention) mekanizmasıyla matematiksel "
+          "olarak eşdeğer olduğu gösterildi ('Hopfield Networks is All You Need') — P2, klasik istatistiksel "
+          "mekanik kökenli teorik nörobilimi güncel yapay zeka araştırmasına bağlıyor.",
+     "t": ["İstatistiksel Mekanik", "Nörobilim", "Yapay Zeka"]},
 ]
 
 resources = [
@@ -360,6 +437,11 @@ resources = [
     {"s": "py", "n": "Computational Physics — Mark Newman", "u": "Sayısal yöntemler, PDE/stokastik için"},
     {"s": "jp", "n": "Genki I + II", "u": "Haftalık tekrar kaynağı"},
     {"s": "de", "n": "Menschen A1/A2", "u": "Ana kitap"},
+    {"s": "prod", "n": "Hopfield, J.J. (1982) — Neural networks and physical systems...", "u": "P2 temel makale"},
+    {"s": "prod", "n": "Ramsauer et al. (2020) — Hopfield Networks is All You Need", "u": "P2 güncel bağlantı"},
+    {"s": "satap", "n": "Official SAT Practice — Khan Academy", "u": "Ücretsiz, College Board resmi ortağı"},
+    {"s": "satap", "n": "AP Classroom — College Board", "u": "AP Calc BC / Physics C / CS A / Psychology / Statistics"},
+    {"s": "brainbee", "n": "Brain Bee resmi müfredatı (BAD üzerinden)", "u": "Nöroanatomi/nörofizyoloji ağırlıklı"},
 ]
 
 subjects = [
@@ -372,8 +454,9 @@ subjects = [
     {"c": "uwc", "n": "UWC", "e": "🍀", "col": "#C7B4EF"},
     {"c": "prod", "n": "Üretim", "e": "🛠️", "col": "#6425B8"},
     {"c": "self", "n": "Öz Değerlendirme", "e": "🪞", "col": "#AE8CFB"},
+    {"c": "idari", "n": "İdari & Kararlar", "e": "🗂️", "col": "#E0526B"},
     {"c": "bak", "n": BAK_GROUP["name"], "e": BAK_GROUP["emoji"], "col": BAK_GROUP["col"]},
-] + [{"c": c, "n": d["name"], "e": d["emoji"], "col": d["col"]} for c, d in SCHOOL_SUBJECTS.items()]
+] + [{"c": c, "n": d["name"], "e": d["emoji"], "col": d["col"]} for c, d in ROTATING_SUBJECTS.items()]
 
 kinds = [
     {"c": "study", "n": "Öğren", "e": "📚"}, {"c": "problem", "n": "Problem", "e": "✏️"},

@@ -57,7 +57,7 @@ Beş alan. Onlarca sekme yok — tek bir küçük dünya.
 | | Alan | Ne yapar |
 |---|---|---|
 | 🔬 | **Laboratuvar** | Ana ekran. Bugünün küçük görevi, deney aşaması, devam et, son anlatım, projeler, köprüler |
-| 📚 | **Müfredat** | 6 faz, 43 birim, 453 görev. Zamansız akış |
+| 📚 | **Müfredat** | 6 faz, 43 birim, 484 görev. Zamansız akış |
 | 📥 | **Brain Inbox** | Hızlı yakalama. Düzenleme sonra |
 | ⚗️ | **Projeler** | Beş üretim projesi. En önemli alan: SIRADAKİ EYLEM |
 | 🎒 | **Çanta** | Anlatımlar, sınavlar, hata defteri, değerlendirme, depolama, kaynaklar |
@@ -133,20 +133,18 @@ Uygulama örüntü arar ama suçlamaz:
 
 ---
 
-## ⚗️ Beş Üretim Projesi
+## ⚗️ Üç Üretim Projesi
 
 Müfredat açıkça söylüyor: **dersler projelere hizmet eder, tersi değil.**
 
 | | Proje | Ne |
 |---|---|---|
-| 🐍 | **fizik.py** | Kendi sayısal fizik kütüphanen — kinematikten ışın izlemeye |
-| 🗺️ | **İnteraktif Fizik Atlası** | React + Plotly, parametre kaydırıcılı sayfalar |
-| 📄 | **Kuantum Simülasyon Makalesi** | 4006 projesi → İngilizce akademik makale |
-| 🇯🇵 | **kotoba** | Kendi Japonca SRS aracın (SM-2) |
-| ✍️ | **Deneme Portfolyosu** | Ayda 2 deneme, hedef 16 yazı |
+| 🧠 | **P1 — Destek Eğitim Odası: Çok Bölmeli HH Nöron Modeli** | Gerçek morfoloji (NeuroMorpho.org) + gerçek elektrofizyoloji (Allen Brain Atlas) verisiyle kablo-teorisi tabanlı, stokastik iyon kanalı gürültülü, iki sinaptik bağlı nöron simülasyonu. Hedef: TÜBİTAK 2204-A. |
+| 🕸️ | **P2 — Hopfield Ağı ile İlişkisel Bellek Modellemesi** | Klasik Hopfield ağı (depolama kapasitesi, enerji manzarası, sahte durumlar), biyolojik bellek fenomenleriyle karşılaştırma, opsiyonel Transformer-attention bağlantısı. |
+| 🍀 | **P3 — UWC Başvurusu & Felsefe Kulübü** | UWC başvurusu birincil öncelik; felsefe kulübü (analitik felsefe + bilim felsefesi) topluluk katkısı kanıtı olarak sürdürülüyor. |
 
 Her proje kartında en önemli alan: **SIRADAKİ EYLEM**.
-"fizik.py üzerinde çalış" değil — *"Vector3D cross product metodunu yaz."*
+"P1 üzerinde çalış" değil — *"NeuroMorpho.org'dan bir piramidal nöron morfolojisi seç ve kablo denkleminin sayısal iskeletini kur."*
 
 ---
 
@@ -155,16 +153,11 @@ Her proje kartında en önemli alan: **SIRADAKİ EYLEM**.
 Birinci sınıf ilişkiler, süs değil:
 
 ```
-Entropi ↔ Enformasyon          Boltzmann = Shannon
-Bilim Felsefesi ↔ Halliday     Newton→Einstein bir paradigma kayması mı?
-Kalkülüs ↔ Felsefe             Zenon ve limit
-Edebiyat ↔ Akademik Yazım      argüman kurmak
-Japonca ↔ Programlama          kotoba: Unicode, veritabanı, SRS
-Olasılık ↔ Kuantum             ölçümün olasılıksal doğası
-Lineer Cebir ↔ Kuantum         Hilbert uzayı, özdurum
-Fourier ↔ Müzik ↔ Dalga        harmonik analiz
-Vektör Analizi ↔ Elektrik Alan Gauss = diverjans teoremi
-DD ↔ Salınım ↔ Devre           hepsi aynı denklem
+Kablo Teorisi Köprüsü                 PDE + devre teorisi + gerçek nöron morfolojisi (P1)
+Stokastik Süreçler ↔ Kanal Gürültüsü  Markov modeli = iyon kanalı açılıp kapanması
+Dinamik Sistemler ↔ Senkronizasyon    salınım + diferansiyel denklem + iki nöron senkronu
+Kalkülüs ↔ Felsefe                    Zenon paradoksları ve limit kavramı
+Hopfield Ağı ↔ Transformer Attention  istatistiksel mekanik → güncel yapay zeka (P2)
 ```
 
 Bunlar hem birim sayfalarında görünür hem görev seçimini etkiler.
