@@ -36,6 +36,7 @@ sealed class Screen {
     data object ExplainIt : Screen()
     data object BridgeGraph : Screen()
     data object Flashcards : Screen()
+    data object CurriculumGen : Screen()
     data class UnitDetail(val id: String) : Screen()
     data class ProjectDetail(val id: String) : Screen()
 }
@@ -173,12 +174,13 @@ private fun Body(
         }
         is Screen.Mistakes -> MistakesScreen(store, mistakeUnit, onBack)
         is Screen.Assessments -> AssessmentsScreen(store, onBack)
-        is Screen.Review -> ReviewScreen(store, onBack)
+        is Screen.Review -> ReviewScreen(store, vault, onBack)
         is Screen.Storage -> StorageScreen(store, vault, compact, onPickFolder, onBack)
         is Screen.Resources -> ResourcesScreen(store, onBack)
         is Screen.ExplainIt -> ExplainItScreen(store, onBack, onRecord)
         is Screen.BridgeGraph -> BridgeGraphScreen(store, onBack)
         is Screen.Flashcards -> FlashcardsScreen(store, vault, onBack)
+        is Screen.CurriculumGen -> CurriculumGenScreen(store, onBack)
         is Screen.UnitDetail -> UnitDetailScreen(
             store, screen.id, onBack, onRecord, onAddMistake, onLogProblems
         )

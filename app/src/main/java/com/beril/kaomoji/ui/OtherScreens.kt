@@ -1,5 +1,6 @@
 package com.beril.kaomoji.ui
 
+import android.content.Intent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -12,6 +13,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -19,6 +21,9 @@ import androidx.compose.ui.unit.sp
 import com.beril.kaomoji.data.*
 import com.beril.kaomoji.storage.FileVault
 import com.beril.kaomoji.storage.humanSize
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 // ══════════════════════════ BRAIN INBOX ══════════════════════════
 
@@ -528,12 +533,26 @@ fun AssessmentsScreen(store: Store, onBack: () -> Unit) {
 // ══════════════════════════ WEEKLY REVIEW ══════════════════════════
 
 @Composable
-fun ReviewScreen(store: Store, onBack: () -> Unit) {
+fun ReviewScreen(store: Store, vault: FileVault, onBack: () -> Unit) {
     var produced by remember { mutableStateOf("") }
     var canExplain by remember { mutableStateOf("") }
     var needsBook by remember { mutableStateOf("") }
     var declining by remember { mutableStateOf(false) }
     var saved by remember { mutableStateOf(false) }
+    val checklist = remember { mutableStateMapOf<String, Boolean>() }
+    var pendingVideoUri by remember { mutableStateOf<android.net.Uri?>(null) }
+    var savedVideoUri by remember { mutableStateOf<String?>(null) }
+    val videoLauncher = androidx.activity.compose.rememberLauncherForActivityResult(
+        androidx.activity.result.contract.ActivityResultContracts.CaptureVideo()
+    ) { success ->
+        if (success) {
+            pendingVideoUri?.let { cacheUri ->
+                savedVideoUri = vault.importVideoFromCache(
+                    cacheUri, "haftalik-gunluk-${System.currentTimeMillis()}"
+                )?.toString()
+            }
+        }
+    }
 
     LazyColumn(
         Modifier.fillMaxSize(),
@@ -589,9 +608,47 @@ fun ReviewScreen(store: Store, onBack: () -> Unit) {
             }
         }
         item {
+            Card {
+                Text("Bu haftanın checkpoint'leri", style = TitleM)
+                Spacer(Modifier.height(6.dp))
+                store.curriculum.subjects.filter { it.code != "self" }.forEach { subj ->
+                    val checked = checklist[subj.code] == true
+                    Row(
+                        Modifier.fillMaxWidth().clickable { checklist[subj.code] = !checked },
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Checkbox(checked, { checklist[subj.code] = !checked }, J.forest)
+                        Spacer(Modifier.width(10.dp))
+                        Text("${subj.emoji} ${subj.name}", style = Body)
+                    }
+                }
+            }
+        }
+        item {
+            Card {
+                Text("Video günlüğü (10 dk, serbest anlatım)", style = TitleM)
+                Spacer(Modifier.height(6.dp))
+                Text(
+                    "Sadece kaydet — izleme yok. Ay sonunda o ayın 4 videosu art arda izlenip kısa bir not yazılacak.",
+                    style = Small
+                )
+                Spacer(Modifier.height(9.dp))
+                Btn(if (savedVideoUri != null) "Video kaydedildi ✓" else "Video günlüğü kaydet", {
+                    val target = vault.createVideoCaptureTarget("haftalik-gunluk-${System.currentTimeMillis()}")
+                    if (target != null) {
+                        pendingVideoUri = target
+                        videoLauncher.launch(target)
+                    }
+                }, bg = J.lilac, emoji = "🎥")
+            }
+        }
+        item {
             Btn(if (saved) "Kaydedildi ✓" else "Değerlendirmeyi kaydet", {
                 store.addReview(
-                    WeeklyReview(uid(), produced, canExplain, needsBook, declining, System.currentTimeMillis())
+                    WeeklyReview(
+                        uid(), produced, canExplain, needsBook, declining, System.currentTimeMillis(),
+                        checklist = checklist.toMap(), videoUri = savedVideoUri
+                    )
                 )
                 saved = true
             }, bg = J.forest, emoji = "📝")
@@ -618,8 +675,11 @@ fun StorageScreen(
     onPickFolder: () -> Unit,
     onBack: () -> Unit
 ) {
+    val ctx = LocalContext.current
+    val scope = rememberCoroutineScope()
     var usage by remember { mutableStateOf<Map<String, Long>>(emptyMap()) }
     var msg by remember { mutableStateOf<String?>(null) }
+    var sharing by remember { mutableStateOf(false) }
 
     LaunchedEffect(store.storageUri, store.recordings.size) {
         usage = try { vault.usage() } catch (_: Exception) { emptyMap() }
@@ -710,6 +770,41 @@ fun StorageScreen(
                         msg = if (uri != null) "Dışa aktarıldı ✓" else "Aktarılamadı"
                     }, Modifier.weight(1f), J.forest, emoji = "📤")
                 }
+                Spacer(Modifier.height(8.dp))
+                Btn(
+                    if (sharing) "Yedek hazırlanıyor…" else "Başka bir yere kaydet",
+                    {
+                        if (!sharing) {
+                            sharing = true
+                            msg = null
+                            val stateJson = store.exportJson()
+                            scope.launch {
+                                val zip = withContext(Dispatchers.IO) {
+                                    vault.createFullBackupZip(stateJson)
+                                }
+                                sharing = false
+                                if (zip == null) {
+                                    msg = "Yedek oluşturulamadı"
+                                } else {
+                                    val shareUri = vault.shareUriFor(zip)
+                                    val send = Intent(Intent.ACTION_SEND).apply {
+                                        type = "application/zip"
+                                        putExtra(Intent.EXTRA_STREAM, shareUri)
+                                        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                                    }
+                                    ctx.startActivity(Intent.createChooser(send, "Yedeği kaydet / paylaş"))
+                                }
+                            }
+                        }
+                    },
+                    bg = J.lilac, emoji = "☁️", enabled = !sharing
+                )
+                Spacer(Modifier.height(4.dp))
+                Text(
+                    "Tüm ses/video/transkript dosyalarını ve ilerlemeni tek bir zip'te toplayıp " +
+                        "Drive, e-posta, başka bir klasör gibi istediğin herhangi bir yere kaydetmeni sağlar.",
+                    style = Tiny
+                )
                 msg?.let { Spacer(Modifier.height(8.dp)); Text(it, style = Small.copy(color = J.forest)) }
             }
 
@@ -763,7 +858,8 @@ fun StudyBagScreen(store: Store, onGo: (Screen) -> Unit, onExplainIt: () -> Unit
         Triple("📁", "Depolama ve Dosyalar", Screen.Storage),
         Triple("📚", "Kaynaklar", Screen.Resources),
         Triple("🕸️", "Köprü Grafiği", Screen.BridgeGraph),
-        Triple("🃏", "Kartlar (Anki)", Screen.Flashcards)
+        Triple("🃏", "Kartlar (Anki)", Screen.Flashcards),
+        Triple("🗂️", "Müfredat Oluştur", Screen.CurriculumGen)
     )
 
     LazyColumn(
