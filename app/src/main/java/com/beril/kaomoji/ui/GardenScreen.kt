@@ -159,7 +159,7 @@ fun GardenScreen(
                 )
                 Btn(
                     "Hata", { onGo(Screen.Mistakes) },
-                    Modifier.weight(1f), J.butter, Color(0xFF3A2F16), emoji = "🍂"
+                    Modifier.weight(1f), J.butter, Color(0xFF1A0E05), emoji = "🍂"
                 )
             }
         }

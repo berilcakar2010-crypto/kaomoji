@@ -3,36 +3,52 @@
     android:height="108dp"
     android:viewportWidth="108"
     android:viewportHeight="108">
-    <!-- apple body -->
+    <!-- tüp camı -->
     <path
-        android:fillColor="#C8402F"
-        android:pathData="M54,44 C46,36 32,38 30,52 C28,66 40,80 54,80 C68,80 80,66 78,52 C76,38 62,36 54,44 Z" />
-    <!-- leaf -->
+        android:fillColor="#1B1228"
+        android:pathData="M54,20 C72.8,20 88,35.2 88,54 C88,72.8 72.8,88 54,88 C35.2,88 20,72.8 20,54 C20,35.2 35.2,20 54,20 Z" />
+    <!-- mor gövde halkası -->
     <path
-        android:fillColor="#5E9C4F"
-        android:pathData="M56,42 C60,32 70,28 76,30 C74,38 66,44 56,42 Z" />
-    <!-- stem -->
+        android:strokeColor="#9D5CFF"
+        android:strokeWidth="2.4"
+        android:fillColor="#00000000"
+        android:pathData="M54,20 C72.8,20 88,35.2 88,54 C88,72.8 72.8,88 54,88 C35.2,88 20,72.8 20,54 C20,35.2 35.2,20 54,20 Z" />
+    <!-- iç mor devre çizgisi -->
     <path
-        android:fillColor="#7A5230"
-        android:pathData="M53,44 L53,34 L56,34 L56,44 Z" />
-    <!-- eyes -->
+        android:strokeColor="#6425B8"
+        android:strokeWidth="1.4"
+        android:fillColor="#00000000"
+        android:pathData="M54,27 C68.9,27 81,39.1 81,54 C81,68.9 68.9,81 54,81 C39.1,81 27,68.9 27,54" />
+    <!-- kırmızı sinyal noktası -->
     <path
-        android:strokeColor="#FFF6E8"
-        android:strokeWidth="3"
+        android:fillColor="#E12A44"
+        android:pathData="M79,29 m-3.4,0 a3.4,3.4 0 1,0 6.8,0 a3.4,3.4 0 1,0 -6.8,0 Z" />
+    <!-- kehribar halo (göz/gülüş arkası parlama) -->
+    <path
+        android:strokeColor="#FFA23C"
+        android:strokeAlpha="0.28"
+        android:strokeWidth="7"
         android:strokeLineCap="round"
         android:fillColor="#00000000"
-        android:pathData="M42,56 L47,60 L42,64" />
+        android:pathData="M41,55 L47,60 L41,65 M67,55 L61,60 L67,65 M46,68 Q54,75 62,68" />
+    <!-- gözler -->
     <path
-        android:strokeColor="#FFF6E8"
-        android:strokeWidth="3"
+        android:strokeColor="#FFA23C"
+        android:strokeWidth="3.2"
         android:strokeLineCap="round"
         android:fillColor="#00000000"
-        android:pathData="M66,56 L61,60 L66,64" />
-    <!-- smile -->
+        android:pathData="M41,55 L47,60 L41,65" />
     <path
-        android:strokeColor="#FFF6E8"
-        android:strokeWidth="3"
+        android:strokeColor="#FFA23C"
+        android:strokeWidth="3.2"
         android:strokeLineCap="round"
         android:fillColor="#00000000"
-        android:pathData="M47,69 Q54,75 61,69" />
+        android:pathData="M67,55 L61,60 L67,65" />
+    <!-- gülüş -->
+    <path
+        android:strokeColor="#FFA23C"
+        android:strokeWidth="3.2"
+        android:strokeLineCap="round"
+        android:fillColor="#00000000"
+        android:pathData="M46,68 Q54,75 62,68" />
 </vector>

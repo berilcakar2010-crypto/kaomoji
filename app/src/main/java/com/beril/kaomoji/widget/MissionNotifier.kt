@@ -71,6 +71,7 @@ object MissionNotifier {
 
         val builder = NotificationCompat.Builder(context, CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_notification)
+            .setColor(0xFF9D5CFF.toInt())
             .setContentTitle("${mission.emoji} ${mission.title}")
             .setContentText(mission.why)
             .setStyle(NotificationCompat.BigTextStyle().bigText(mission.why))

@@ -211,12 +211,15 @@ Klasör seçilmezse uygulama kendi harici klasörüne yazar — kayıt her zaman
 
 ---
 
-## 🎨 Juminocore
+## 🎨 VOIDLAB
 
-Elma yeşili · nane · misket limonu · vişne kırmızısı · çilek pembesi · krem · sıcak kahve · orman yeşili · kısık sarı
+Void siyahı · elektrik moru · derin mor · sinyal kırmızısı · nixie kehribarı · kireç beyazı · loş lavanta
 
-Kağıt dokusu, gingham deseni, kesik kenarlı çıkartma çerçeveleri, hafifçe döndürülmüş küçük öğeler,
-serif başlıklar, monospace etiketler.
+Karanlık laboratuvar defteri hissi: neredeyse siyah zemin, ince mor devre çizgileri (osiloskop ızgarası),
+kesik çizgili sinyal çerçeveleri, monospace başlıklar, sade sans gövde metni.
+Vurgular kırmızı (uyarı/hata) ve kehribar (nixie tüp parıltısı) — mor birincil, kırmızı ikincil.
+Widget ve kilit ekranı bildirimi gerçek bir **nixie tüp göstergesi** gibi: cam koyu, çerçeve ince mor,
+sinyal noktası kırmızı, metin kehribar parıltısında.
 
 Süsleme bilgiyi **dekore eder**, ezmez. Hiyerarşi her zaman net kalır.
 

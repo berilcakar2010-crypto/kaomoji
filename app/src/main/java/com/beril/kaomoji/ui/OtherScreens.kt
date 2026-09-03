@@ -317,7 +317,7 @@ fun MistakesScreen(store: Store, presetUnit: String?, onBack: () -> Unit) {
         item {
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 Btn(if (adding) "Kapat" else "Hata ekle", { adding = !adding },
-                    Modifier.weight(1f), J.butter, Color(0xFF3A2F16), if (adding) "✕" else "＋")
+                    Modifier.weight(1f), J.butter, Color(0xFF1A0E05), if (adding) "✕" else "＋")
             }
         }
 
@@ -408,7 +408,7 @@ private fun MistakeForm(store: Store, presetUnit: String?, onDone: () -> Unit) {
                 )
                 onDone()
             }
-        }, bg = J.butter, fg = Color(0xFF3A2F16), emoji = "🍂")
+        }, bg = J.butter, fg = Color(0xFF1A0E05), emoji = "🍂")
     }
 }
 

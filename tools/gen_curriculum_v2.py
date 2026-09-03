@@ -279,15 +279,15 @@ resources = [
 ]
 
 subjects = [
-    {"c": "math", "n": "Matematik", "e": "📐", "col": "#7BB661"},
-    {"c": "phys", "n": "Fizik", "e": "🍎", "col": "#C8402F"},
-    {"c": "py", "n": "Python", "e": "🐍", "col": "#3F7A57"},
-    {"c": "bio", "n": "Biyoloji + Nörobilim", "e": "🧠", "col": "#5E9C4F"},
-    {"c": "jp", "n": "Japonca", "e": "🌸", "col": "#E58FA6"},
-    {"c": "de", "n": "Almanca", "e": "🥨", "col": "#B98A3E"},
-    {"c": "sch", "n": "10. Sınıf", "e": "🏫", "col": "#8899AA"},
-    {"c": "uwc", "n": "UWC", "e": "🍀", "col": "#4E9160"},
-    {"c": "prod", "n": "Üretim", "e": "🌱", "col": "#D08A2E"},
+    {"c": "math", "n": "Matematik", "e": "📐", "col": "#9D5CFF"},
+    {"c": "phys", "n": "Fizik", "e": "🍎", "col": "#E12A44"},
+    {"c": "py", "n": "Python", "e": "🐍", "col": "#FFA23C"},
+    {"c": "bio", "n": "Biyoloji + Nörobilim", "e": "🧠", "col": "#7C86E0"},
+    {"c": "jp", "n": "Japonca", "e": "🌸", "col": "#CE6E8C"},
+    {"c": "de", "n": "Almanca", "e": "🥨", "col": "#B4102E"},
+    {"c": "sch", "n": "10. Sınıf", "e": "🏫", "col": "#AE8CFB"},
+    {"c": "uwc", "n": "UWC", "e": "🍀", "col": "#C7B4EF"},
+    {"c": "prod", "n": "Üretim", "e": "🌱", "col": "#6425B8"},
 ]
 
 kinds = [

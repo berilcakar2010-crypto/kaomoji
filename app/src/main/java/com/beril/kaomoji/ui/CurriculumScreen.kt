@@ -270,7 +270,7 @@ fun UnitDetailScreen(
             SectionLabel("bu birim için", "🍂")
             Spacer(Modifier.height(8.dp))
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                Btn("Hata ekle", { onAddMistake(u.id) }, Modifier.weight(1f), J.butter, Color(0xFF3A2F16), "🍂")
+                Btn("Hata ekle", { onAddMistake(u.id) }, Modifier.weight(1f), J.butter, Color(0xFF1A0E05), "🍂")
                 Btn("Problem kaydet", { onLogProblems(u.id) }, Modifier.weight(1f), J.cherry, emoji = "✏️")
             }
         }
