@@ -57,7 +57,7 @@ Beş alan. Onlarca sekme yok — tek bir küçük dünya.
 | | Alan | Ne yapar |
 |---|---|---|
 | 🔬 | **Laboratuvar** | Ana ekran. Bugünün küçük görevi, deney aşaması, devam et, son anlatım, projeler, köprüler |
-| 📚 | **Müfredat** | 4 faz, 67 birim, 657 görev. Zamansız akış |
+| 📚 | **Müfredat** | 6 faz, 43 birim, 453 görev. Zamansız akış |
 | 📥 | **Brain Inbox** | Hızlı yakalama. Düzenleme sonra |
 | ⚗️ | **Projeler** | Beş üretim projesi. En önemli alan: SIRADAKİ EYLEM |
 | 🎒 | **Çanta** | Anlatımlar, sınavlar, hata defteri, değerlendirme, depolama, kaynaklar |
@@ -73,10 +73,12 @@ Tarih yok. Bir birimin görevleri bitince **sıradaki açılır.**
 - Hızlı gidersen önden gidersin, yavaş gidersen aynı yoldasın
 
 ```
-Faz 1 · Temeller          31 birim   ~325 saat
-Faz 2 · Derinleşme        12 birim   ~175 saat
-Faz 3 · Elektromanyetizma 12 birim   ~175 saat
-Faz 4 · Sentez ve Üretim  12 birim   ~180 saat
+Faz 1 · Kuruluş                   9 birim   ~79 saat
+Faz 2 · Çok Bölmeli Model          8 birim   ~64 saat
+Faz 3 · Güz Konsolidasyonu         4 birim   ~35 saat
+Faz 4 · Stokastik Genişleme        9 birim   ~75 saat
+Faz 5 · Senkronizasyon ve Sentez   9 birim   ~72 saat
+Faz 6 · Final                     4 birim   ~33 saat
 ```
 
 Laboratuvar metaforu XP değil, gerçek durum: 🧊 ham numune → ⚗️ tepkimede → 🧪 stabilize → 🔬 analiz → 💠 sonuçlandı
@@ -233,19 +235,26 @@ steril Material, çocuksu anaokulu estetiği, aşırı animasyon.
 - **Kotlin + Jetpack Compose + Material 3**
 - **Bağımlılık yok denecek kadar az** — Room yok, Hilt yok, Navigation kütüphanesi yok
 - Durum tek bir JSON dosyasında (`filesDir/state.json`) — hızlı, taşınabilir, yedeklenebilir
-- Müfredat `assets/curriculum.json` içinde, `tools/gen_curriculum.py` ile üretiliyor
+- Müfredat `assets/curriculum.json` içinde, `tools/gen_curriculum_v3.py` ile üretiliyor
+  (eski `gen_curriculum.py`/`gen_curriculum_v2.py` referans için repoda duruyor, aktif olan v3)
 - Ses: `MediaRecorder` (AAC/MP4) + `MediaPlayer`, SAF üzerinden dosya tanımlayıcı
 - minSdk 26 · targetSdk 34 · JDK 17
-- **Tamamen çevrimdışı.** Sunucu yok, hesap yok, internet izni bile yok.
+- **Temelde çevrimdışı.** Sunucu yok, hesap yok. AI özellikleri (transkripsiyon, analiz,
+  soru/müfredat üretimi) opsiyonel — kendi Groq/Gemini API anahtarını girersen çalışır,
+  girmezsen uygulama hiçbir zaman internete çıkmaz.
 
 ### Müfredatı değiştirmek
 
 ```bash
-python3 tools/gen_curriculum.py
+python3 tools/gen_curriculum_v3.py
 ```
 
-`tools/gen_curriculum.py` içindeki `U(...)` ve `T(...)` çağrılarını düzenle, scripti çalıştır,
+`tools/gen_curriculum_v3.py` içindeki faz/birim/ders tanımlarını düzenle, scripti çalıştır,
 `app/src/main/assets/curriculum.json` yeniden üretilir. Sonra yeniden derle.
+
+Ya da hiç script'e dokunmadan: Çanta → **Müfredat Oluştur** ekranından bir `.md`/`.pdf`
+belge yükleyip (Groq veya Gemini) API anahtarını girince, uygulama o belgeye uygun,
+sıfırdan bir müfredat kurup mevcut varsayılanın yerine koyar.
 
 ---
 
@@ -255,13 +264,17 @@ Hepsi çalışıyor:
 
 Laboratuvar · Müfredat · Bugünün Küçük Görevi · Brain Inbox · Projeler · Ses kaydı ·
 Ses kütüphanesi · Oynatma · Müfredat↔Ses ilişkileri · Hata Defteri · Sınavlar ·
-Haftalık değerlendirme · Kullanıcı seçimli klasör · Depolama yönetimi · Katlanabilir arayüz ·
-Problem takibi · Kaynaklar · Kayda Anlat
+Haftalık değerlendirme (video günlüğü dahil) · Kullanıcı seçimli klasör · Depolama yönetimi
+ve başka bir yere yedekleme · Katlanabilir arayüz · Problem takibi · Kaynaklar · Kayda Anlat ·
+Köprü grafiği · Ana ekran widget'ı + kilit ekranı bildirimi · AI transkripsiyon ve anlatım
+analizi (Groq/Gemini) · Otomatik soru üretimi + Anki dışa aktarma · Belgeden (.md/.pdf)
+özel müfredat üretme
 
 ### Sonraya bırakılanlar
 
-Yapay zekâ transkripsiyon · anlatım analizi · otomatik soru üretimi · Anki dışa aktarma ·
-gelişmiş köprü grafiği · widget'lar · kilit ekranı entegrasyonu
+Otomatik köprü çıkarımı (şu an elle tanımlı) · çoklu cihaz senkronizasyonu
 
 Yapay zekâ hiçbir zaman merkeze konmayacak — **senin kendi düşüncen merkezde.**
-Temel kayıt ve oynatma yapay zekâsız çalışır, hep öyle kalacak.
+Temel kayıt ve oynatma yapay zekâsız çalışır, hep öyle kalacak. AI özellikleri
+(transkripsiyon, analiz, soru/müfredat üretimi) tamamen opsiyonel — kendi API
+anahtarını girmezsen uygulama hiçbir zaman dışarı istek atmaz.
