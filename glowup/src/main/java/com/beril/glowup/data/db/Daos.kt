@@ -17,6 +17,9 @@ interface KategoriDao {
 
     @Query("SELECT * FROM kategori")
     suspend fun hepsi(): List<Kategori>
+
+    @Query("SELECT * FROM kategori WHERE id = :id LIMIT 1")
+    suspend fun bul(id: String): Kategori?
 }
 
 @Dao
@@ -24,11 +27,18 @@ interface GorevDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun hepsiniEkle(gorevler: List<Gorev>)
 
-    @Query("SELECT * FROM gorev WHERE kategoriId = :kategoriId AND sureDk <= :maxSureDk")
-    suspend fun kategoriVeSureyeGore(kategoriId: String, maxSureDk: Int): List<Gorev>
+    /**
+     * Öneri motorunun aday havuzu: süre üst sınırına uyan, [kategoriId] verilmişse
+     * yalnızca o kategoriye ait, verilmemişse (null) tüm kategorilerdeki görevler.
+     */
+    @Query("SELECT * FROM gorev WHERE sureDk <= :maxSureDk AND (:kategoriId IS NULL OR kategoriId = :kategoriId)")
+    suspend fun uygunAdaylar(maxSureDk: Int, kategoriId: String?): List<Gorev>
 
     @Query("UPDATE gorev SET sonYapilmaZamani = :zaman WHERE id = :gorevId")
     suspend fun sonYapilmaZamaniGuncelle(gorevId: String, zaman: Long)
+
+    @Query("UPDATE gorev SET agirlik = :agirlik WHERE id = :gorevId")
+    suspend fun agirlikGuncelle(gorevId: String, agirlik: Float)
 }
 
 @Dao

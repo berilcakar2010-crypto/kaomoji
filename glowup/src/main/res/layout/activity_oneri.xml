@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/jacket_khaki"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:id="@+id/oneriKapsayici"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/oneriBaslik"
+            style="@style/Text.Baslik"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Şimdi Ne Yapsam" />
+
+        <TextView
+            android:id="@+id/oneriAltBaslik"
+            style="@style/Text.Govde"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="16dp"
+            android:visibility="gone" />
+
+        <TextView
+            style="@style/Text.Govde"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:text="Süre" />
+
+        <LinearLayout
+            android:id="@+id/sureSecenekleri"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="16dp">
+
+            <TextView android:id="@+id/sure5" style="@style/Text.Govde" android:layout_width="match_parent" android:layout_height="wrap_content" android:padding="12dp" android:layout_marginBottom="6dp" android:background="@drawable/secim_durumu" android:text="5 dakika" />
+            <TextView android:id="@+id/sure15" style="@style/Text.Govde" android:layout_width="match_parent" android:layout_height="wrap_content" android:padding="12dp" android:layout_marginBottom="6dp" android:background="@drawable/secim_durumu" android:text="15 dakika" />
+            <TextView android:id="@+id/sure30" style="@style/Text.Govde" android:layout_width="match_parent" android:layout_height="wrap_content" android:padding="12dp" android:layout_marginBottom="6dp" android:background="@drawable/secim_durumu" android:text="30 dakika" />
+            <TextView android:id="@+id/sure60" style="@style/Text.Govde" android:layout_width="match_parent" android:layout_height="wrap_content" android:padding="12dp" android:background="@drawable/secim_durumu" android:text="60 dakika" />
+        </LinearLayout>
+
+        <TextView
+            style="@style/Text.Govde"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:text="Enerji ve Mod" />
+
+        <LinearLayout
+            android:id="@+id/modSecenekleri"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="16dp">
+
+            <TextView android:id="@+id/modYuksekSosyal" style="@style/Text.Govde" android:layout_width="match_parent" android:layout_height="wrap_content" android:padding="12dp" android:layout_marginBottom="6dp" android:background="@drawable/secim_durumu" android:text="Yüksek enerji · sosyal" />
+            <TextView android:id="@+id/modYuksekYalniz" style="@style/Text.Govde" android:layout_width="match_parent" android:layout_height="wrap_content" android:padding="12dp" android:layout_marginBottom="6dp" android:background="@drawable/secim_durumu" android:text="Yüksek enerji · yalnız" />
+            <TextView android:id="@+id/modDusukSosyal" style="@style/Text.Govde" android:layout_width="match_parent" android:layout_height="wrap_content" android:padding="12dp" android:layout_marginBottom="6dp" android:background="@drawable/secim_durumu" android:text="Düşük enerji · sosyal" />
+            <TextView android:id="@+id/modDusukYalniz" style="@style/Text.Govde" android:layout_width="match_parent" android:layout_height="wrap_content" android:padding="12dp" android:background="@drawable/secim_durumu" android:text="Düşük enerji · yalnız" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/oneriButonu"
+            style="@style/Text.Govde"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="14dp"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:background="@drawable/kart_focus_selector"
+            android:text="Öneri Al" />
+
+        <LinearLayout
+            android:id="@+id/sonucKapsayici"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/kart_focus_selector"
+            android:padding="16dp"
+            android:layout_marginTop="16dp"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/sonucSure"
+                style="@style/Text.Istatistik"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/sonucBaslik"
+                style="@style/Text.Baslik"
+                android:textSize="18sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp" />
+
+            <TextView
+                android:id="@+id/sonucAciklama"
+                style="@style/Text.Govde"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="12dp" />
+
+            <TextView
+                android:id="@+id/kabulEtButonu"
+                style="@style/Text.Govde"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="12dp"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:background="@drawable/secim_durumu"
+                android:layout_marginBottom="6dp"
+                android:text="Kabul Et" />
+
+            <TextView
+                android:id="@+id/baskaOnerButonu"
+                style="@style/Text.Govde"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="12dp"
+                android:gravity="center"
+                android:background="@drawable/secim_durumu"
+                android:text="Başka Öner" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/bosDurumMesaji"
+            style="@style/Text.Govde"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:visibility="gone"
+            android:text="Belirtilen süre ve mod için uygun bir görev bulunamadı. Farklı bir süre veya mod seçilmesi önerilir." />
+
+    </LinearLayout>
+</ScrollView>

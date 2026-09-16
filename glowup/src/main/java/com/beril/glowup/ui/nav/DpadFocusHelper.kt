@@ -16,6 +16,16 @@ object DpadFocusHelper {
         val odaklanabilirler = (0 until container.childCount)
             .map { container.getChildAt(it) }
             .filter { it.visibility == View.VISIBLE }
+        zincirKur(odaklanabilirler, onSecildi)
+    }
+
+    /**
+     * Verilen sırayla, iç içe konteynerlere dağılmış görünümleri de tek bir dikey
+     * D-pad zinciri haline getirir (ör. bir ekrandaki birden çok seçim grubu +
+     * eylem düğmeleri tek zincirde art arda gezilebilir).
+     */
+    fun zincirKur(siraliGorunumler: List<View>, onSecildi: (View) -> Unit) {
+        val odaklanabilirler = siraliGorunumler.filter { it.visibility == View.VISIBLE }
 
         odaklanabilirler.forEachIndexed { index, view ->
             view.isFocusable = true

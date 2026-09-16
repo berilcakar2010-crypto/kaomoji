@@ -1,10 +1,8 @@
 package com.beril.glowup.ui
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.widget.LinearLayout
-import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.beril.glowup.data.GorevKutuphanesiYukleyici
@@ -15,9 +13,9 @@ import com.beril.glowup.ui.nav.DpadFocusHelper
 import kotlinx.coroutines.launch
 
 /**
- * Aşama 1 iskeleti: görev kütüphanesini JSON'dan okuyup Room'a yazar,
- * kategorileri D-pad ile gezilebilir bir dikey liste olarak gösterir.
- * "Şimdi ne yapsam" öneri motoru Aşama 2'de bu ekrana bağlanacak.
+ * Görev kütüphanesini JSON'dan okuyup Room'a yazar; genel "Şimdi Ne Yapsam"
+ * girişini ve kategorileri D-pad ile gezilebilir bir dikey liste olarak gösterir.
+ * Her girişin seçilmesi, öneri motorunun çalıştığı [OneriActivity]'yi açar.
  */
 class MainActivity : AppCompatActivity() {
 
@@ -35,20 +33,30 @@ class MainActivity : AppCompatActivity() {
             db.kategoriDao().hepsiniEkle(kutuphane.kategoriler)
             db.gorevDao().hepsiniEkle(kutuphane.gorevler)
 
+            val genelGirisBinding = ItemKategoriKartiBinding.inflate(
+                LayoutInflater.from(this@MainActivity), binding.kategoriListesi, false
+            )
+            genelGirisBinding.kategoriEmoji.text = "🔎"
+            genelGirisBinding.kategoriAd.text = "Şimdi Ne Yapsam"
+            genelGirisBinding.root.id = VIEW_ID_BASE
+            genelGirisBinding.root.setOnClickListener {
+                startActivity(Intent(this@MainActivity, OneriActivity::class.java))
+            }
+            binding.kategoriListesi.addView(genelGirisBinding.root)
+
             val kategoriler = db.kategoriDao().hepsi()
-            kategoriler.forEach { kategori ->
+            kategoriler.forEachIndexed { index, kategori ->
                 val itemBinding = ItemKategoriKartiBinding.inflate(
                     LayoutInflater.from(this@MainActivity), binding.kategoriListesi, false
                 )
                 itemBinding.kategoriEmoji.text = kategori.emoji
                 itemBinding.kategoriAd.text = kategori.ad
-                itemBinding.root.id = VIEW_ID_BASE + kategoriler.indexOf(kategori)
+                itemBinding.root.id = VIEW_ID_BASE + 1 + index
                 itemBinding.root.setOnClickListener {
-                    Toast.makeText(
-                        this@MainActivity,
-                        "${kategori.ad}: öneri motoru Aşama 2'de gelecek",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    startActivity(
+                        Intent(this@MainActivity, OneriActivity::class.java)
+                            .putExtra(OneriActivity.EXTRA_KATEGORI_ID, kategori.id)
+                    )
                 }
                 binding.kategoriListesi.addView(itemBinding.root)
             }

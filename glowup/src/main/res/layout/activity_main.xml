@@ -6,7 +6,6 @@
     android:fillViewport="true">
 
     <LinearLayout
-        android:id="@+id/kategoriListesi"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -20,7 +19,14 @@
             android:layout_marginBottom="16dp"
             android:text="@string/ana_soru" />
 
-        <!-- Kategori kartları burada programatik olarak eklenir (bkz. MainActivity). -->
+        <LinearLayout
+            android:id="@+id/kategoriListesi"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
+            <!-- Genel giriş ve kategori kartları burada programatik olarak eklenir (bkz. MainActivity). -->
+
+        </LinearLayout>
     </LinearLayout>
 </ScrollView>
