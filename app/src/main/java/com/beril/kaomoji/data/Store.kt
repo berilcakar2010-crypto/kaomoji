@@ -85,7 +85,7 @@ class Store(private val ctx: Context) {
 
     val totalDone: Int get() = curriculum.allUnits.sumOf { u -> u.tasks.count { done[it.id] == true } }
 
-    /** Garden growth stage 0..4 based on units completed. */
+    /** Lab experiment stage 0..4 based on units completed. */
     val growthStage: Int
         get() {
             val ratio = currentUnitIndex.toFloat() / curriculum.allUnits.size.coerceAtLeast(1)
@@ -237,6 +237,9 @@ class Store(private val ctx: Context) {
                         put("id", r.id); put("produced", r.produced)
                         put("canExplain", r.canExplain); put("needsBook", r.stillNeedsBook)
                         put("declining", r.declining); put("at", r.createdAt)
+                        put("checklist", JSONObject().also { c -> r.checklist.forEach { (k, v) -> c.put(k, v) } })
+                        put("videoUri", r.videoUri ?: JSONObject.NULL)
+                        put("videoWatched", r.videoWatched)
                     })
                 }
             })
@@ -361,11 +364,16 @@ class Store(private val ctx: Context) {
             root.optJSONArray("reviews")?.let { a ->
                 for (i in 0 until a.length()) {
                     val o = a.getJSONObject(i)
+                    val checklist = mutableMapOf<String, Boolean>()
+                    o.optJSONObject("checklist")?.let { c -> c.keys().forEach { k -> checklist[k] = c.optBoolean(k) } }
                     reviews.add(
                         WeeklyReview(
                             o.getString("id"), o.optString("produced", ""),
                             o.optString("canExplain", ""), o.optString("needsBook", ""),
-                            o.optBoolean("declining"), o.optLong("at")
+                            o.optBoolean("declining"), o.optLong("at"),
+                            checklist = checklist,
+                            videoUri = if (o.isNull("videoUri")) null else o.optString("videoUri", null),
+                            videoWatched = o.optBoolean("videoWatched")
                         )
                     )
                 }

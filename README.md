@@ -3,7 +3,7 @@
 Kişisel akademik işletim sistemi.
 
 > **"Daha çok çalışma. Sırada ne olduğunu bil."**
-> *Küçük adımlar, büyük ağaçlar.*
+> *Küçük ölçümler, kesin sonuçlar.*
 
 Bu bir üretkenlik uygulaması değil. Pomodoro yok, seri (streak) yok, puan yok, geri sayım yok.
 Tek bir soruya cevap verir: **şimdi ne yapmalıyım?**
@@ -56,10 +56,10 @@ Beş alan. Onlarca sekme yok — tek bir küçük dünya.
 
 | | Alan | Ne yapar |
 |---|---|---|
-| 🍎 | **Bahçe** | Ana ekran. Bugünün küçük görevi, büyüme durumu, devam et, son anlatım, projeler, köprüler |
-| 📚 | **Müfredat** | 4 faz, 67 birim, 657 görev. Zamansız akış |
-| 🧺 | **Brain Inbox** | Hızlı yakalama. Düzenleme sonra |
-| 🌱 | **Projeler** | Beş üretim projesi. En önemli alan: SIRADAKİ EYLEM |
+| 🔬 | **Laboratuvar** | Ana ekran. Bugünün küçük görevi, deney aşaması, devam et, son anlatım, projeler, köprüler |
+| 📚 | **Müfredat** | 6 faz, 43 birim, 484 görev. Zamansız akış |
+| 📥 | **Brain Inbox** | Hızlı yakalama. Düzenleme sonra |
+| ⚗️ | **Projeler** | Beş üretim projesi. En önemli alan: SIRADAKİ EYLEM |
 | 🎒 | **Çanta** | Anlatımlar, sınavlar, hata defteri, değerlendirme, depolama, kaynaklar |
 
 ---
@@ -73,17 +73,19 @@ Tarih yok. Bir birimin görevleri bitince **sıradaki açılır.**
 - Hızlı gidersen önden gidersin, yavaş gidersen aynı yoldasın
 
 ```
-Faz 1 · Temeller          31 birim   ~325 saat
-Faz 2 · Derinleşme        12 birim   ~175 saat
-Faz 3 · Elektromanyetizma 12 birim   ~175 saat
-Faz 4 · Sentez ve Üretim  12 birim   ~180 saat
+Faz 1 · Kuruluş                   9 birim   ~79 saat
+Faz 2 · Çok Bölmeli Model          8 birim   ~64 saat
+Faz 3 · Güz Konsolidasyonu         4 birim   ~35 saat
+Faz 4 · Stokastik Genişleme        9 birim   ~75 saat
+Faz 5 · Senkronizasyon ve Sentez   9 birim   ~72 saat
+Faz 6 · Final                     4 birim   ~33 saat
 ```
 
-Bahçe metaforu XP değil, gerçek durum: 🌰 tohum → 🌱 filiz → 🪴 fidan → 🌳 ağaç → 🍎 meyve
+Laboratuvar metaforu XP değil, gerçek durum: 🧊 ham numune → ⚗️ tepkimede → 🧪 stabilize → 🔬 analiz → 💠 sonuçlandı
 
 ---
 
-## 🍀 Bugünün Küçük Görevi
+## 🎯 Bugünün Küçük Görevi
 
 Rastgele değil. Şunlara bakıp **tek bir anlamlı eylem** seçer ve **neden seçtiğini söyler**:
 
@@ -116,7 +118,7 @@ Sıradan bir ses kaydedici değil. Kendi sesinle kurduğun sözlü bilgi arşivi
 
 ---
 
-## 🍂 Hata Defteri
+## ⚠️ Hata Defteri
 
 Müfredatın en yüksek getirili aracı. Her hata üç sütun:
 
@@ -131,20 +133,18 @@ Uygulama örüntü arar ama suçlamaz:
 
 ---
 
-## 🌱 Beş Üretim Projesi
+## ⚗️ Üç Üretim Projesi
 
 Müfredat açıkça söylüyor: **dersler projelere hizmet eder, tersi değil.**
 
 | | Proje | Ne |
 |---|---|---|
-| 🐍 | **fizik.py** | Kendi sayısal fizik kütüphanen — kinematikten ışın izlemeye |
-| 🗺️ | **İnteraktif Fizik Atlası** | React + Plotly, parametre kaydırıcılı sayfalar |
-| 📄 | **Kuantum Simülasyon Makalesi** | 4006 projesi → İngilizce akademik makale |
-| 🇯🇵 | **kotoba** | Kendi Japonca SRS aracın (SM-2) |
-| ✍️ | **Deneme Portfolyosu** | Ayda 2 deneme, hedef 16 yazı |
+| 🧠 | **P1 — Destek Eğitim Odası: Çok Bölmeli HH Nöron Modeli** | Gerçek morfoloji (NeuroMorpho.org) + gerçek elektrofizyoloji (Allen Brain Atlas) verisiyle kablo-teorisi tabanlı, stokastik iyon kanalı gürültülü, iki sinaptik bağlı nöron simülasyonu. Hedef: TÜBİTAK 2204-A. |
+| 🕸️ | **P2 — Hopfield Ağı ile İlişkisel Bellek Modellemesi** | Klasik Hopfield ağı (depolama kapasitesi, enerji manzarası, sahte durumlar), biyolojik bellek fenomenleriyle karşılaştırma, opsiyonel Transformer-attention bağlantısı. |
+| 🍀 | **P3 — UWC Başvurusu & Felsefe Kulübü** | UWC başvurusu birincil öncelik; felsefe kulübü (analitik felsefe + bilim felsefesi) topluluk katkısı kanıtı olarak sürdürülüyor. |
 
 Her proje kartında en önemli alan: **SIRADAKİ EYLEM**.
-"fizik.py üzerinde çalış" değil — *"Vector3D cross product metodunu yaz."*
+"P1 üzerinde çalış" değil — *"NeuroMorpho.org'dan bir piramidal nöron morfolojisi seç ve kablo denkleminin sayısal iskeletini kur."*
 
 ---
 
@@ -153,16 +153,11 @@ Her proje kartında en önemli alan: **SIRADAKİ EYLEM**.
 Birinci sınıf ilişkiler, süs değil:
 
 ```
-Entropi ↔ Enformasyon          Boltzmann = Shannon
-Bilim Felsefesi ↔ Halliday     Newton→Einstein bir paradigma kayması mı?
-Kalkülüs ↔ Felsefe             Zenon ve limit
-Edebiyat ↔ Akademik Yazım      argüman kurmak
-Japonca ↔ Programlama          kotoba: Unicode, veritabanı, SRS
-Olasılık ↔ Kuantum             ölçümün olasılıksal doğası
-Lineer Cebir ↔ Kuantum         Hilbert uzayı, özdurum
-Fourier ↔ Müzik ↔ Dalga        harmonik analiz
-Vektör Analizi ↔ Elektrik Alan Gauss = diverjans teoremi
-DD ↔ Salınım ↔ Devre           hepsi aynı denklem
+Kablo Teorisi Köprüsü                 PDE + devre teorisi + gerçek nöron morfolojisi (P1)
+Stokastik Süreçler ↔ Kanal Gürültüsü  Markov modeli = iyon kanalı açılıp kapanması
+Dinamik Sistemler ↔ Senkronizasyon    salınım + diferansiyel denklem + iki nöron senkronu
+Kalkülüs ↔ Felsefe                    Zenon paradoksları ve limit kavramı
+Hopfield Ağı ↔ Transformer Attention  istatistiksel mekanik → güncel yapay zeka (P2)
 ```
 
 Bunlar hem birim sayfalarında görünür hem görev seçimini etkiler.
@@ -174,7 +169,7 @@ Bunlar hem birim sayfalarında görünür hem görev seçimini etkiler.
 **Kapalı ekran (< 380dp)** — tek bir soru:
 
 > (≧▽≦) — *ne yapıyoruz?*
-> Devam et · Anlat · Yakala · Bahçe
+> Devam et · Anlat · Yakala · Lab
 
 Bugünün görevi tek satır olarak görünür. Dashboard yok, utandırma yok.
 Asla *"X dakika boşa harcadın"* demez.
@@ -211,12 +206,15 @@ Klasör seçilmezse uygulama kendi harici klasörüne yazar — kayıt her zaman
 
 ---
 
-## 🎨 Juminocore
+## 🎨 VOIDLAB
 
-Elma yeşili · nane · misket limonu · vişne kırmızısı · çilek pembesi · krem · sıcak kahve · orman yeşili · kısık sarı
+Void siyahı · elektrik moru · derin mor · sinyal kırmızısı · nixie kehribarı · kireç beyazı · loş lavanta
 
-Kağıt dokusu, gingham deseni, kesik kenarlı çıkartma çerçeveleri, hafifçe döndürülmüş küçük öğeler,
-serif başlıklar, monospace etiketler.
+Karanlık laboratuvar defteri hissi: neredeyse siyah zemin, ince mor devre çizgileri (osiloskop ızgarası),
+kesik çizgili sinyal çerçeveleri, monospace başlıklar, sade sans gövde metni.
+Vurgular kırmızı (uyarı/hata) ve kehribar (nixie tüp parıltısı) — mor birincil, kırmızı ikincil.
+Widget ve kilit ekranı bildirimi gerçek bir **nixie tüp göstergesi** gibi: cam koyu, çerçeve ince mor,
+sinyal noktası kırmızı, metin kehribar parıltısında.
 
 Süsleme bilgiyi **dekore eder**, ezmez. Hiyerarşi her zaman net kalır.
 
@@ -230,19 +228,26 @@ steril Material, çocuksu anaokulu estetiği, aşırı animasyon.
 - **Kotlin + Jetpack Compose + Material 3**
 - **Bağımlılık yok denecek kadar az** — Room yok, Hilt yok, Navigation kütüphanesi yok
 - Durum tek bir JSON dosyasında (`filesDir/state.json`) — hızlı, taşınabilir, yedeklenebilir
-- Müfredat `assets/curriculum.json` içinde, `tools/gen_curriculum.py` ile üretiliyor
+- Müfredat `assets/curriculum.json` içinde, `tools/gen_curriculum_v3.py` ile üretiliyor
+  (eski `gen_curriculum.py`/`gen_curriculum_v2.py` referans için repoda duruyor, aktif olan v3)
 - Ses: `MediaRecorder` (AAC/MP4) + `MediaPlayer`, SAF üzerinden dosya tanımlayıcı
 - minSdk 26 · targetSdk 34 · JDK 17
-- **Tamamen çevrimdışı.** Sunucu yok, hesap yok, internet izni bile yok.
+- **Temelde çevrimdışı.** Sunucu yok, hesap yok. AI özellikleri (transkripsiyon, analiz,
+  soru/müfredat üretimi) opsiyonel — kendi Groq/Gemini API anahtarını girersen çalışır,
+  girmezsen uygulama hiçbir zaman internete çıkmaz.
 
 ### Müfredatı değiştirmek
 
 ```bash
-python3 tools/gen_curriculum.py
+python3 tools/gen_curriculum_v3.py
 ```
 
-`tools/gen_curriculum.py` içindeki `U(...)` ve `T(...)` çağrılarını düzenle, scripti çalıştır,
+`tools/gen_curriculum_v3.py` içindeki faz/birim/ders tanımlarını düzenle, scripti çalıştır,
 `app/src/main/assets/curriculum.json` yeniden üretilir. Sonra yeniden derle.
+
+Ya da hiç script'e dokunmadan: Çanta → **Müfredat Oluştur** ekranından bir `.md`/`.pdf`
+belge yükleyip (Groq veya Gemini) API anahtarını girince, uygulama o belgeye uygun,
+sıfırdan bir müfredat kurup mevcut varsayılanın yerine koyar.
 
 ---
 
@@ -250,15 +255,19 @@ python3 tools/gen_curriculum.py
 
 Hepsi çalışıyor:
 
-Bahçe · Müfredat · Bugünün Küçük Görevi · Brain Inbox · Projeler · Ses kaydı ·
+Laboratuvar · Müfredat · Bugünün Küçük Görevi · Brain Inbox · Projeler · Ses kaydı ·
 Ses kütüphanesi · Oynatma · Müfredat↔Ses ilişkileri · Hata Defteri · Sınavlar ·
-Haftalık değerlendirme · Kullanıcı seçimli klasör · Depolama yönetimi · Katlanabilir arayüz ·
-Problem takibi · Kaynaklar · (≧▽≦)'ye Anlat
+Haftalık değerlendirme (video günlüğü dahil) · Kullanıcı seçimli klasör · Depolama yönetimi
+ve başka bir yere yedekleme · Katlanabilir arayüz · Problem takibi · Kaynaklar · Kayda Anlat ·
+Köprü grafiği · Ana ekran widget'ı + kilit ekranı bildirimi · AI transkripsiyon ve anlatım
+analizi (Groq/Gemini) · Otomatik soru üretimi + Anki dışa aktarma · Belgeden (.md/.pdf)
+özel müfredat üretme
 
 ### Sonraya bırakılanlar
 
-Yapay zekâ transkripsiyon · anlatım analizi · otomatik soru üretimi · Anki dışa aktarma ·
-gelişmiş köprü grafiği · widget'lar · kilit ekranı entegrasyonu
+Otomatik köprü çıkarımı (şu an elle tanımlı) · çoklu cihaz senkronizasyonu
 
 Yapay zekâ hiçbir zaman merkeze konmayacak — **senin kendi düşüncen merkezde.**
-Temel kayıt ve oynatma yapay zekâsız çalışır, hep öyle kalacak.
+Temel kayıt ve oynatma yapay zekâsız çalışır, hep öyle kalacak. AI özellikleri
+(transkripsiyon, analiz, soru/müfredat üretimi) tamamen opsiyonel — kendi API
+anahtarını girmezsen uygulama hiçbir zaman dışarı istek atmaz.

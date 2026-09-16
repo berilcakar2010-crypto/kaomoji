@@ -26,7 +26,7 @@ object MissionEngine {
         val unit = store.currentUnit ?: return Mission(
             "Müfredat tamamlandı",
             "Dört ay bitti. Envanterini çıkar ve sıradaki planı yaz.",
-            "🌳", "produce"
+            "💠", "produce"
         )
         val phase = c.phaseOf(unit.id)
 
@@ -71,7 +71,7 @@ object MissionEngine {
             candidates += 88 to Mission(
                 "Hata Defteri'nden ${openMistakes.size} soruyu yeniden çöz",
                 "Hatalar birikti. En yüksek getirili tek iş, çözülmemiş hataları tekrar çözmek — yeni konu okumaktan daha değerli.",
-                "🍂", "review", mistakeId = m.id
+                "⚠️", "review", mistakeId = m.id
             )
         }
         val patterns = store.mistakePatterns()
@@ -121,7 +121,7 @@ object MissionEngine {
             candidates += base to Mission(
                 nextTask.text,
                 why,
-                sd?.emoji ?: kd?.emoji ?: "🌱",
+                sd?.emoji ?: kd?.emoji ?: "⚗️",
                 nextTask.kind,
                 taskId = nextTask.id,
                 unitId = unit.id
@@ -150,7 +150,7 @@ object MissionEngine {
             candidates += 48 to Mission(
                 "Brain Inbox'ta $openInbox not birikti — ayıkla",
                 "Yakalamak kolay, ayıklamak gerekli. Beş dakika ayır, gerçekten yapılacakları işaretle.",
-                "🧺", "review"
+                "📥", "review"
             )
         }
 
@@ -169,7 +169,7 @@ object MissionEngine {
         return best ?: Mission(
             "Bir sonraki birime geç: ${unit.title}",
             unit.kicker,
-            "🌿", "study", unitId = unit.id
+            "🧪", "study", unitId = unit.id
         )
     }
 
@@ -184,7 +184,7 @@ object MissionEngine {
         }.take(3).forEach { t ->
             out += Mission(
                 t.text, "${c.subject(t.subject)?.name ?: ""} · ${t.minutes} dk",
-                c.subject(t.subject)?.emoji ?: "🌱", t.kind, taskId = t.id, unitId = unit.id
+                c.subject(t.subject)?.emoji ?: "⚗️", t.kind, taskId = t.id, unitId = unit.id
             )
         }
 

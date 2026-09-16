@@ -163,7 +163,7 @@ fun TaskRow(
 ) {
     val sd = c.subject(task.subject)
     val kd = c.kind(task.kind)
-    val col = subjectColor(sd?.color ?: "#7BB661")
+    val col = subjectColor(sd?.color ?: "#9D5CFF")
 
     Row(
         Modifier

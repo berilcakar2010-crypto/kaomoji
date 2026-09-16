@@ -1,34 +1,31 @@
 package com.beril.kaomoji.ai
 
+import android.util.Base64
 import okhttp3.MediaType.Companion.toMediaType
-import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
 import okhttp3.Request
-import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.File
 import java.util.concurrent.TimeUnit
 
-class GroqException(message: String) : Exception(message)
+class GeminiException(message: String) : Exception(message)
 
 /**
- * Groq (https://console.groq.com) üzerinden:
- *  - ses transkripsiyonu (Whisper Large v3)
- *  - anlatım analizi (GPT-OSS 120B, sohbet tamamlama)
- *  - otomatik soru/cevap üretimi (aynı model, JSON çıktı)
+ * Google Gemini (https://aistudio.google.com) üzerinden Groq'a alternatif, ücretsiz
+ * katmanlı bir sağlayıcı. Aynı üç görevi yapar:
+ *  - ses transkripsiyonu (ses dosyası doğrudan modele gönderilir)
+ *  - anlatım analizi (sohbet tamamlama)
+ *  - otomatik soru/cevap üretimi (JSON çıktı)
  *
- * Not: Bu istekler internet gerektirir ve Beril'in kendi Groq API anahtarını
- * kullanır (console.groq.com üzerinden ücretsiz alınabiliyor — FocusLock'ta
- * kullandığın anahtarla aynısını burada da kullanabilirsin). Model, Groq'un
- * 17 Haziran 2026'da llama-3.3-70b-versatile'ı kullanımdan kaldırmasıyla
- * önerdiği openai/gpt-oss-120b'ye güncellendi (bkz. console.groq.com/docs/deprecations).
+ * Model: gemini-2.5-flash — ücretsiz katmanda desteklenen, Google'ın önerdiği
+ * güncel Flash modeli (bkz. ai.google.dev/gemini-api/docs/pricing).
+ * Anahtar aistudio.google.com/apikey üzerinden ücretsiz alınabiliyor.
  */
-object GroqClient {
-    private const val BASE = "https://api.groq.com/openai/v1"
-    private const val CHAT_MODEL = "openai/gpt-oss-120b"
-    private const val WHISPER_MODEL = "whisper-large-v3"
+object GeminiClient {
+    private const val BASE = "https://generativelanguage.googleapis.com/v1beta/models"
+    private const val MODEL = "gemini-2.5-flash"
 
     private val client = OkHttpClient.Builder()
         .connectTimeout(30, TimeUnit.SECONDS)
@@ -42,7 +39,7 @@ object GroqClient {
         .build()
 
     private fun requireKey(apiKey: String?): String {
-        if (apiKey.isNullOrBlank()) throw GroqException("Groq API anahtarı girilmemiş. Çanta → Kartlar (Anki) veya Anlatımlar ekranından ekleyebilirsin.")
+        if (apiKey.isNullOrBlank()) throw GeminiException("Gemini API anahtarı girilmemiş. Çanta → Kartlar (Anki) veya Anlatımlar ekranından ekleyebilirsin.")
         return apiKey
     }
 
@@ -50,30 +47,25 @@ object GroqClient {
     fun transcribeAudio(apiKey: String?, audioFile: File): String {
         val key = requireKey(apiKey)
         if (!audioFile.exists() || audioFile.length() == 0L) {
-            throw GroqException("Ses dosyası okunamadı ya da boş. Kaydı tekrar dinleyip deneyebilirsin.")
+            throw GeminiException("Ses dosyası okunamadı ya da boş. Kaydı tekrar dinleyip deneyebilirsin.")
         }
-        val mediaType = "audio/mp4".toMediaType()
-        val body = MultipartBody.Builder()
-            .setType(MultipartBody.FORM)
-            .addFormDataPart("model", WHISPER_MODEL)
-            .addFormDataPart("language", "tr")
-            .addFormDataPart(
-                "file", audioFile.name,
-                audioFile.asRequestBody(mediaType)
-            )
-            .build()
-
-        val req = Request.Builder()
-            .url("$BASE/audio/transcriptions")
-            .addHeader("Authorization", "Bearer $key")
-            .post(body)
-            .build()
-
-        client.newCall(req).execute().use { resp ->
-            val text = resp.body?.string() ?: ""
-            if (!resp.isSuccessful) throw GroqException("Transkripsiyon başarısız (${resp.code}): ${extractError(text)}")
-            return JSONObject(text).optString("text", "").trim()
+        val b64 = Base64.encodeToString(audioFile.readBytes(), Base64.NO_WRAP)
+        val payload = JSONObject().apply {
+            put("contents", JSONArray().put(JSONObject().apply {
+                put("parts", JSONArray()
+                    .put(JSONObject().apply {
+                        put("text", "Bu ses kaydını Türkçe olarak birebir yazıya dök. Sadece transkript metnini döndür, başka açıklama ekleme.")
+                    })
+                    .put(JSONObject().apply {
+                        put("inline_data", JSONObject().apply {
+                            put("mime_type", "audio/mp4")
+                            put("data", b64)
+                        })
+                    })
+                )
+            }))
         }
+        return generateContent(key, payload)
     }
 
     // ── 2. Anlatım analizi ──────────────────────────────────────────
@@ -87,11 +79,10 @@ object GroqClient {
             if (!topic.isNullOrBlank()) append("Konu: $topic\n\n")
             append("Anlatım: $transcript")
         }
-        return chatCompletion(key, system, user)
+        return generateText(key, system, user)
     }
 
     // ── 3. Otomatik soru/cevap üretimi (flashcard) ──────────────────
-    /** Kaynak metinden (birim görevleri veya bir anlatım) N adet soru-cevap çifti üretir. */
     fun generateFlashcards(apiKey: String?, sourceText: String, subjectName: String, n: Int = 8): List<Pair<String, String>> {
         val key = requireKey(apiKey)
         val system = "Sen bir öğretmen asistanısın. Verilen konu metninden aralıklı tekrar (spaced " +
@@ -100,7 +91,7 @@ object GroqClient {
             "SADECE geçerli bir JSON dizisi döndür, başka hiçbir metin ekleme. Format: " +
             "[{\"q\":\"soru\",\"a\":\"cevap\"}, ...]"
         val user = "Konu alanı: $subjectName\nKaynak metin:\n$sourceText\n\n$n adet kart üret."
-        val raw = chatCompletion(key, system, user)
+        val raw = generateText(key, system, user)
         return parseFlashcardJson(raw)
     }
 
@@ -109,31 +100,21 @@ object GroqClient {
     fun generateCurriculum(apiKey: String?, docTitle: String, docText: String): String {
         val key = requireKey(apiKey)
         val payload = JSONObject().apply {
-            put("model", CHAT_MODEL)
-            put("temperature", 0.3)
-            put("max_tokens", 8000)
-            put("messages", JSONArray().apply {
-                put(JSONObject().apply { put("role", "system"); put("content", CurriculumPrompt.SYSTEM) })
-                put(JSONObject().apply { put("role", "user"); put("content", CurriculumPrompt.userMessage(docTitle, docText)) })
+            put("systemInstruction", JSONObject().apply {
+                put("parts", JSONArray().put(JSONObject().apply { put("text", CurriculumPrompt.SYSTEM) }))
+            })
+            put("contents", JSONArray().put(JSONObject().apply {
+                put("parts", JSONArray().put(JSONObject().apply {
+                    put("text", CurriculumPrompt.userMessage(docTitle, docText))
+                }))
+            }))
+            put("generationConfig", JSONObject().apply {
+                put("temperature", 0.3)
+                put("maxOutputTokens", 8192)
             })
         }
-        val body = payload.toString().toRequestBody("application/json".toMediaType())
-        val req = Request.Builder()
-            .url("$BASE/chat/completions")
-            .addHeader("Authorization", "Bearer $key")
-            .addHeader("Content-Type", "application/json")
-            .post(body)
-            .build()
-
-        longClient.newCall(req).execute().use { resp ->
-            val text = resp.body?.string() ?: ""
-            if (!resp.isSuccessful) throw GroqException("Müfredat üretimi başarısız (${resp.code}): ${extractError(text)}")
-            val json = JSONObject(text)
-            val choices = json.optJSONArray("choices") ?: throw GroqException("Beklenmeyen yanıt biçimi")
-            if (choices.length() == 0) throw GroqException("Boş yanıt")
-            val content = choices.getJSONObject(0).getJSONObject("message").getString("content").trim()
-            return CurriculumPrompt.extractJson(content)
-        }
+        val raw = generateContent(key, payload, longClient)
+        return CurriculumPrompt.extractJson(raw)
     }
 
     private fun parseFlashcardJson(raw: String): List<Pair<String, String>> {
@@ -156,31 +137,39 @@ object GroqClient {
         }
     }
 
-    // ── ortak sohbet tamamlama çağrısı ──────────────────────────────
-    private fun chatCompletion(apiKey: String, system: String, user: String): String {
+    // ── ortak metin üretimi çağrısı (sistem talimatı + kullanıcı mesajı) ──
+    private fun generateText(apiKey: String, system: String, user: String): String {
         val payload = JSONObject().apply {
-            put("model", CHAT_MODEL)
-            put("temperature", 0.4)
-            put("messages", JSONArray().apply {
-                put(JSONObject().apply { put("role", "system"); put("content", system) })
-                put(JSONObject().apply { put("role", "user"); put("content", user) })
+            put("systemInstruction", JSONObject().apply {
+                put("parts", JSONArray().put(JSONObject().apply { put("text", system) }))
             })
+            put("contents", JSONArray().put(JSONObject().apply {
+                put("parts", JSONArray().put(JSONObject().apply { put("text", user) }))
+            }))
+            put("generationConfig", JSONObject().apply { put("temperature", 0.4) })
         }
+        return generateContent(apiKey, payload)
+    }
+
+    private fun generateContent(apiKey: String, payload: JSONObject, httpClient: OkHttpClient = client): String {
         val body = payload.toString().toRequestBody("application/json".toMediaType())
         val req = Request.Builder()
-            .url("$BASE/chat/completions")
-            .addHeader("Authorization", "Bearer $apiKey")
+            .url("$BASE/$MODEL:generateContent")
+            .addHeader("x-goog-api-key", apiKey)
             .addHeader("Content-Type", "application/json")
             .post(body)
             .build()
 
-        client.newCall(req).execute().use { resp ->
+        httpClient.newCall(req).execute().use { resp ->
             val text = resp.body?.string() ?: ""
-            if (!resp.isSuccessful) throw GroqException("İstek başarısız (${resp.code}): ${extractError(text)}")
+            if (!resp.isSuccessful) throw GeminiException("İstek başarısız (${resp.code}): ${extractError(text)}")
             val json = JSONObject(text)
-            val choices = json.optJSONArray("choices") ?: throw GroqException("Beklenmeyen yanıt biçimi")
-            if (choices.length() == 0) throw GroqException("Boş yanıt")
-            return choices.getJSONObject(0).getJSONObject("message").getString("content").trim()
+            val candidates = json.optJSONArray("candidates") ?: throw GeminiException("Beklenmeyen yanıt biçimi")
+            if (candidates.length() == 0) throw GeminiException("Boş yanıt (içerik güvenlik filtresine takılmış olabilir)")
+            val parts = candidates.getJSONObject(0).getJSONObject("content").getJSONArray("parts")
+            return (0 until parts.length())
+                .joinToString("") { parts.getJSONObject(it).optString("text", "") }
+                .trim()
         }
     }
 

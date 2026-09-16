@@ -1,12 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="ic_launcher_background">#EAF3DC</color>
+    <color name="ic_launcher_background">#0B0710</color>
 
-    <!-- Widget / bildirim paleti (Theme.kt · object J ile aynı) -->
-    <color name="widget_paper">#F6F1E4</color>
-    <color name="widget_paper_deep">#EDE6D4</color>
-    <color name="widget_ink">#2B2620</color>
-    <color name="widget_ink_soft">#6B6154</color>
-    <color name="widget_ink_faint">#9A9081</color>
-    <color name="widget_forest">#3F6B4A</color>
+    <!-- Widget / bildirim paleti (Theme.kt · object J ile aynı — VOIDLAB) -->
+    <color name="widget_paper">#0B0710</color>
+    <color name="widget_paper_deep">#140C1E</color>
+    <color name="widget_ink">#F3EEFA</color>
+    <color name="widget_ink_soft">#B6ABC9</color>
+    <color name="widget_ink_faint">#6D6280</color>
+    <color name="widget_forest">#9D5CFF</color>
+
+    <!-- Nixie tüp camı — widget/bildirim sayaç göstergeleri -->
+    <color name="nixie_glass">#120A1B</color>
+    <color name="nixie_frame">#2A1F38</color>
+    <color name="nixie_amber">#FFA23C</color>
+    <color name="nixie_amber_dim">#7A4E1E</color>
+    <color name="nixie_red">#E12A44</color>
 </resources>
