@@ -26,7 +26,6 @@ import androidx.glance.layout.Box
 import androidx.glance.layout.Column
 import androidx.glance.layout.Row
 import androidx.glance.layout.Spacer
-import androidx.glance.layout.defaultWeight
 import androidx.glance.layout.fillMaxHeight
 import androidx.glance.layout.fillMaxSize
 import androidx.glance.layout.fillMaxWidth
@@ -104,7 +103,7 @@ private fun MissionWidgetContent(context: Context) {
 
             Spacer(GlanceModifier.width(10.dp))
 
-            Column(modifier = GlanceModifier.defaultWeight()) {
+            Column(modifier = GlanceModifier.fillMaxHeight()) {
                 Row(verticalAlignment = Alignment.Vertical.CenterVertically) {
                     Box(
                         modifier = GlanceModifier
