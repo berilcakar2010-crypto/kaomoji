@@ -12,6 +12,11 @@
         <item name="android:textColorPrimary">@color/ink_dark</item>
         <item name="android:textColorSecondary">@color/ink_muted</item>
         <item name="android:statusBarColor">@color/tie_burgundy_dark</item>
+        <!-- Düşük özellikli/eski cihazlarda pil ve performans için ekran geçiş
+             animasyonları ve içerik geçişleri kapatılır. -->
+        <item name="android:windowAnimationStyle">@null</item>
+        <item name="android:windowContentTransitions">false</item>
+        <item name="android:windowIsTranslucent">false</item>
     </style>
 
     <style name="Text.Baslik" parent="TextAppearance.AppCompat.Headline">

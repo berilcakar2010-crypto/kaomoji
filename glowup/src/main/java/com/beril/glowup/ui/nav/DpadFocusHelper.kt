@@ -3,11 +3,16 @@ package com.beril.glowup.ui.nav
 import android.view.KeyEvent
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 
 /**
  * 2 tuşlu cihaz (D-pad yön + onay) için dikey liste odaklı focus navigasyonu.
  * Dokunmatik varsayımı yapmaz: her odaklanabilir görünüm net bir seçili durum
  * gösterir, ONAY tuşu her zaman o an odaklı görünümü tetikler.
+ *
+ * [EditText] alanları zincire dahil edilir (yukarı/aşağı ile erişilebilir) ama
+ * ONAY tuşu bu alanlarda tetiklenmez — sistemin varsayılan metin düzenleme
+ * davranışı (imleç/yazma) ezilmez.
  */
 object DpadFocusHelper {
 
@@ -32,6 +37,8 @@ object DpadFocusHelper {
             view.isFocusableInTouchMode = true
             view.nextFocusUpId = if (index > 0) odaklanabilirler[index - 1].id else view.id
             view.nextFocusDownId = if (index < odaklanabilirler.size - 1) odaklanabilirler[index + 1].id else view.id
+
+            if (view is EditText) return@forEachIndexed
 
             view.setOnKeyListener { v, keyCode, event ->
                 if (event.action == KeyEvent.ACTION_UP &&

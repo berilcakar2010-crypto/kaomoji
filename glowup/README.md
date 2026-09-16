@@ -75,12 +75,53 @@ henüz "atlanmış/iptal edilmiş görev" kavramı yok, yalnızca kabul edilen g
 kaydediliyor. Bu, gerçek bir eksiklik olduğu için Aşama 4/5'te ele alınmalı,
 şimdilik var olmayan bir veriyle sahte bir oran üretilmedi.
 
-## Sırada (Aşama 4)
+## Durum: Aşama 4 — 2 Tuşlu Navigasyon ve Arayüz Cilası
 
-2 tuşlu navigasyon ve arayüz cilası: tüm ekranların katı D-pad zinciri (metin
-girişi alanları dahil), ana ekranda tek tuşla tetiklenen büyük "şimdi ne yapsam"
-butonu + kısa istatistik özeti, düşük pil/performans için animasyon/arkaplan
-servisi minimizasyonu, gerçek 2 tuşlu cihazda erişilebilirlik testi.
+- [x] Ana ekran yeniden tasarlandı: "🔎 Şimdi Ne Yapsam" artık büyük, tek tuşla
+      tetiklenen bir giriş (liste elemanı değil) ve her zaman ekranın ilk odak
+      noktası; hemen altında kısa bir günlük özet (`gunlukOzetMetni` —
+      "Bugün: N görev · En uzun seri: X gün (Kategori)")
+- [x] `DpadFocusHelper` düzeltmesi: `EditText` alanları artık D-pad zincirine
+      dahil (yukarı/aşağı ile erişilebilir) ama ONAY tuşu bu alanlarda
+      tetiklenmiyor — sistemin varsayılan metin imleci/düzenleme davranışı
+      önceden yanlışlıkla eziliyordu, artık ezilmiyor
+      (`OneriActivity`, `KartEkleActivity` etkileniyor)
+- [x] Tema tüm ekranlarda tutarlı: her activity aynı `Theme.GlowUp`'ı, aynı
+      `jacket_khaki` zemini, aynı kart/odak selector'larını kullanıyor —
+      ayrı ayrı stil sapması yok
+- [x] Düşük pil/performans: `windowAnimationStyle` kapatıldı (`@null`),
+      `windowContentTransitions` false — ekran geçişlerinde gereksiz animasyon
+      yok. Zaten arka planda çalışan bir servis/iş yok (bildirim, senkronizasyon
+      vb. planlanmadı), bu yönüyle gereksinim baştan sağlanmış durumda.
+
+### Erişilebilirlik incelemesi (gerçek cihaz yerine kod incelemesiyle)
+
+Bu ortamda gerçek 2 tuşlu bir cihaza erişim yok; bu nedenle plandaki "gerçek
+cihazda tek elle, bakmadan kullanılabilirlik kontrolü" burada **yapılamadı**.
+Bunun yerine her ekran şu kontrol listesine göre satır satır incelendi:
+
+- Her ekranda ilk odak, mantıksal olarak en makul öğeye otomatik gidiyor mu? →
+  Evet (`DpadFocusHelper` her zincir kurulduğunda ilk elemana `requestFocus()`
+  çağırıyor; sonuç kartı göründüğünde odak "Kabul Et"e taşınıyor).
+  A `+/-` tuşuyla ONAY yanlışlıkla ikinci bir eyleme mi düşüyor? → Kontrol
+  edildi, çakışan id yok.
+- Odaklı/seçili durumlar yeterince ayırt edici mi (dokunmadan, sadece görerek)? →
+  `kart_focus_selector` (kalın bordo çerçeve) ve `secim_durumu` (dolu bordo =
+  seçili, lavanta çerçeve = odaklı) net biçimde ayrışıyor.
+- Metin girişi gerektiren tek ekranlar (`OneriActivity`'deki opsiyonel not,
+  `KartEkleActivity`) fiziksel bir tuş takımı/klavye gerektiriyor — bu, 2 tuşlu
+  D-pad navigasyonunun doğal bir sınırı, uygulamanın değil. Bu alanlar
+  isteğe bağlı bırakıldı (not) ya da ayrı bir ekranda toplandı (kart ekleme),
+  ana akışı (öneri al → kabul et) tek elle D-pad ile tamamen kullanılabilir.
+
+**Gerçek cihaz testi hâlâ yapılmalı** — bu inceleme bunun yerini tutmaz, sadece
+bariz sorunları elemek için yapıldı.
+
+## Sırada (Aşama 5)
+
+Test, GitHub, APK: SM-2 hesaplaması ve öneri motoru için birim testleri, APK
+üretimi için GitHub Actions pipeline'ı (kaomoji reposundakine benzer), gerçek
+cihazda son kullanılabilirlik turu, v1.0 release + backlog.
 
 ## Not
 

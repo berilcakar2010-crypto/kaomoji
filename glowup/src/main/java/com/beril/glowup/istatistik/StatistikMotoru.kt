@@ -9,6 +9,11 @@ object StatistikMotoru {
 
     data class KategoriToplam(val kategori: Kategori, val toplamDakika: Int)
     data class GunToplam(val etiket: String, val toplamDakika: Int)
+    data class GunlukOzet(
+        val bugunTamamlananGorevSayisi: Int,
+        val enUzunSeriKategori: Kategori?,
+        val enUzunSeriGunSayisi: Int
+    )
 
     /** Kategori başına toplam çalışma süresi (dakika), en yüksekten en düşüğe. */
     suspend fun kategoriDagilimi(db: GlowUpDatabase): List<KategoriToplam> {
@@ -46,6 +51,26 @@ object StatistikMotoru {
             gun = Zaman.gunOnce(1, gun)
         }
         return streak
+    }
+
+    /** Ana ekranda gösterilen kısa özet: bugün tamamlanan görev sayısı + en uzun seri. */
+    suspend fun gunlukOzet(db: GlowUpDatabase): GunlukOzet {
+        val bugun = Zaman.gunBaslangici()
+        val bugunTamamlanan = db.ilerlemeKaydiDao().hepsi()
+            .filter { it.gunDamgasi == bugun }
+            .sumOf { it.tamamlananGorevSayisi }
+
+        var enUzunKategori: Kategori? = null
+        var enUzunGunSayisi = 0
+        db.kategoriDao().hepsi().forEach { kategori ->
+            val seri = streakGunSayisi(db, kategori.id)
+            if (seri > enUzunGunSayisi) {
+                enUzunGunSayisi = seri
+                enUzunKategori = kategori
+            }
+        }
+
+        return GunlukOzet(bugunTamamlanan, enUzunKategori, enUzunGunSayisi)
     }
 
     /**
