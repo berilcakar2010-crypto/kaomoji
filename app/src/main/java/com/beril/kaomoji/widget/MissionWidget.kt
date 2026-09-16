@@ -8,6 +8,8 @@ import androidx.compose.ui.unit.sp
 import androidx.glance.GlanceId
 import androidx.glance.GlanceModifier
 import androidx.glance.GlanceTheme
+import androidx.glance.Image
+import androidx.glance.ImageProvider
 import androidx.glance.action.ActionParameters
 import androidx.glance.action.actionParametersOf
 import androidx.glance.action.clickable
@@ -24,6 +26,8 @@ import androidx.glance.layout.Box
 import androidx.glance.layout.Column
 import androidx.glance.layout.Row
 import androidx.glance.layout.Spacer
+import androidx.glance.layout.defaultWeight
+import androidx.glance.layout.fillMaxHeight
 import androidx.glance.layout.fillMaxSize
 import androidx.glance.layout.fillMaxWidth
 import androidx.glance.layout.height
@@ -34,6 +38,7 @@ import androidx.glance.text.FontWeight
 import androidx.glance.text.Text
 import androidx.glance.text.TextStyle
 import androidx.glance.unit.ColorProvider
+import com.beril.kaomoji.R
 import com.beril.kaomoji.data.MissionEngine
 import com.beril.kaomoji.data.Store
 
@@ -63,17 +68,20 @@ class MissionWidgetReceiver : GlanceAppWidgetReceiver() {
 private val NixieGlass = Color(0xFF0B0710)
 private val NixieFrame = Color(0xFF352745)
 private val NixieAmber = Color(0xFFFFA23C)
-private val NixieAmberDim = Color(0xFF9A6A2E)
 private val NixieRed = Color(0xFFE12A44)
 private val NixieWhite = Color(0xFFF3EEFA)
 private val NixieViolet = Color(0xFF9D5CFF)
 
+/**
+ * Geniş (x ekseni) ve alçak (y ekseni) tek satırlık düzen: solda gerçek bir
+ * nixie tüp illüstrasyonu (cam gövde + kehribar tel-çerçeve katot), sağında
+ * bugünün görevi ve iki eylem. Yükseklik tek satıra sığacak şekilde sınırlı.
+ */
 @Composable
 private fun MissionWidgetContent(context: Context) {
     val store = Store(context)
     val mission = MissionEngine.pick(store)
 
-    // dış mor çerçeve + iç cam panel = tüp gövdesi efekti
     Box(
         modifier = GlanceModifier
             .fillMaxSize()
@@ -81,77 +89,71 @@ private fun MissionWidgetContent(context: Context) {
             .background(ColorProvider(NixieFrame))
             .padding(1.5.dp)
     ) {
-        Column(
+        Row(
             modifier = GlanceModifier
                 .fillMaxSize()
                 .background(ColorProvider(NixieGlass))
-                .padding(14.dp),
+                .padding(horizontal = 10.dp, vertical = 6.dp),
             verticalAlignment = Alignment.Vertical.CenterVertically
         ) {
-            Row(verticalAlignment = Alignment.Vertical.CenterVertically) {
-                // kırmızı sinyal göstergesi — "kayıt açık" LED'i
-                Box(
-                    modifier = GlanceModifier
-                        .size(6.dp)
-                        .background(ColorProvider(NixieRed))
-                ) {}
-                Spacer(GlanceModifier.width(6.dp))
-                Text(
-                    "GÖREV KAYDI",
-                    style = TextStyle(
-                        fontSize = 10.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = ColorProvider(NixieAmberDim)
-                    )
-                )
-                Spacer(GlanceModifier.width(6.dp))
-                Text(mission.emoji, style = TextStyle(fontSize = 14.sp))
-            }
-
-            Spacer(GlanceModifier.height(8.dp))
-
-            Text(
-                mission.title,
-                maxLines = 3,
-                style = TextStyle(
-                    fontSize = 15.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = ColorProvider(NixieWhite)
-                )
+            Image(
+                provider = ImageProvider(R.drawable.nixie_tube_illustration),
+                contentDescription = null,
+                modifier = GlanceModifier.width(28.dp).fillMaxHeight()
             )
 
-            Spacer(GlanceModifier.height(10.dp))
+            Spacer(GlanceModifier.width(10.dp))
 
-            Row(modifier = GlanceModifier.fillMaxWidth()) {
-                Text(
-                    "✓ TAMAMLA",
-                    style = TextStyle(
-                        fontSize = 12.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = ColorProvider(NixieWhite)
-                    ),
-                    modifier = GlanceModifier
-                        .background(ColorProvider(NixieViolet))
-                        .padding(horizontal = 14.dp, vertical = 8.dp)
-                        .clickable(
-                            actionRunCallback<CompleteMissionAction>(
-                                actionParametersOf(TASK_ID_KEY to (mission.taskId ?: ""))
-                            )
+            Column(modifier = GlanceModifier.defaultWeight()) {
+                Row(verticalAlignment = Alignment.Vertical.CenterVertically) {
+                    Box(
+                        modifier = GlanceModifier
+                            .size(5.dp)
+                            .background(ColorProvider(NixieRed))
+                    ) {}
+                    Spacer(GlanceModifier.width(5.dp))
+                    Text(
+                        mission.title,
+                        maxLines = 1,
+                        style = TextStyle(
+                            fontSize = 13.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = ColorProvider(NixieWhite)
                         )
-                )
-                Spacer(GlanceModifier.width(8.dp))
-                Text(
-                    "AÇ →",
-                    style = TextStyle(
-                        fontSize = 12.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = ColorProvider(NixieAmber)
-                    ),
-                    modifier = GlanceModifier
-                        .padding(horizontal = 10.dp, vertical = 8.dp)
-                        .clickable(actionRunCallback<OpenAppAction>())
-                )
+                    )
+                }
             }
+
+            Spacer(GlanceModifier.width(8.dp))
+
+            Text(
+                "✓",
+                style = TextStyle(
+                    fontSize = 13.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = ColorProvider(NixieWhite)
+                ),
+                modifier = GlanceModifier
+                    .background(ColorProvider(NixieViolet))
+                    .padding(horizontal = 10.dp, vertical = 6.dp)
+                    .clickable(
+                        actionRunCallback<CompleteMissionAction>(
+                            actionParametersOf(TASK_ID_KEY to (mission.taskId ?: ""))
+                        )
+                    )
+            )
+            Spacer(GlanceModifier.width(6.dp))
+            Text(
+                "AÇ →",
+                style = TextStyle(
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = ColorProvider(NixieAmber)
+                ),
+                modifier = GlanceModifier
+                    .padding(horizontal = 4.dp, vertical = 6.dp)
+                    .clickable(actionRunCallback<OpenAppAction>())
+            )
         }
     }
 }

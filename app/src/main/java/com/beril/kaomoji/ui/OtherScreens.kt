@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.sp
 import com.beril.kaomoji.data.*
 import com.beril.kaomoji.storage.FileVault
 import com.beril.kaomoji.storage.humanSize
+import com.beril.kaomoji.ui.nav.dpadFocusable
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -858,8 +859,11 @@ fun StudyBagScreen(store: Store, onGo: (Screen) -> Unit, onExplainIt: () -> Unit
         Triple("📁", "Depolama ve Dosyalar", Screen.Storage),
         Triple("📚", "Kaynaklar", Screen.Resources),
         Triple("🕸️", "Köprü Grafiği", Screen.BridgeGraph),
-        Triple("🃏", "Kartlar (Anki)", Screen.Flashcards),
-        Triple("🗂️", "Müfredat Oluştur", Screen.CurriculumGen)
+        Triple("🃏", "Kartlar (Anki + Tekrar)", Screen.Flashcards),
+        Triple("🗂️", "Müfredat Oluştur", Screen.CurriculumGen),
+        Triple("✏️", "Müfredatı Düzenle", Screen.CurriculumEdit),
+        Triple("🤖", "Durumu Değerlendir (AI)", Screen.Evaluation),
+        Triple("📈", "İstatistikler", Screen.Stats)
     )
 
     LazyColumn(
@@ -878,7 +882,7 @@ fun StudyBagScreen(store: Store, onGo: (Screen) -> Unit, onExplainIt: () -> Unit
                     .fillMaxWidth()
                     .background(J.blush.copy(alpha = 0.18f), RoundedCornerShape(18.dp))
                     .dashed(J.blush.copy(alpha = 0.7f))
-                    .clickable { onExplainIt() }
+                    .dpadFocusable(onClick = onExplainIt, shape = RoundedCornerShape(18.dp))
                     .padding(14.dp)
             ) {
                 Text("// GİRDİ EKSİK", style = TitleL)
@@ -896,7 +900,7 @@ fun StudyBagScreen(store: Store, onGo: (Screen) -> Unit, onExplainIt: () -> Unit
                     .fillMaxWidth()
                     .background(J.card, RoundedCornerShape(14.dp))
                     .border(1.dp, J.line, RoundedCornerShape(14.dp))
-                    .clickable { onGo(screen) }
+                    .dpadFocusable(onClick = { onGo(screen) })
                     .padding(13.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {

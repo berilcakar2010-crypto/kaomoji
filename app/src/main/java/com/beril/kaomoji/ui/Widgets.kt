@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.beril.kaomoji.data.Curriculum
 import com.beril.kaomoji.data.Task
+import com.beril.kaomoji.ui.nav.dpadFocusable
 
 @Composable
 fun Btn(
@@ -35,7 +36,7 @@ fun Btn(
     Row(
         modifier
             .background(if (enabled) bg else J.line, RoundedCornerShape(14.dp))
-            .clickable(enabled = enabled) { onClick() }
+            .dpadFocusable(enabled = enabled, onClick = onClick)
             .padding(horizontal = 16.dp, vertical = 11.dp),
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically
@@ -67,7 +68,7 @@ fun GhostBtn(
     Row(
         modifier
             .border(1.dp, J.line, RoundedCornerShape(14.dp))
-            .clickable { onClick() }
+            .dpadFocusable(onClick = onClick)
             .padding(horizontal = 14.dp, vertical = 10.dp),
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically
@@ -143,7 +144,7 @@ fun Checkbox(checked: Boolean, onToggle: () -> Unit, color: Color = J.forest) {
             .size(22.dp)
             .background(if (checked) color else Color.Transparent, RoundedCornerShape(7.dp))
             .border(1.5.dp, if (checked) color else J.line, RoundedCornerShape(7.dp))
-            .clickable { onToggle() },
+            .dpadFocusable(onClick = onToggle, shape = RoundedCornerShape(7.dp)),
         contentAlignment = Alignment.Center
     ) {
         if (checked) Text("✓", style = TextStyle(fontSize = 12.sp, color = Color.White, fontWeight = FontWeight.Bold))

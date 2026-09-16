@@ -90,6 +90,18 @@ object GroqClient {
         return chatCompletion(key, system, user)
     }
 
+    // ── 2b. Genel ilerleme değerlendirmesi ("şu ana kadarki durumu değerlendir") ──
+    fun evaluateProgress(apiKey: String?, statsSummary: String): String {
+        val key = requireKey(apiKey)
+        val system = "Sen bir akademik koçsun. Sana bir öğrencinin çalışma istatistiklerinin özeti " +
+            "veriliyor (ilerleme yüzdesi, seri/streak, çözülen problem sayısı, tekrar eden hata " +
+            "örüntüleri, tekrar kartı performansı). Görevin: (1) genel durumu iki cümlede özetle, " +
+            "(2) en güçlü yönü belirt, (3) en çok dikkat gerektiren tek noktayı belirt, " +
+            "(4) sıradaki hafta için tek somut öneri ver. Türkçe, resmi ve net bir dille, " +
+            "en fazla 150 kelime, öznel yorum/mizah yapma, sadece veriye dayan."
+        return chatCompletion(key, system, statsSummary)
+    }
+
     // ── 3. Otomatik soru/cevap üretimi (flashcard) ──────────────────
     /** Kaynak metinden (birim görevleri veya bir anlatım) N adet soru-cevap çifti üretir. */
     fun generateFlashcards(apiKey: String?, sourceText: String, subjectName: String, n: Int = 8): List<Pair<String, String>> {

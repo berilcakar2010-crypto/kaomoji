@@ -18,6 +18,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.beril.kaomoji.data.*
+import com.beril.kaomoji.ui.nav.dpadFocusable
 
 @Composable
 fun CurriculumScreen(store: Store, onOpenUnit: (String) -> Unit) {
@@ -55,7 +56,7 @@ fun CurriculumScreen(store: Store, onOpenUnit: (String) -> Unit) {
                                 RoundedCornerShape(14.dp)
                             )
                             .border(1.dp, if (on) J.forest else J.line, RoundedCornerShape(14.dp))
-                            .clickable { openPhase = p.id }
+                            .dpadFocusable(onClick = { openPhase = p.id })
                             .padding(11.dp)
                     ) {
                         Text(
@@ -119,7 +120,7 @@ private fun UnitRow(
                 RoundedCornerShape(16.dp)
             )
             .border(if (current) 2.dp else 1.dp, border, RoundedCornerShape(16.dp))
-            .clickable(enabled = unlocked) { onOpen() }
+            .dpadFocusable(enabled = unlocked, onClick = onOpen, shape = RoundedCornerShape(16.dp))
             .padding(13.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {

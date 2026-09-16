@@ -20,6 +20,7 @@ import com.beril.kaomoji.audio.Recorder
 import com.beril.kaomoji.data.MissionEngine
 import com.beril.kaomoji.data.Store
 import com.beril.kaomoji.storage.FileVault
+import com.beril.kaomoji.ui.nav.dpadFocusable
 
 sealed class Screen {
     data object Garden : Screen()
@@ -37,8 +38,12 @@ sealed class Screen {
     data object BridgeGraph : Screen()
     data object Flashcards : Screen()
     data object CurriculumGen : Screen()
+    data object CurriculumEdit : Screen()
+    data object Evaluation : Screen()
+    data object Stats : Screen()
     data class UnitDetail(val id: String) : Screen()
     data class ProjectDetail(val id: String) : Screen()
+    data class UnitEdit(val id: String) : Screen()
 }
 
 private data class Tab(val emoji: String, val label: String, val screen: Screen)
@@ -77,7 +82,8 @@ fun Root(
 
     fun go(s: Screen) {
         if (screen is Screen.Garden || screen is Screen.Curriculum ||
-            screen is Screen.Projects || screen is Screen.Bag || screen is Screen.Inbox
+            screen is Screen.Projects || screen is Screen.Bag || screen is Screen.Inbox ||
+            screen is Screen.CurriculumEdit
         ) back = screen
         screen = s
     }
@@ -181,10 +187,14 @@ private fun Body(
         is Screen.BridgeGraph -> BridgeGraphScreen(store, onBack)
         is Screen.Flashcards -> FlashcardsScreen(store, vault, onBack)
         is Screen.CurriculumGen -> CurriculumGenScreen(store, onBack)
+        is Screen.CurriculumEdit -> CurriculumEditScreen(store, onOpenUnit = { onGo(Screen.UnitEdit(it)) }, onBack = onBack)
+        is Screen.Evaluation -> EvaluationScreen(store, onBack)
+        is Screen.Stats -> StatsScreen(store, onBack)
         is Screen.UnitDetail -> UnitDetailScreen(
             store, screen.id, onBack, onRecord, onAddMistake, onLogProblems
         )
         is Screen.ProjectDetail -> ProjectDetailScreen(store, screen.id, onBack, onRecord)
+        is Screen.UnitEdit -> UnitEditScreen(store, screen.id, onBack)
     }
 }
 
@@ -202,7 +212,7 @@ private fun BottomBar(current: Screen, onGo: (Screen) -> Unit) {
             val on = current::class == t.screen::class
             Column(
                 Modifier
-                    .clickable { onGo(t.screen) }
+                    .dpadFocusable(onClick = { onGo(t.screen) }, shape = RoundedCornerShape(14.dp))
                     .padding(horizontal = 6.dp, vertical = 3.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
@@ -250,7 +260,7 @@ private fun Rail(current: Screen, onGo: (Screen) -> Unit) {
             Column(
                 Modifier
                     .fillMaxWidth()
-                    .clickable { onGo(t.screen) }
+                    .dpadFocusable(onClick = { onGo(t.screen) }, shape = RoundedCornerShape(14.dp))
                     .padding(vertical = 10.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {

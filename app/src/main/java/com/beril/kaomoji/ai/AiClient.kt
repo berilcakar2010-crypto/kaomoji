@@ -19,6 +19,13 @@ object AiClient {
             AiProvider.GROQ -> GroqClient.analyzeTranscript(apiKey, transcript, topic)
         }
 
+    /** Genel istatistik özetinden ("şu ana kadarki durumu değerlendir") kısa bir AI değerlendirmesi üretir. */
+    fun evaluateProgress(ctx: Context, apiKey: String?, statsSummary: String): String =
+        when (ApiKeyStore.provider(ctx)) {
+            AiProvider.GEMINI -> GeminiClient.evaluateProgress(apiKey, statsSummary)
+            AiProvider.GROQ -> GroqClient.evaluateProgress(apiKey, statsSummary)
+        }
+
     fun generateFlashcards(ctx: Context, apiKey: String?, sourceText: String, subjectName: String, n: Int = 8): List<Pair<String, String>> =
         when (ApiKeyStore.provider(ctx)) {
             AiProvider.GEMINI -> GeminiClient.generateFlashcards(apiKey, sourceText, subjectName, n)

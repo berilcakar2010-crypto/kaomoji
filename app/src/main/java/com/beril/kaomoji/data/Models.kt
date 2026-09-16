@@ -120,7 +120,21 @@ data class Flashcard(
     var subject: String,
     var unitId: String? = null,
     var createdAt: Long,
-    var source: String = "manual" // "manual" | "auto"
+    var source: String = "manual", // "manual" | "auto"
+    // ── SM-2 aralıklı tekrar durumu ──
+    var easeFactor: Float = 2.5f,
+    var repetitions: Int = 0,
+    var intervalDays: Int = 0,
+    var nextReviewAt: Long = 0L,
+    var lastQuality: Int? = null
+)
+
+/** Bir günde ne kadar çalışıldığının kaydı — streak ve uzun vadeli istatistiklerin kaynağı. */
+data class DailyLog(
+    val dayKey: String, // "yyyy-MM-dd"
+    var tasksDone: Int = 0,
+    var cardsReviewed: Int = 0,
+    var minutesLogged: Int = 0
 )
 
 data class Mistake(

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Gerçekçi bir nixie tüp illüstrasyonu: cam silindir gövde, üstte yuvarlak
+    cam tepe, içeride kehribar parıltılı tel-çerçeve rakam katodu, altta metal
+    soket ve pimler. Karaktere özgü hiçbir öğe yok — jenerik laboratuvar aleti.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp"
+    android:height="64dp"
+    android:viewportWidth="48"
+    android:viewportHeight="64">
+
+    <!-- cam silindir gövde -->
+    <path
+        android:fillColor="#14101C"
+        android:strokeColor="#4A3B66"
+        android:strokeWidth="1.4"
+        android:pathData="M10,10 L38,10 L38,50 C38,53.3 34.4,56 30,56 L18,56 C13.6,56 10,53.3 10,50 Z" />
+
+    <!-- cam üst kubbe -->
+    <path
+        android:fillColor="#14101C"
+        android:strokeColor="#4A3B66"
+        android:strokeWidth="1.4"
+        android:pathData="M10,10 C10,5.6 14.9,2 24,2 C33.1,2 38,5.6 38,10 Z" />
+
+    <!-- cam parlaması (sol kenar highlight) -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:fillAlpha="0.06"
+        android:pathData="M13,8 C13,5 17,4 17,4 L15,50 C15,52 13,52 13,50 Z" />
+
+    <!-- kehribar parıltı halesi (rakam katodunun arkasındaki glow) -->
+    <path
+        android:fillColor="#FFA23C"
+        android:fillAlpha="0.20"
+        android:pathData="M24,16 m-11,0 a11,11 0 1,0 22,0 a11,11 0 1,0 -22,0 Z" />
+
+    <!-- tel-çerçeve rakam katodu (jenerik "8" biçimli tel örgü) -->
+    <path
+        android:strokeColor="#FFC98C"
+        android:strokeWidth="2"
+        android:strokeLineCap="round"
+        android:fillColor="#00000000"
+        android:pathData="M18,10 L30,10 M18,10 L18,28 M30,10 L30,28 M18,19 L30,19 M18,28 L30,28 M18,19 L18,37 M30,19 L30,37 M18,37 L30,37" />
+
+    <!-- destek tel çubukları (anot/katot bacakları) -->
+    <path
+        android:strokeColor="#5C4B7A"
+        android:strokeWidth="1"
+        android:fillColor="#00000000"
+        android:pathData="M14,42 L14,50 M34,42 L34,50" />
+
+    <!-- metal soket / taban -->
+    <path
+        android:fillColor="#2B2438"
+        android:pathData="M12,56 L36,56 L34,62 L14,62 Z" />
+
+    <!-- pimler -->
+    <path
+        android:strokeColor="#8A7CA8"
+        android:strokeWidth="1.6"
+        android:strokeLineCap="round"
+        android:fillColor="#00000000"
+        android:pathData="M18,62 L18,64 M24,62 L24,64 M30,62 L30,64" />
+</vector>

@@ -17,7 +17,14 @@ import java.util.UUID
  */
 class Store(private val ctx: Context) {
 
-    val curriculum: Curriculum = CurriculumLoader.load(ctx)
+    var curriculum: Curriculum by mutableStateOf(CurriculumLoader.load(ctx))
+        private set
+
+    /** Manuel müfredat düzenleyicisinden gelen değişikliği hem bellekte hem diskte (özel müfredat) uygular. */
+    fun updateCurriculum(yeni: Curriculum) {
+        curriculum = yeni
+        CurriculumLoader.saveCustom(ctx, yeni.toJson())
+    }
 
     // ── state ──
     val done = mutableStateMapOf<String, Boolean>()
@@ -30,6 +37,8 @@ class Store(private val ctx: Context) {
     val assessmentStates = mutableStateMapOf<String, AssessmentState>()
     val skipped = mutableStateMapOf<String, Boolean>()
     val flashcards = mutableStateListOf<Flashcard>()
+    /** Gün anahtarına (yyyy-MM-dd) göre günlük özet — streak ve uzun vadeli istatistikler için. */
+    val dailyLogs = mutableStateMapOf<String, DailyLog>()
 
     var storageUri by mutableStateOf<String?>(null)
     var missionOverride by mutableStateOf<String?>(null)
@@ -39,6 +48,7 @@ class Store(private val ctx: Context) {
     var onStateChanged: (() -> Unit)? = null
 
     private val file: File get() = File(ctx.filesDir, "state.json")
+    private val dayKeyFormat = java.text.SimpleDateFormat("yyyy-MM-dd", java.util.Locale.US)
 
     init {
         load()
@@ -109,11 +119,46 @@ class Store(private val ctx: Context) {
     // ── mutations ──
 
     fun toggleTask(id: String) {
+        val nowDone = done[id] != true
         if (done[id] == true) done.remove(id) else done[id] = true
         skipped.remove(id)
         missionOverride = null
+        if (nowDone) {
+            val task = curriculum.task(id)
+            logToday(tasksDone = 1, minutes = task?.minutes ?: 0)
+        }
         save()
     }
+
+    // ── günlük kayıt (streak / uzun vadeli istatistikler) ──
+
+    private fun todayKey(): String = dayKeyFormat.format(java.util.Date())
+
+    private fun logToday(tasksDone: Int = 0, cardsReviewed: Int = 0, minutes: Int = 0) {
+        val key = todayKey()
+        val mevcut = dailyLogs[key] ?: DailyLog(key)
+        dailyLogs[key] = mevcut.copy(
+            tasksDone = mevcut.tasksDone + tasksDone,
+            cardsReviewed = mevcut.cardsReviewed + cardsReviewed,
+            minutesLogged = mevcut.minutesLogged + minutes
+        )
+    }
+
+    /** Bugünden geriye, en az bir görev veya kart tekrarı yapılan kesintisiz gün sayısı. */
+    val currentStreak: Int
+        get() {
+            var gun = java.util.Calendar.getInstance()
+            var streak = 0
+            while (true) {
+                val key = dayKeyFormat.format(gun.time)
+                val log = dailyLogs[key]
+                if (log != null && (log.tasksDone > 0 || log.cardsReviewed > 0)) {
+                    streak++
+                    gun.add(java.util.Calendar.DAY_OF_YEAR, -1)
+                } else break
+            }
+            return streak
+        }
 
     fun skipTask(id: String) {
         skipped[id] = true
@@ -140,6 +185,27 @@ class Store(private val ctx: Context) {
     fun addFlashcard(f: Flashcard) { flashcards.add(0, f); save() }
     fun addFlashcards(list: List<Flashcard>) { flashcards.addAll(0, list); save() }
     fun deleteFlashcard(id: String) { flashcards.removeAll { it.id == id }; save() }
+
+    /** Gösterim zamanı gelmiş kartlar — aralıklı tekrar (SM-2) akışının aday havuzu. */
+    fun dueFlashcards(simdi: Long = System.currentTimeMillis()): List<Flashcard> =
+        flashcards.filter { it.nextReviewAt <= simdi }
+
+    /** Bir tekrar kartına 0-5 arası zorluk puanı verilince SM-2 ile sonraki gösterimi hesaplar. */
+    fun reviewFlashcard(id: String, kalite: Int) {
+        val i = flashcards.indexOfFirst { it.id == id }
+        if (i < 0) return
+        val kart = flashcards[i]
+        val sonuc = SM2.hesapla(kart, kalite)
+        flashcards[i] = kart.copy(
+            easeFactor = sonuc.easeFactor,
+            repetitions = sonuc.repetitions,
+            intervalDays = sonuc.intervalDays,
+            nextReviewAt = sonuc.nextReviewAt,
+            lastQuality = kalite
+        )
+        logToday(cardsReviewed = 1)
+        save()
+    }
 
     fun addInbox(text: String, cat: String) {
         inbox.add(0, InboxNote(uid(), text, cat, System.currentTimeMillis())); save()
@@ -268,6 +334,17 @@ class Store(private val ctx: Context) {
                         put("id", f.id); put("front", f.front); put("back", f.back)
                         put("subject", f.subject); put("unitId", f.unitId ?: JSONObject.NULL)
                         put("at", f.createdAt); put("src", f.source)
+                        put("ef", f.easeFactor); put("reps", f.repetitions)
+                        put("ivl", f.intervalDays); put("next", f.nextReviewAt)
+                        put("lastQ", f.lastQuality ?: JSONObject.NULL)
+                    })
+                }
+            })
+
+            root.put("dailyLogs", JSONObject().also { o ->
+                dailyLogs.forEach { (k, v) ->
+                    o.put(k, JSONObject().apply {
+                        put("tasks", v.tasksDone); put("cards", v.cardsReviewed); put("min", v.minutesLogged)
                     })
                 }
             })
@@ -413,8 +490,25 @@ class Store(private val ctx: Context) {
                             subject = o.optString("subject", "phys"),
                             unitId = o.optNull("unitId"),
                             createdAt = o.optLong("at"),
-                            source = o.optString("src", "manual")
+                            source = o.optString("src", "manual"),
+                            easeFactor = o.optDouble("ef", 2.5).toFloat(),
+                            repetitions = o.optInt("reps"),
+                            intervalDays = o.optInt("ivl"),
+                            nextReviewAt = o.optLong("next"),
+                            lastQuality = if (o.isNull("lastQ") || !o.has("lastQ")) null else o.optInt("lastQ")
                         )
+                    )
+                }
+            }
+
+            root.optJSONObject("dailyLogs")?.let { o ->
+                o.keys().forEach { k ->
+                    val j = o.getJSONObject(k)
+                    dailyLogs[k] = DailyLog(
+                        dayKey = k,
+                        tasksDone = j.optInt("tasks"),
+                        cardsReviewed = j.optInt("cards"),
+                        minutesLogged = j.optInt("min")
                     )
                 }
             }
@@ -435,7 +529,7 @@ class Store(private val ctx: Context) {
     fun resetAll() {
         done.clear(); skipped.clear(); recordings.clear(); mistakes.clear()
         inbox.clear(); problems.clear(); reviews.clear(); flashcards.clear()
-        projectStates.clear(); assessmentStates.clear()
+        projectStates.clear(); assessmentStates.clear(); dailyLogs.clear()
         curriculum.projects.forEach { projectStates[it.id] = ProjectState(nextAction = it.defaultNext) }
         curriculum.assessments.forEach { assessmentStates[it.id] = AssessmentState() }
         save()
