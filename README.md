@@ -57,7 +57,7 @@ Beş alan. Onlarca sekme yok — tek bir küçük dünya.
 | | Alan | Ne yapar |
 |---|---|---|
 | 🔬 | **Laboratuvar** | Ana ekran. Bugünün küçük görevi, deney aşaması, devam et, son anlatım, projeler, köprüler |
-| 📚 | **Müfredat** | 6 faz, 43 birim, 484 görev. Zamansız akış |
+| 📚 | **Müfredat** | 4 faz, 16 birim, 129 görev (Eylül–Aralık 2026). Zamansız akış |
 | 📥 | **Brain Inbox** | Hızlı yakalama. Düzenleme sonra |
 | ⚗️ | **Projeler** | Beş üretim projesi. En önemli alan: SIRADAKİ EYLEM |
 | 🎒 | **Çanta** | Anlatımlar, sınavlar, hata defteri, değerlendirme, depolama, kaynaklar |
@@ -73,12 +73,10 @@ Tarih yok. Bir birimin görevleri bitince **sıradaki açılır.**
 - Hızlı gidersen önden gidersin, yavaş gidersen aynı yoldasın
 
 ```
-Faz 1 · Kuruluş                   9 birim   ~79 saat
-Faz 2 · Çok Bölmeli Model          8 birim   ~64 saat
-Faz 3 · Güz Konsolidasyonu         4 birim   ~35 saat
-Faz 4 · Stokastik Genişleme        9 birim   ~75 saat
-Faz 5 · Senkronizasyon ve Sentez   9 birim   ~72 saat
-Faz 6 · Final                     4 birim   ~33 saat
+Eylül · Kurulum ve Keşif             3 birim   ~19 saat
+Ekim · Derinleşme                    4 birim   ~32 saat
+Kasım · Tamamlama ve Sıkılaştırma    4 birim   ~32 saat
+Aralık · Bitirme, Toparlama, Dinlenme 5 birim  ~29 saat
 ```
 
 Laboratuvar metaforu XP değil, gerçek durum: 🧊 ham numune → ⚗️ tepkimede → 🧪 stabilize → 🔬 analiz → 💠 sonuçlandı
@@ -156,9 +154,11 @@ Birinci sınıf ilişkiler, süs değil:
 Kablo Teorisi Köprüsü                 PDE + devre teorisi + gerçek nöron morfolojisi (P1)
 Stokastik Süreçler ↔ Kanal Gürültüsü  Markov modeli = iyon kanalı açılıp kapanması
 Dinamik Sistemler ↔ Senkronizasyon    salınım + diferansiyel denklem + iki nöron senkronu
-Kalkülüs ↔ Felsefe                    Zenon paradoksları ve limit kavramı
-Hopfield Ağı ↔ Transformer Attention  istatistiksel mekanik → güncel yapay zeka (P2)
 ```
+
+Kalkülüs↔Felsefe ve Hopfield Ağı↔Transformer Attention köprüleri P2 (Ocak-Haziran'a
+ertelenen Hopfield ağı projesi) ile birlikte geri gelecek — bu dönemin (Eylül-Aralık)
+müfredatında henüz karşılıkları yok.
 
 Bunlar hem birim sayfalarında görünür hem görev seçimini etkiler.
 
@@ -228,8 +228,10 @@ steril Material, çocuksu anaokulu estetiği, aşırı animasyon.
 - **Kotlin + Jetpack Compose + Material 3**
 - **Bağımlılık yok denecek kadar az** — Room yok, Hilt yok, Navigation kütüphanesi yok
 - Durum tek bir JSON dosyasında (`filesDir/state.json`) — hızlı, taşınabilir, yedeklenebilir
-- Müfredat `assets/curriculum.json` içinde, `tools/gen_curriculum_v3.py` ile üretiliyor
-  (eski `gen_curriculum.py`/`gen_curriculum_v2.py` referans için repoda duruyor, aktif olan v3)
+- Müfredat `assets/curriculum.json` içinde. Aktif olan, `tools/gen_curriculum_eylul_aralik_2026.py`
+  ile üretilen Eylül–Aralık 2026 dönem müfredatı (16 hafta, gerçek PDF programından elle
+  yapılandırılmış — AI üretimi değil). Eski `gen_curriculum.py`/`v2`/`v3` (43 haftalık
+  Ağustos 2026–Haziran 2027 sürümü) referans için repoda duruyor.
 - Ses: `MediaRecorder` (AAC/MP4) + `MediaPlayer`, SAF üzerinden dosya tanımlayıcı
 - minSdk 26 · targetSdk 34 · JDK 17
 - **Temelde çevrimdışı.** Sunucu yok, hesap yok. AI özellikleri (transkripsiyon, analiz,
@@ -239,11 +241,11 @@ steril Material, çocuksu anaokulu estetiği, aşırı animasyon.
 ### Müfredatı değiştirmek
 
 ```bash
-python3 tools/gen_curriculum_v3.py
+python3 tools/gen_curriculum_eylul_aralik_2026.py
 ```
 
-`tools/gen_curriculum_v3.py` içindeki faz/birim/ders tanımlarını düzenle, scripti çalıştır,
-`app/src/main/assets/curriculum.json` yeniden üretilir. Sonra yeniden derle.
+`tools/gen_curriculum_eylul_aralik_2026.py` içindeki `WEEKS`/`PHASES` tanımlarını düzenle,
+scripti çalıştır, `app/src/main/assets/curriculum.json` yeniden üretilir. Sonra yeniden derle.
 
 Ya da hiç script'e dokunmadan: Çanta → **Müfredat Oluştur** ekranından bir `.md`/`.pdf`
 belge yükleyip (Groq veya Gemini) API anahtarını girince, uygulama o belgeye uygun,
