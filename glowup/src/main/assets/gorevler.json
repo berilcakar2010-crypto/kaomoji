@@ -1,0 +1,22 @@
+{
+  "kategoriler": [
+    { "id": "fiziksel", "ad": "Fiziksel", "emoji": "🏃", "renkHex": "#6E2430" },
+    { "id": "sosyal", "ad": "Sosyal", "emoji": "🗣️", "renkHex": "#8A7CA8" },
+    { "id": "bilissel", "ad": "Bilişsel", "emoji": "🧠", "renkHex": "#A69B7C" },
+    { "id": "entelektuel", "ad": "Entelektüel", "emoji": "📚", "renkHex": "#4A1820" },
+    { "id": "yaratici", "ad": "Yaratıcı", "emoji": "🎨", "renkHex": "#6B5F87" }
+  ],
+  "gorevler": [
+    { "id": "fiz_001", "kategoriId": "fiziksel", "baslik": "20 squat", "aciklama": "Formu bozmadan 20 tekrar.", "sureDk": 5, "enerjiSeviyesi": "YUKSEK", "sosyalMod": "FARKETMEZ" },
+    { "id": "fiz_002", "kategoriId": "fiziksel", "baslik": "Nefes egzersizi", "aciklama": "4-7-8 tekniğiyle 6 tur.", "sureDk": 5, "enerjiSeviyesi": "DUSUK", "sosyalMod": "YALNIZ" },
+    { "id": "fiz_003", "kategoriId": "fiziksel", "baslik": "Kısa yürüyüş", "aciklama": "15 dakika, telefon cepte.", "sureDk": 15, "enerjiSeviyesi": "DUSUK", "sosyalMod": "FARKETMEZ" },
+    { "id": "fiz_004", "kategoriId": "fiziksel", "baslik": "Esneme seti", "aciklama": "Boyun, omuz, sırt, bacak — 5 hareket.", "sureDk": 10, "enerjiSeviyesi": "DUSUK", "sosyalMod": "YALNIZ" },
+    { "id": "sos_001", "kategoriId": "sosyal", "baslik": "Mesaj taslağı", "aciklama": "Uzun süredir yazmadığın birine 2 satır yaz.", "sureDk": 5, "enerjiSeviyesi": "DUSUK", "sosyalMod": "SOSYAL" },
+    { "id": "sos_002", "kategoriId": "sosyal", "baslik": "Kısa arama", "aciklama": "Aile/arkadaş — 5 dakikalık check-in.", "sureDk": 15, "enerjiSeviyesi": "YUKSEK", "sosyalMod": "SOSYAL" },
+    { "id": "bil_001", "kategoriId": "bilissel", "baslik": "Bulmaca turu", "aciklama": "Sudoku/kelime bulmacası — tek tur.", "sureDk": 15, "enerjiSeviyesi": "DUSUK", "sosyalMod": "YALNIZ" },
+    { "id": "bil_002", "kategoriId": "bilissel", "baslik": "Çalışma kartı turu", "aciklama": "Bekleyen tekrar kartlarından 10 tanesi.", "sureDk": 10, "enerjiSeviyesi": "YUKSEK", "sosyalMod": "YALNIZ" },
+    { "id": "ent_001", "kategoriId": "entelektuel", "baslik": "Kısa okuma", "aciklama": "Bir makale/bölüm — sonunda 1 satır özet.", "sureDk": 30, "enerjiSeviyesi": "DUSUK", "sosyalMod": "YALNIZ" },
+    { "id": "ent_002", "kategoriId": "entelektuel", "baslik": "Not çıkarma", "aciklama": "Yarım kalmış bir konudan 5 madde not.", "sureDk": 15, "enerjiSeviyesi": "YUKSEK", "sosyalMod": "YALNIZ" },
+    { "id": "yar_001", "kategoriId": "yaratici", "baslik": "Serbest yazma", "aciklama": "Kesintisiz 10 dakika, düzenleme yok.", "sureDk": 10, "enerjiSeviyesi": "YUKSEK", "sosyalMod": "YALNIZ" }
+  ]
+}

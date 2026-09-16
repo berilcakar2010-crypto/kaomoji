@@ -14,3 +14,4 @@ dependencyResolutionManagement {
 }
 rootProject.name = "kaomoji"
 include(":app")
+include(":glowup")

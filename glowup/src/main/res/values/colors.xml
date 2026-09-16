@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--
+        Palet: "Genç Araştırmacı" — kıyafetten esinlenilmiş renk/ton seviyesi.
+        İsim, yüz, saç, görsel tasvir veya replik YOK — sadece renk/motif.
+    -->
+
+    <!-- Ana vurgu: kirli/koyu bordo-kızıl (kravat rengi) -->
+    <color name="tie_burgundy">#6E2430</color>
+    <color name="tie_burgundy_dark">#4A1820</color>
+    <color name="tie_burgundy_light">#8C3A46</color>
+
+    <!-- İkincil vurgu: soluk mor-eflatun (göz rengi) -->
+    <color name="eye_lavender">#8A7CA8</color>
+    <color name="eye_lavender_dark">#6B5F87</color>
+    <color name="eye_lavender_light">#AEA2C6</color>
+
+    <!-- Nötr arka plan: kirli haki/bej (ceket tonu) -->
+    <color name="jacket_khaki">#C9BFA0</color>
+    <color name="jacket_khaki_dark">#A69B7C</color>
+    <color name="jacket_khaki_light">#D8CFB0</color>
+
+    <!-- Kart yüzeyleri: kırık beyaz (gömlek) -->
+    <color name="shirt_offwhite">#F5F0E6</color>
+    <color name="shirt_offwhite_dim">#EDE6D6</color>
+
+    <!-- Metin / mürekkep tonları -->
+    <color name="ink_dark">#2B2520</color>
+    <color name="ink_muted">#5A5348</color>
+
+    <!-- Fonksiyonel -->
+    <color name="divider">#B0A47E</color>
+    <color name="danger">@color/tie_burgundy</color>
+    <color name="success">#4C6B4C</color>
+
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+</resources>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--
+        "Tez klasörü / araştırmacı defteri" hissi — CRT/terminal değil, kağıt/dosya klasörü.
+        Başlıklar ince akademik serif, gövde sans-serif, sayı/istatistik alanları monospace.
+    -->
+    <style name="Theme.GlowUp" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/tie_burgundy</item>
+        <item name="colorPrimaryDark">@color/tie_burgundy_dark</item>
+        <item name="colorAccent">@color/eye_lavender</item>
+        <item name="android:windowBackground">@color/jacket_khaki</item>
+        <item name="android:textColorPrimary">@color/ink_dark</item>
+        <item name="android:textColorSecondary">@color/ink_muted</item>
+        <item name="android:statusBarColor">@color/tie_burgundy_dark</item>
+    </style>
+
+    <style name="Text.Baslik" parent="TextAppearance.AppCompat.Headline">
+        <item name="android:fontFamily">serif</item>
+        <item name="android:textColor">@color/ink_dark</item>
+    </style>
+
+    <style name="Text.Govde" parent="TextAppearance.AppCompat.Body1">
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:textColor">@color/ink_dark</item>
+    </style>
+
+    <style name="Text.Istatistik" parent="TextAppearance.AppCompat.Body2">
+        <item name="android:fontFamily">monospace</item>
+        <item name="android:textColor">@color/tie_burgundy</item>
+    </style>
+</resources>
