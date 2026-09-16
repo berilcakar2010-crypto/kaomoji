@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/jacket_khaki"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            style="@style/Text.Baslik"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:text="Tekrar Kartları" />
+
+        <!-- Hub durumu -->
+        <LinearLayout
+            android:id="@+id/hubKapsayici"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/durumMetni"
+                style="@style/Text.Govde"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp" />
+
+            <TextView
+                android:id="@+id/tekraraBaslaButonu"
+                style="@style/Text.Govde"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="14dp"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:background="@drawable/kart_focus_selector"
+                android:layout_marginBottom="10dp"
+                android:text="Tekrara Başla" />
+
+            <TextView
+                android:id="@+id/yeniKartEkleButonu"
+                style="@style/Text.Govde"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="14dp"
+                android:gravity="center"
+                android:background="@drawable/kart_focus_selector"
+                android:text="Yeni Kart Ekle" />
+        </LinearLayout>
+
+        <!-- İnceleme durumu -->
+        <LinearLayout
+            android:id="@+id/incelemeKapsayici"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/kart_focus_selector"
+            android:padding="16dp"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/ilerlemeMetni"
+                style="@style/Text.Istatistik"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp" />
+
+            <TextView
+                android:id="@+id/soruMetni"
+                style="@style/Text.Baslik"
+                android:textSize="18sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp" />
+
+            <TextView
+                android:id="@+id/cevapMetni"
+                style="@style/Text.Govde"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/cevabiGosterButonu"
+                style="@style/Text.Govde"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="12dp"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:background="@drawable/secim_durumu"
+                android:text="Cevabı Göster" />
+
+            <LinearLayout
+                android:id="@+id/kaliteButonlari"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <TextView android:id="@+id/kaliteTekrar" style="@style/Text.Govde" android:layout_width="match_parent" android:layout_height="wrap_content" android:padding="12dp" android:layout_marginBottom="6dp" android:background="@drawable/secim_durumu" android:text="Hatırlamadım — tekrar" />
+                <TextView android:id="@+id/kaliteZor" style="@style/Text.Govde" android:layout_width="match_parent" android:layout_height="wrap_content" android:padding="12dp" android:layout_marginBottom="6dp" android:background="@drawable/secim_durumu" android:text="Zor hatırladım" />
+                <TextView android:id="@+id/kaliteIyi" style="@style/Text.Govde" android:layout_width="match_parent" android:layout_height="wrap_content" android:padding="12dp" android:layout_marginBottom="6dp" android:background="@drawable/secim_durumu" android:text="Hatırladım" />
+                <TextView android:id="@+id/kaliteKolay" style="@style/Text.Govde" android:layout_width="match_parent" android:layout_height="wrap_content" android:padding="12dp" android:background="@drawable/secim_durumu" android:text="Kolayca hatırladım" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tamamlandiMesaji"
+            style="@style/Text.Govde"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:visibility="gone" />
+
+    </LinearLayout>
+</ScrollView>

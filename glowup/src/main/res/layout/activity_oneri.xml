@@ -111,6 +111,34 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
+                android:layout_marginBottom="8dp" />
+
+            <TextView
+                android:id="@+id/gecenSeferNotu"
+                style="@style/Text.Govde"
+                android:textStyle="italic"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:visibility="gone" />
+
+            <TextView
+                style="@style/Text.Govde"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ne öğrendin / ne yaptın? (opsiyonel)" />
+
+            <EditText
+                android:id="@+id/neOgrendinGirisi"
+                style="@style/Text.Govde"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minLines="1"
+                android:maxLines="3"
+                android:inputType="textMultiLine|textCapSentences"
+                android:background="@drawable/kart_focus_selector"
+                android:padding="10dp"
+                android:layout_marginTop="6dp"
                 android:layout_marginBottom="12dp" />
 
             <TextView

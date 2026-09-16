@@ -48,6 +48,10 @@ interface OturumDao {
 
     @Query("SELECT * FROM oturum WHERE kategoriId = :kategoriId ORDER BY baslangicZamani DESC LIMIT :limit")
     suspend fun sonOturumlar(kategoriId: String, limit: Int): List<Oturum>
+
+    /** Retrieval practice: bir kategoride en son girilen "ne öğrendin" notu. */
+    @Query("SELECT * FROM oturum WHERE kategoriId = :kategoriId AND neOgrendinNotu IS NOT NULL ORDER BY baslangicZamani DESC LIMIT 1")
+    suspend fun sonNotluOturum(kategoriId: String): Oturum?
 }
 
 @Dao
@@ -69,4 +73,11 @@ interface IlerlemeKaydiDao {
 
     @Query("SELECT * FROM ilerleme_kaydi WHERE gunDamgasi >= :baslangic ORDER BY gunDamgasi ASC")
     suspend fun aralikta(baslangic: Long): List<IlerlemeKaydi>
+
+    @Query("SELECT * FROM ilerleme_kaydi WHERE kategoriId = :kategoriId AND gunDamgasi = :gunDamgasi LIMIT 1")
+    suspend fun bul(kategoriId: String, gunDamgasi: Long): IlerlemeKaydi?
+
+    /** Küçük, kişisel veri seti — istatistik hesaplamaları için tamamı belleğe alınır. */
+    @Query("SELECT * FROM ilerleme_kaydi")
+    suspend fun hepsi(): List<IlerlemeKaydi>
 }

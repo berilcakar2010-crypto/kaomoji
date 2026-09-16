@@ -9,17 +9,21 @@ import androidx.lifecycle.lifecycleScope
 import com.beril.glowup.data.db.GlowUpDatabase
 import com.beril.glowup.data.model.EnerjiSeviyesi
 import com.beril.glowup.data.model.Gorev
+import com.beril.glowup.data.model.Oturum
 import com.beril.glowup.data.model.SosyalMod
 import com.beril.glowup.databinding.ActivityOneriBinding
 import com.beril.glowup.engine.OneriGirdisi
 import com.beril.glowup.engine.OneriMotoru
+import com.beril.glowup.istatistik.IlerlemeGuncelleyici
 import com.beril.glowup.ui.nav.DpadFocusHelper
 import kotlinx.coroutines.launch
 
 /**
- * Aşama 2: "Şimdi ne yapsam" öneri motorunun arayüzü. Kullanıcıdan süre ve
- * enerji/mod girdisi alır, motorun seçtiği görevi gösterir; "Kabul Et" görevi
- * kaydeder, "Başka Öner" aynı görevin ağırlığını azaltıp yeni bir aday getirir.
+ * "Şimdi ne yapsam" öneri motorunun arayüzü. Kullanıcıdan süre ve enerji/mod
+ * girdisi alır, motorun seçtiği görevi gösterir. "Kabul Et", isteğe bağlı bir
+ * retrieval-practice notuyla birlikte oturumu kaydeder ve günlük ilerleme
+ * kaydını günceller; "Başka Öner" aynı görevin ağırlığını azaltıp yeni bir
+ * aday getirir.
  *
  * [EXTRA_KATEGORI_ID] verilirse öneri yalnızca o kategoriyle sınırlı kalır;
  * verilmezse motor tüm kategoriler arasından seçim yapar.
@@ -89,8 +93,21 @@ class OneriActivity : AppCompatActivity() {
 
         binding.kabulEtButonu.setOnClickListener {
             val gorev = gosterilenOneri ?: return@setOnClickListener
+            val not = binding.neOgrendinGirisi.text?.toString()?.trim()?.ifBlank { null }
             lifecycleScope.launch {
-                db.gorevDao().sonYapilmaZamaniGuncelle(gorev.id, System.currentTimeMillis())
+                val simdi = System.currentTimeMillis()
+                db.gorevDao().sonYapilmaZamaniGuncelle(gorev.id, simdi)
+                db.oturumDao().ekle(
+                    Oturum(
+                        gorevId = gorev.id,
+                        kategoriId = gorev.kategoriId,
+                        baslangicZamani = simdi,
+                        bitisZamani = simdi,
+                        tamamlandiMi = true,
+                        neOgrendinNotu = not
+                    )
+                )
+                IlerlemeGuncelleyici.gorevTamamlandi(db, gorev.kategoriId, gorev.sureDk)
                 Toast.makeText(
                     this@OneriActivity,
                     "Görev kaydedildi: ${gorev.baslik}",
@@ -143,11 +160,21 @@ class OneriActivity : AppCompatActivity() {
         binding.sonucSure.text = "${gorev.sureDk} dk"
         binding.sonucBaslik.text = gorev.baslik
         binding.sonucAciklama.text = gorev.aciklama
+        binding.neOgrendinGirisi.setText("")
+
+        // Retrieval practice: bu kategoride en son girilen not, yeni görevden önce gösterilir.
+        val sonNotluOturum = db.oturumDao().sonNotluOturum(gorev.kategoriId)
+        if (sonNotluOturum?.neOgrendinNotu != null) {
+            binding.gecenSeferNotu.text = "Geçen sefer: ${sonNotluOturum.neOgrendinNotu}"
+            binding.gecenSeferNotu.visibility = View.VISIBLE
+        } else {
+            binding.gecenSeferNotu.visibility = View.GONE
+        }
 
         val tamZincir = listOf(
             binding.sure5, binding.sure15, binding.sure30, binding.sure60,
             binding.modYuksekSosyal, binding.modYuksekYalniz, binding.modDusukSosyal, binding.modDusukYalniz,
-            binding.oneriButonu, binding.kabulEtButonu, binding.baskaOnerButonu
+            binding.oneriButonu, binding.neOgrendinGirisi, binding.kabulEtButonu, binding.baskaOnerButonu
         )
         DpadFocusHelper.zincirKur(tamZincir) { it.performClick() }
         binding.kabulEtButonu.requestFocus()

@@ -61,6 +61,28 @@ class MainActivity : AppCompatActivity() {
                 binding.kategoriListesi.addView(itemBinding.root)
             }
 
+            val tekrarGirisBinding = ItemKategoriKartiBinding.inflate(
+                LayoutInflater.from(this@MainActivity), binding.kategoriListesi, false
+            )
+            tekrarGirisBinding.kategoriEmoji.text = "🔁"
+            tekrarGirisBinding.kategoriAd.text = "Tekrar Kartları"
+            tekrarGirisBinding.root.id = VIEW_ID_BASE + 1 + kategoriler.size
+            tekrarGirisBinding.root.setOnClickListener {
+                startActivity(Intent(this@MainActivity, TekrarActivity::class.java))
+            }
+            binding.kategoriListesi.addView(tekrarGirisBinding.root)
+
+            val istatistikGirisBinding = ItemKategoriKartiBinding.inflate(
+                LayoutInflater.from(this@MainActivity), binding.kategoriListesi, false
+            )
+            istatistikGirisBinding.kategoriEmoji.text = "📊"
+            istatistikGirisBinding.kategoriAd.text = "İstatistikler"
+            istatistikGirisBinding.root.id = VIEW_ID_BASE + 2 + kategoriler.size
+            istatistikGirisBinding.root.setOnClickListener {
+                startActivity(Intent(this@MainActivity, StatistikActivity::class.java))
+            }
+            binding.kategoriListesi.addView(istatistikGirisBinding.root)
+
             DpadFocusHelper.dikeyZincirKur(binding.kategoriListesi) { secilenView ->
                 secilenView.performClick()
             }

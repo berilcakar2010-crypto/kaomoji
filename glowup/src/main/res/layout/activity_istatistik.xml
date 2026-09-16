@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/jacket_khaki"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            style="@style/Text.Baslik"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:text="İstatistikler" />
+
+        <TextView
+            android:id="@+id/bosDurumMesaji"
+            style="@style/Text.Govde"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:text="Henüz kayıtlı bir çalışma verisi yok. İlk görev tamamlandığında burada görünecektir." />
+
+        <TextView
+            android:id="@+id/kategoriDagilimBaslik"
+            style="@style/Text.Govde"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:text="Kategori Dağılımı (Toplam Süre)" />
+
+        <LinearLayout
+            android:id="@+id/kategoriDagilimContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="20dp" />
+
+        <TextView
+            android:id="@+id/haftalikTrendBaslik"
+            style="@style/Text.Govde"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:text="Son 7 Gün" />
+
+        <LinearLayout
+            android:id="@+id/haftalikTrendContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="20dp" />
+
+        <TextView
+            android:id="@+id/streakBaslik"
+            style="@style/Text.Govde"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:text="Seri (Güncel Ardışık Gün Sayısı)" />
+
+        <LinearLayout
+            android:id="@+id/streakContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="20dp" />
+
+        <TextView
+            android:id="@+id/ihmalMesaji"
+            style="@style/Text.Govde"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+</ScrollView>

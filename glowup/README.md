@@ -48,10 +48,39 @@ Plan taslağındaki tsundere/iğneleyici ton **kullanılmadı**. Tüm arayüz me
 (görev açıklamaları, düğme etiketleri, durum mesajları) resmi, akademik ve net bir
 dille yazıldı; mizahi/ironik ifadeler yok.
 
-## Sırada (Aşama 3)
+## Durum: Aşama 3 — Bilimsel Takip Katmanı
 
-Bilimsel takip katmanı: SM-2 aralıklı tekrar, streak/tutarlılık takibi, istatistik
-ekranı, her görev sonunda "ne öğrendin" retrieval practice girişi.
+- [x] **SM-2 aralıklı tekrar** (`repetition/SM2.kt`): standart SuperMemo-2 formülü —
+      her tekrardan sonra 0-5 arası zorluk puanı istenir, kolaylık faktörü ve
+      sonraki gösterim tarihi buna göre yeniden hesaplanır. `KartEkleActivity` ile
+      bilişsel/entelektüel kategorilerde manuel kart oluşturma; `TekrarActivity` ile
+      gösterim zamanı gelen kartların soru → cevap → zorluk puanı akışı
+- [x] **Streak/tutarlılık takibi** (`istatistik/StatistikMotoru.kt`): kategori
+      bazlı güncel ardışık gün sayısı, "en uzun süredir çalışılmayan alan" tespiti
+- [x] **İstatistik ekranı** (`StatistikActivity`): kategori dağılımı (toplam süre),
+      son 7 günün trendi, kategori bazlı seri — sade, tek renkli yatay çubuklarla
+      (kütüphane bağımlılığı yok, düşük özellikli ekranda okunaklı)
+- [x] **Retrieval practice**: `OneriActivity`'de her görev kabul edilirken isteğe
+      bağlı "ne öğrendin/ne yaptın" notu istenir (`Oturum.neOgrendinNotu`); aynı
+      kategoride bir sonraki öneride bu not "Geçen sefer: ..." olarak gösterilir
+      (elaborative encoding)
+- [x] Görev kabul edildiğinde `Oturum` kaydı ve günlük `IlerlemeKaydi` (kategori +
+      gün bazlı toplam süre/tamamlama sayısı) artık gerçekten yazılıyor —
+      istatistik ve streak hesaplamalarının veri kaynağı budur
+
+### Bilinen sınırlama
+
+Tamamlanma oranı (plan md'de "completion rate") şu an hesaplanmıyor: uygulamada
+henüz "atlanmış/iptal edilmiş görev" kavramı yok, yalnızca kabul edilen görevler
+kaydediliyor. Bu, gerçek bir eksiklik olduğu için Aşama 4/5'te ele alınmalı,
+şimdilik var olmayan bir veriyle sahte bir oran üretilmedi.
+
+## Sırada (Aşama 4)
+
+2 tuşlu navigasyon ve arayüz cilası: tüm ekranların katı D-pad zinciri (metin
+girişi alanları dahil), ana ekranda tek tuşla tetiklenen büyük "şimdi ne yapsam"
+butonu + kısa istatistik özeti, düşük pil/performans için animasyon/arkaplan
+servisi minimizasyonu, gerçek 2 tuşlu cihazda erişilebilirlik testi.
 
 ## Not
 
