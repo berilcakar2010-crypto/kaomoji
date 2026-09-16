@@ -117,11 +117,53 @@ Bunun yerine her ekran şu kontrol listesine göre satır satır incelendi:
 **Gerçek cihaz testi hâlâ yapılmalı** — bu inceleme bunun yerini tutmaz, sadece
 bariz sorunları elemek için yapıldı.
 
-## Sırada (Aşama 5)
+## Durum: Aşama 5 — Test, GitHub, APK
 
-Test, GitHub, APK: SM-2 hesaplaması ve öneri motoru için birim testleri, APK
-üretimi için GitHub Actions pipeline'ı (kaomoji reposundakine benzer), gerçek
-cihazda son kullanılabilirlik turu, v1.0 release + backlog.
+- [x] **Birim testleri** eklendi: `SM2Test` (8 test — başarılı/başarısız tekrar,
+      aralık büyümesi, kolaylık faktörü tabanı, geçersiz kalite puanı) ve
+      `OneriMotoruTest` (11 test — uygunluk filtresi, çeşitlilik skoru,
+      ağırlıklı seçim). Bunun için `engine/OneriMotoru.kt`, veritabanından
+      bağımsız test edilebilsin diye saf `internal` fonksiyonlara bölündü
+      (`uygunMu`, `skorHesapla`, `agirlikliSec`) — Room/Android bağımlılığı
+      olmadan düz JUnit ile çalışırlar (`glowup/src/test/`)
+- [x] **GitHub reposu**: zaten mevcut (`kaomoji` reposu, bu branch); ayrı bir
+      repo kurmak yerine mevcut yapı (`:app` + `:glowup` iki modül) korundu
+- [x] **GitHub Actions APK pipeline'ı** genişletildi (`.github/workflows/build.yml`):
+      artık her push'ta önce birim testleri çalışıyor, sonra hem kaomoji hem
+      Glow-Up için debug + imzasız release APK üretiliyor ve ayrı artifact'ler
+      olarak yükleniyor (`glowup-debug-apk`, `glowup-release-unsigned-apk`);
+      test raporları da her durumda (başarısız olsa dahi) artifact olarak
+      yükleniyor
+
+### Bilinçli olarak yapılmayanlar
+
+- **Gerçek imzalı release**: plan "otomatik imzalı APK" diyor ama imzalama bir
+  keystore + gizli anahtar gerektirir; bunlar kullanıcıdan gelmeden repoya
+  sahte/geçici bir imzalama anahtarı eklemek güvenlik açısından yanlış olur.
+  Şu an kaomoji'nin kendi release akışıyla aynı düzeyde (imzasız release +
+  debug-imzalı) bırakıldı; gerçek imzalama, kullanıcı bir keystore sağladığında
+  GitHub Secrets üzerinden eklenebilir.
+- **Gerçek cihazda son kullanılabilirlik turu**: bu ortamda fiziksel 2 tuşlu
+  bir cihaz yok. Aşama 4'teki kod-incelemesi bunun yerini tutmuyor.
+- **v1.0 etiketi**: Bu ortamda `gradlew` hiçbir aşamada gerçekten çalıştırılıp
+  derleme doğrulanamadı (ağ kısıtı — bkz. aşağıdaki not) ve gerçek cihaz testi
+  yapılmadı. Bu haliyle v1.0 etiketlemek erken ve yanıltıcı olur; ilk yeşil
+  GitHub Actions derlemesi ve en az bir gerçek cihaz turu tamamlanmadan
+  etiketlenmemeli.
+
+### Gelecek özellik backlog'u
+
+- Otomatik köprü çıkarımı / disiplinlerarası ilişki önerisi (şu an yok, plan
+  kapsamı dışı bırakıldı)
+- "Atlanan/iptal edilen görev" kavramı ve buna dayalı gerçek tamamlanma oranı
+  (Aşama 3'te bilinen sınırlama olarak not edilmişti)
+- Yaratıcı kategorisi için görev havuzunun genişletilmesi (şu an 12, diğerleri
+  15-16)
+- Gerçek imzalı release + Play Store dışı dağıtım (APK üzerinden) süreci
+- Widget / kilit ekranı bildirimi (plandaki "Aşama 4" kapsamının ötesinde,
+  kaomoji'deki nixie tüp widget'ından esinlenilebilir ama ayrı bir esinle)
+- Çoklu cihaz senkronizasyonu (plan açıkça kapsam dışı bırakmış, kaomoji ile
+  aynı karar)
 
 ## Not
 

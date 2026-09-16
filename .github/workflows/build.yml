@@ -1,4 +1,4 @@
-name: APK Derle
+name: APK Derle (kaomoji + Glow-Up)
 
 # Her push'ta çalışır, ayrıca Actions sekmesinden elle de başlatılabilir.
 on:
@@ -10,7 +10,7 @@ on:
 
 jobs:
   build:
-    name: Debug + Release APK
+    name: Birim Testleri + Debug + Release APK
     runs-on: ubuntu-latest
 
     steps:
@@ -28,25 +28,52 @@ jobs:
         with:
           gradle-version: '8.9'
 
+      - name: Birim testlerini çalıştır (SM-2, öneri motoru)
+        run: gradle test --no-daemon --stacktrace
+
       - name: Debug APK derle
         run: gradle assembleDebug --no-daemon --stacktrace
 
       - name: Release APK derle (imzasız)
         run: gradle assembleRelease --no-daemon --stacktrace
 
-      - name: Debug APK'yı yükle
+      - name: kaomoji Debug APK'yı yükle
         uses: actions/upload-artifact@v4
         with:
           name: kaomoji-debug-apk
           path: app/build/outputs/apk/debug/*.apk
           if-no-files-found: error
 
-      - name: Release APK'yı yükle
+      - name: kaomoji Release APK'yı yükle
         uses: actions/upload-artifact@v4
         with:
           name: kaomoji-release-unsigned-apk
           path: app/build/outputs/apk/release/*.apk
           if-no-files-found: warn
+
+      - name: Glow-Up Debug APK'yı yükle
+        uses: actions/upload-artifact@v4
+        with:
+          name: glowup-debug-apk
+          path: glowup/build/outputs/apk/debug/*.apk
+          if-no-files-found: error
+
+      - name: Glow-Up Release APK'yı yükle
+        uses: actions/upload-artifact@v4
+        with:
+          name: glowup-release-unsigned-apk
+          path: glowup/build/outputs/apk/release/*.apk
+          if-no-files-found: warn
+
+      - name: Birim testi raporlarını yükle (başarısızlıkta inceleme için)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: birim-testi-raporlari
+          path: |
+            app/build/reports/tests
+            glowup/build/reports/tests
+          if-no-files-found: ignore
 
   release:
     name: Etiketliyse Release oluştur
