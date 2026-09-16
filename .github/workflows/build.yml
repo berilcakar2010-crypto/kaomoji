@@ -99,5 +99,7 @@ jobs:
       - name: Release yayınla
         uses: softprops/action-gh-release@v2
         with:
-          files: app/build/outputs/apk/debug/*.apk
+          files: |
+            app/build/outputs/apk/debug/*.apk
+            glowup/build/outputs/apk/debug/*.apk
           generate_release_notes: true

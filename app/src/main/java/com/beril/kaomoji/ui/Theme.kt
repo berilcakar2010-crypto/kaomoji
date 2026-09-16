@@ -19,29 +19,33 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
-// ── VOIDLAB palette — laboratuvar karanlığı, mor devre ışığı, nixie kırmızısı ──
+// ── "Genç Araştırmacı" paleti — Glow-Up uygulamasıyla birebir aynı.
+// Kirli bordo-kızıl (ana vurgu) + soluk mor-eflatun (ikincil vurgu) + kirli
+// haki/bej (zemin) + kırık beyaz (kart yüzeyi). İsim/yüz/replik yok — sadece
+// renk/motif seviyesinde bir esinlenme. VOIDLAB'ın koyu/mor/kırmızı paletinin
+// yerini alır; kasıtlı olarak daha az renk kullanır (minimalist).
 object J {
-    val paper = Color(0xFF0B0710)        // void — near-black, faint violet undertone
-    val paperDeep = Color(0xFF140C1E)
-    val card = Color(0xFF1B1228)
-    val ink = Color(0xFFF3EEFA)          // chalk white
-    val inkSoft = Color(0xFFB6ABC9)      // muted lavender-gray
-    val inkFaint = Color(0xFF6D6280)     // faint violet-gray
+    val paper = Color(0xFFD8CFB0)        // jacket_khaki_light — ana zemin
+    val paperDeep = Color(0xFFA69B7C)    // jacket_khaki_dark — ikincil zemin / track
+    val card = Color(0xFFF5F0E6)         // shirt_offwhite — kart yüzeyi
+    val ink = Color(0xFF2B2520)          // ink_dark
+    val inkSoft = Color(0xFF5A5348)      // ink_muted
+    val inkFaint = Color(0xFF8B8371)     // ink_muted'den daha soluk
 
-    val apple = Color(0xFF9D5CFF)        // electric violet — primary
-    val forest = Color(0xFF6425B8)       // deep violet — primary (pressed/strong)
-    val mint = Color(0xFFDCCBFA)         // pale violet glow
-    val lime = Color(0xFFC7B4EF)         // soft lavender
-    val cherry = Color(0xFFE12A44)       // signal red — secondary / error
-    val berry = Color(0xFFB4102E)        // deep crimson
-    val blush = Color(0xFFCE6E8C)        // muted rose
-    val butter = Color(0xFFFFA23C)       // nixie amber glow — warnings / highlights
-    val bark = Color(0xFF43223A)         // dark plum-brown
-    val sky = Color(0xFF7C86E0)          // cool blue-violet
-    val lilac = Color(0xFFAE8CFB)        // violet accent
+    val forest = Color(0xFF6E2430)       // tie_burgundy — ana vurgu / birincil eylem
+    val apple = Color(0xFF8A7CA8)        // eye_lavender — ikincil vurgu
+    val mint = Color(0xFF8A7CA8)         // eye_lavender (çağrı noktalarında alpha ile kullanılır)
+    val lime = Color(0xFFAEA2C6)         // eye_lavender_light — vurgu arka planı
+    val cherry = Color(0xFF4A1820)       // tie_burgundy_dark — uyarı / güçlü vurgu
+    val berry = Color(0xFF4A1820)        // tie_burgundy_dark
+    val blush = Color(0xFF8C3A46)        // tie_burgundy_light — sıcak vurgu arka planı
+    val butter = Color(0xFFA9843F)       // ölçülü hardal/altın — uyarı vurgusu
+    val bark = Color(0xFF6B5F87)         // eye_lavender_dark
+    val sky = Color(0xFF8A7CA8)          // eye_lavender
+    val lilac = Color(0xFF6B5F87)        // eye_lavender_dark — Feynman/tekrar vurgusu
 
-    val line = Color(0xFF352745)         // dark violet-gray border
-    val lineSoft = Color(0xFF241A33)
+    val line = Color(0xFFB0A47E)         // divider
+    val lineSoft = Color(0xFFC7BC98)     // daha soluk divider
 }
 
 fun subjectColor(hex: String): Color = try {
@@ -50,17 +54,20 @@ fun subjectColor(hex: String): Color = try {
     J.apple
 }
 
-// ── Typography — laboratuvar konsolu: monospace başlıklar, sade gövde ─
+// ── Typography — "tez klasörü / araştırmacı defteri" hissi: başlıklarda
+// ince akademik serif, gövdede sade sans-serif; monospace SADECE sayı/
+// istatistik alanlarında (Tiny, Mono) kullanılır — VOIDLAB'ın her yeri
+// monospace yapan "konsol" hissinden kasıtlı olarak uzaklaşır (minimalist).
 val Display = TextStyle(
-    fontFamily = FontFamily.Monospace, fontWeight = FontWeight.Bold,
-    fontSize = 26.sp, lineHeight = 32.sp, color = J.ink, letterSpacing = 0.4.sp
+    fontFamily = FontFamily.Serif, fontWeight = FontWeight.Bold,
+    fontSize = 26.sp, lineHeight = 32.sp, color = J.ink, letterSpacing = 0.2.sp
 )
 val TitleL = TextStyle(
-    fontFamily = FontFamily.Monospace, fontWeight = FontWeight.Bold,
-    fontSize = 20.sp, lineHeight = 26.sp, color = J.ink, letterSpacing = 0.3.sp
+    fontFamily = FontFamily.Serif, fontWeight = FontWeight.Bold,
+    fontSize = 20.sp, lineHeight = 26.sp, color = J.ink
 )
 val TitleM = TextStyle(
-    fontFamily = FontFamily.Monospace, fontWeight = FontWeight.SemiBold,
+    fontFamily = FontFamily.Serif, fontWeight = FontWeight.SemiBold,
     fontSize = 16.sp, lineHeight = 22.sp, color = J.ink
 )
 val Body = TextStyle(
@@ -81,10 +88,10 @@ val Mono = TextStyle(
     fontSize = 12.sp, color = J.inkSoft
 )
 
-private val VoidScheme = darkColorScheme(
-    primary = J.apple,
+private val AcademicScheme = lightColorScheme(
+    primary = J.forest,
     onPrimary = Color.White,
-    secondary = J.cherry,
+    secondary = J.apple,
     onSecondary = Color.White,
     background = J.paper,
     onBackground = J.ink,
@@ -99,7 +106,7 @@ private val VoidScheme = darkColorScheme(
 @Composable
 fun KaomojiTheme(content: @Composable () -> Unit) {
     MaterialTheme(
-        colorScheme = VoidScheme,
+        colorScheme = AcademicScheme,
         typography = Typography(
             bodyLarge = Body, bodyMedium = Body, bodySmall = Small,
             titleLarge = TitleL, titleMedium = TitleM, labelSmall = Tiny
@@ -110,10 +117,10 @@ fun KaomojiTheme(content: @Composable () -> Unit) {
 
 // ── Decorative building blocks ──────────────────────────────────────
 
-/** Faint schematic grid — laboratuvar defteri / osiloskop ızgarası. */
+/** Çok soluk kağıt dokusu — minimalist, dikkat dağıtmayan bir zemin ızgarası. */
 fun Modifier.gingham(
-    color: Color = J.apple.copy(alpha = 0.05f),
-    cell: Float = 26f
+    color: Color = J.line.copy(alpha = 0.06f),
+    cell: Float = 32f
 ): Modifier = this.drawBehind {
     var x = 0f
     while (x < size.width) {

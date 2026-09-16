@@ -171,49 +171,49 @@ UNIT_TITLES = {
                  "Motor Sistemler ve Kontrol", "Nöroetik ve Özel Konular"],
 }
 SCHOOL_SUBJECTS = {
-    "msch": {"name": "Matematik (okul)", "emoji": "📐", "col": "#B48CFF", "cadence": 3,
+    "msch": {"name": "Matematik (okul)", "emoji": "📐", "col": "#6F2A36", "cadence": 3,
              "kind": "write", "unit_label": "köprü notu",
              "text": "Matematik (okul) — {u}: MEB konusunu Ray A'daki ileri versiyona bağlayan kısa köprü notu"},
-    "psch": {"name": "Fizik (okul)", "emoji": "🔺", "col": "#FF5C7A", "cadence": 4,
+    "psch": {"name": "Fizik (okul)", "emoji": "🔺", "col": "#9B3B4B", "cadence": 4,
              "kind": "write", "unit_label": "köprü notu",
              "text": "Fizik (okul) — {u}: MEB konusunu Ray A'daki (Halliday) karşılığına bağlayan kısa köprü notu — olimpiyat hedefi yok, sadece temel pekiştirme"},
-    "kim": {"name": "Kimya", "emoji": "🧪", "col": "#FFC98C", "cadence": 4,
+    "kim": {"name": "Kimya", "emoji": "🧪", "col": "#59222B", "cadence": 4,
             "kind": "write", "unit_label": "vaka analizi",
             "text": "Kimya — {u}: gerçek dünya vakası analizi (tek sayfa)"},
-    "bsch": {"name": "Biyoloji (okul)", "emoji": "🧬", "col": "#8B93E8", "cadence": 6,
+    "bsch": {"name": "Biyoloji (okul)", "emoji": "🧬", "col": "#BC4E60", "cadence": 6,
              "kind": "write", "unit_label": "P1 bağlantı notu",
              "text": "Biyoloji (okul) — {u}: konunun P1'in biyolojik gerçeklik bölümüne referans notu"},
-    "tde": {"name": "Türk Dili ve Edebiyatı", "emoji": "📖", "col": "#E0A8C4", "cadence": 2,
+    "tde": {"name": "Türk Dili ve Edebiyatı", "emoji": "📖", "col": "#853240", "cadence": 2,
             "kind": "write", "unit_label": "metin tahlili",
             "text": "Türk Dili ve Edebiyatı — {u}: temasından okunan metin için 300-400 kelimelik özgün tahlil"},
-    "tar": {"name": "Tarih", "emoji": "🏛️", "col": "#C9793D", "cadence": 6,
+    "tar": {"name": "Tarih", "emoji": "🏛️", "col": "#8073A5", "cadence": 6,
             "kind": "produce", "unit_label": "zaman çizelgesi",
             "text": "Tarih — {u}: zaman çizelgesi + UWC küresel vatandaşlık teması bağlantı notu"},
-    "cog": {"name": "Coğrafya", "emoji": "🗺️", "col": "#D9A6FF", "cadence": 9,
+    "cog": {"name": "Coğrafya", "emoji": "🗺️", "col": "#5F5483", "cadence": 9,
             "kind": "produce", "unit_label": "görselleştirme",
             "text": "Coğrafya — {u}: konuyla ilgili harita/grafik görselleştirmesi"},
-    "fel": {"name": "Felsefe", "emoji": "🦉", "col": "#A78BFA", "cadence": 6,
+    "fel": {"name": "Felsefe", "emoji": "🦉", "col": "#9C92B9", "cadence": 6,
             "kind": "write", "unit_label": "kulüp sorusu",
             "text": "Felsefe — {u}: felsefe kulübü için tartışma sorusu önerisi + kısa gerekçe"},
-    "din": {"name": "Din Kültürü ve Ahlak Bilgisi", "emoji": "🕊️", "col": "#6D5A99", "cadence": 4,
+    "din": {"name": "Din Kültürü ve Ahlak Bilgisi", "emoji": "🕊️", "col": "#6D5F95", "cadence": 4,
             "kind": "review", "unit_label": "özet kart seti",
             "text": "Din Kültürü — {u}: kısa özet kart seti (flashcard formatında)"},
-    "ing": {"name": "İngilizce", "emoji": "🇬🇧", "col": "#FFB3C6", "cadence": 1,
+    "ing": {"name": "İngilizce", "emoji": "🇬🇧", "col": "#524870", "cadence": 1,
             "kind": "write", "unit_label": "yazılı",
             "text": "İngilizce — {u} temalı kısa yazılı üretim (essay/summary, B2.2→C1)"},
 }
 # Almanca (A1+) ve Beden/Sanat/Sağlık grubu ayrı ele alınıyor (aşağıda).
 
-BAK_GROUP = {"name": "Beden/Sanat/Sağlık", "emoji": "🎨", "col": "#8C6FBF"}  # bakım grubu, üretim baskısı yok
+BAK_GROUP = {"name": "Beden/Sanat/Sağlık", "emoji": "🎨", "col": "#9B7D4B"}  # bakım grubu, üretim baskısı yok
 
 # Olimpiyat/vasıta hazırlığı — okulun zorunlu dersleri DEĞİL, ayrı bir ray.
 # Hat C (ABD) henüz "olası" statüsünde → satap düşük cadence (nadir, ek yük az).
 # Brain Bee "öncelikli aday" → brainbee daha sık.
 PREP_SUBJECTS = {
-    "satap": {"name": "SAT/AP Hazırlığı", "emoji": "🎓", "col": "#FFD08A", "cadence": 6,
+    "satap": {"name": "SAT/AP Hazırlığı", "emoji": "🎓", "col": "#6E5935", "cadence": 6,
               "kind": "problem", "unit_label": "pratik seti",
               "text": "SAT/AP Hazırlığı — {u}: pratik seti çöz + hata analizi (Hat C açık kaldığı sürece, tam efor değil)"},
-    "brainbee": {"name": "Brain Bee Hazırlığı", "emoji": "🥼", "col": "#7A8FE0", "cadence": 3,
+    "brainbee": {"name": "Brain Bee Hazırlığı", "emoji": "🥼", "col": "#B99E6E", "cadence": 3,
                  "kind": "study", "unit_label": "konu çalışması",
                  "text": "Brain Bee Hazırlığı — {u}: konu çalışması + örnek soru seti (BAD müfredatına göre)"},
 }
@@ -445,16 +445,16 @@ resources = [
 ]
 
 subjects = [
-    {"c": "math", "n": "Matematik", "e": "📐", "col": "#9D5CFF"},
-    {"c": "phys", "n": "Fizik", "e": "⚛️", "col": "#E12A44"},
-    {"c": "py", "n": "Python", "e": "🐍", "col": "#FFA23C"},
-    {"c": "bio", "n": "Biyoloji + Nörobilim", "e": "🧠", "col": "#7C86E0"},
-    {"c": "jp", "n": "Japonca", "e": "🌸", "col": "#CE6E8C"},
-    {"c": "de", "n": "Almanca", "e": "🥨", "col": "#B4102E"},
-    {"c": "uwc", "n": "UWC", "e": "🍀", "col": "#C7B4EF"},
-    {"c": "prod", "n": "Üretim", "e": "🛠️", "col": "#6425B8"},
-    {"c": "self", "n": "Öz Değerlendirme", "e": "🪞", "col": "#AE8CFB"},
-    {"c": "idari", "n": "İdari & Kararlar", "e": "🗂️", "col": "#E0526B"},
+    {"c": "math", "n": "Matematik", "e": "📐", "col": "#534328"},
+    {"c": "phys", "n": "Fizik", "e": "⚛️", "col": "#79344B"},
+    {"c": "py", "n": "Python", "e": "🐍", "col": "#A44666"},
+    {"c": "bio", "n": "Biyoloji + Nörobilim", "e": "🧠", "col": "#BF6986"},
+    {"c": "jp", "n": "Japonca", "e": "🌸", "col": "#7A609F"},
+    {"c": "de", "n": "Almanca", "e": "🥨", "col": "#5D4979"},
+    {"c": "uwc", "n": "UWC", "e": "🍀", "col": "#9580B2"},
+    {"c": "prod", "n": "Üretim", "e": "🛠️", "col": "#8F633D"},
+    {"c": "self", "n": "Öz Değerlendirme", "e": "🪞", "col": "#B68154"},
+    {"c": "idari", "n": "İdari & Kararlar", "e": "🗂️", "col": "#BD7581"},
     {"c": "bak", "n": BAK_GROUP["name"], "e": BAK_GROUP["emoji"], "col": BAK_GROUP["col"]},
 ] + [{"c": c, "n": d["name"], "e": d["emoji"], "col": d["col"]} for c, d in ROTATING_SUBJECTS.items()]
 
