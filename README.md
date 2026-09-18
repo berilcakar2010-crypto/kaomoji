@@ -57,27 +57,37 @@ Beş alan. Onlarca sekme yok — tek bir küçük dünya.
 | | Alan | Ne yapar |
 |---|---|---|
 | 🔬 | **Laboratuvar** | Ana ekran. Bugünün küçük görevi, deney aşaması, devam et, son anlatım, projeler, köprüler |
-| 📚 | **Müfredat** | 4 faz, 16 birim, 129 görev (Eylül–Aralık 2026). Zamansız akış |
+| 📚 | **Müfredat** | 6 faz, 24 birim, 178 görev (Eylül 2026–Haziran 2027). Her günlük görevin başında gerçek takvim tarihi |
 | 📥 | **Brain Inbox** | Hızlı yakalama. Düzenleme sonra |
 | ⚗️ | **Projeler** | Beş üretim projesi. En önemli alan: SIRADAKİ EYLEM |
 | 🎒 | **Çanta** | Anlatımlar, sınavlar, hata defteri, değerlendirme, depolama, kaynaklar |
 
 ---
 
-## ⏳ Zamansız Müfredat
+## ⏳ Zamansız Müfredat, Tarihli Görevler
 
-Tarih yok. Bir birimin görevleri bitince **sıradaki açılır.**
-
-- Geç kalmak diye bir şey yok
-- Bir günü kaçırmak diye bir şey yok
-- Hızlı gidersen önden gidersin, yavaş gidersen aynı yoldasın
+Fazlar arası sıra hâlâ zamansız — bir birimin görevleri bitince sıradaki açılır,
+geç kalmak ya da bir günü kaçırmak diye bir şey yok. Ama artık her günlük mikro
+modülün metni gerçek takvim tarihiyle başlıyor (ör. **"21 Eylül · Cable theory
+teorik özeti..."**) — gerçek 2026-2027 okul yılı programından (Eylül-Haziran)
+elle çıkarıldı.
 
 ```
-Eylül · Kurulum ve Keşif             3 birim   ~19 saat
-Ekim · Derinleşme                    4 birim   ~32 saat
-Kasım · Tamamlama ve Sıkılaştırma    4 birim   ~32 saat
-Aralık · Bitirme, Toparlama, Dinlenme 5 birim  ~29 saat
+Eylül · Kurulum ve Keşif                          3 birim   ~17 saat
+Ekim · Derinleşme                                  4 birim   ~32 saat
+Kasım · Tamamlama ve Sıkılaştırma                  4 birim   ~32 saat
+Aralık · Bitirme, Toparlama, Dinlenme              5 birim   ~28 saat
+Ocak · Dönem 1 Kapanışı + AP Biyoloji'nin Girişi   3 birim   ~21 saat
+Şubat-Haziran (Dönem 2) · İskelet                  5 birim    — (aylık, gün bazlı değil)
 ```
+
+**Dönem 2 neden gün bazlı değil?** Kaynak program da Şubat-Haziran için sadece
+aylık hedefler veriyor (gün bazlı detay 23 Ocak 2027 retrospektifinde
+yazılacak, kaynağın kendi notu). Bu yüzden Dönem 2 birimleri bilinçli olarak
+sadece ay etiketiyle geliyor (ör. "(Şubat) Model kodlanması tamamlanır") —
+olmayan bir tarihi uydurmak yerine, kaynağın kendisinin de henüz bilmediğini
+şeffafça gösteriyor. Ocak sonu retrospektifinden sonra bu faz gün bazlı olarak
+yeniden yazılabilir.
 
 Laboratuvar metaforu XP değil, gerçek durum: 🧊 ham numune → ⚗️ tepkimede → 🧪 stabilize → 🔬 analiz → 💠 sonuçlandı
 
@@ -154,11 +164,8 @@ Birinci sınıf ilişkiler, süs değil:
 Kablo Teorisi Köprüsü                 PDE + devre teorisi + gerçek nöron morfolojisi (P1)
 Stokastik Süreçler ↔ Kanal Gürültüsü  Markov modeli = iyon kanalı açılıp kapanması
 Dinamik Sistemler ↔ Senkronizasyon    salınım + diferansiyel denklem + iki nöron senkronu
+Hopfield Ağı ↔ Transformer Attention  attractor network ↔ güncel yapay zeka mimarileri (P2)
 ```
-
-Kalkülüs↔Felsefe ve Hopfield Ağı↔Transformer Attention köprüleri P2 (Ocak-Haziran'a
-ertelenen Hopfield ağı projesi) ile birlikte geri gelecek — bu dönemin (Eylül-Aralık)
-müfredatında henüz karşılıkları yok.
 
 Bunlar hem birim sayfalarında görünür hem görev seçimini etkiler.
 
@@ -228,10 +235,11 @@ steril Material, çocuksu anaokulu estetiği, aşırı animasyon.
 - **Kotlin + Jetpack Compose + Material 3**
 - **Bağımlılık yok denecek kadar az** — Room yok, Hilt yok, Navigation kütüphanesi yok
 - Durum tek bir JSON dosyasında (`filesDir/state.json`) — hızlı, taşınabilir, yedeklenebilir
-- Müfredat `assets/curriculum.json` içinde. Aktif olan, `tools/gen_curriculum_eylul_aralik_2026.py`
-  ile üretilen Eylül–Aralık 2026 dönem müfredatı (16 hafta, gerçek PDF programından elle
-  yapılandırılmış — AI üretimi değil). Eski `gen_curriculum.py`/`v2`/`v3` (43 haftalık
-  Ağustos 2026–Haziran 2027 sürümü) referans için repoda duruyor.
+- Müfredat `assets/curriculum.json` içinde. Aktif olan, `tools/gen_curriculum_2026_2027.py`
+  ile üretilen tam 2026-2027 dönem müfredatı (Eylül-Ocak: 19 hafta, gün bazlı tarihli;
+  Şubat-Haziran: aylık iskelet), gerçek okul programından elle yapılandırılmış — AI üretimi
+  değil. Eski `gen_curriculum_eylul_aralik_2026.py` (yalnızca Eylül-Aralık) ve daha önceki
+  `gen_curriculum.py`/`v2`/`v3` sürümleri referans için repoda duruyor.
 - Ses: `MediaRecorder` (AAC/MP4) + `MediaPlayer`, SAF üzerinden dosya tanımlayıcı
 - minSdk 26 · targetSdk 34 · JDK 17
 - **Temelde çevrimdışı.** Sunucu yok, hesap yok. AI özellikleri (transkripsiyon, analiz,
@@ -241,11 +249,12 @@ steril Material, çocuksu anaokulu estetiği, aşırı animasyon.
 ### Müfredatı değiştirmek
 
 ```bash
-python3 tools/gen_curriculum_eylul_aralik_2026.py
+python3 tools/gen_curriculum_2026_2027.py
 ```
 
-`tools/gen_curriculum_eylul_aralik_2026.py` içindeki `WEEKS`/`PHASES` tanımlarını düzenle,
-scripti çalıştır, `app/src/main/assets/curriculum.json` yeniden üretilir. Sonra yeniden derle.
+`tools/gen_curriculum_2026_2027.py` içindeki `WEEKS`/`PHASES`/`DONEM2_UNITS` tanımlarını
+düzenle, scripti çalıştır, `app/src/main/assets/curriculum.json` yeniden üretilir. Sonra
+yeniden derle.
 
 Ya da hiç script'e dokunmadan: Çanta → **Müfredat Oluştur** ekranından bir `.md`/`.pdf`
 belge yükleyip (Groq veya Gemini) API anahtarını girince, uygulama o belgeye uygun,
