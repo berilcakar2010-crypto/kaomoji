@@ -57,7 +57,7 @@ Beş alan. Onlarca sekme yok — tek bir küçük dünya.
 | | Alan | Ne yapar |
 |---|---|---|
 | 🔬 | **Laboratuvar** | Ana ekran. Bugünün küçük görevi, deney aşaması, devam et, son anlatım, projeler, köprüler |
-| 📚 | **Müfredat** | 6 faz, 24 birim, 178 görev (Eylül 2026–Haziran 2027). Her günlük görevin başında gerçek takvim tarihi |
+| 📚 | **Müfredat** | 10 faz, 38 birim (haftalık), 566 görev (20 Eylül 2026–20 Haziran 2027). Her mikro modülün başında gerçek takvim tarihi |
 | 📥 | **Brain Inbox** | Hızlı yakalama. Düzenleme sonra |
 | ⚗️ | **Projeler** | Beş üretim projesi. En önemli alan: SIRADAKİ EYLEM |
 | 🎒 | **Çanta** | Anlatımlar, sınavlar, hata defteri, değerlendirme, depolama, kaynaklar |
@@ -67,27 +67,32 @@ Beş alan. Onlarca sekme yok — tek bir küçük dünya.
 ## ⏳ Zamansız Müfredat, Tarihli Görevler
 
 Fazlar arası sıra hâlâ zamansız — bir birimin görevleri bitince sıradaki açılır,
-geç kalmak ya da bir günü kaçırmak diye bir şey yok. Ama artık her günlük mikro
-modülün metni gerçek takvim tarihiyle başlıyor (ör. **"21 Eylül · Cable theory
-teorik özeti..."**) — gerçek 2026-2027 okul yılı programından (Eylül-Haziran)
-elle çıkarıldı.
+geç kalmak ya da bir günü kaçırmak diye bir şey yok. Ama artık **tüm yıl boyunca**
+(sadece Eylül-Aralık değil) her günlük mikro modülün metni gerçek takvim
+tarihiyle başlıyor (ör. **"21 Eylül · Cable theory teorik özeti..."**,
+**"9 Şubat · Hopfield network kodlamasına devam..."**) — gerçek 2026-2027 okul
+yılı programından (20 Eylül 2026 – 20 Haziran 2027) elle çıkarıldı.
 
 ```
-Eylül · Kurulum ve Keşif                          3 birim   ~17 saat
-Ekim · Derinleşme                                  4 birim   ~32 saat
-Kasım · Tamamlama ve Sıkılaştırma                  4 birim   ~32 saat
-Aralık · Bitirme, Toparlama, Dinlenme              5 birim   ~28 saat
-Ocak · Dönem 1 Kapanışı + AP Biyoloji'nin Girişi   3 birim   ~21 saat
-Şubat-Haziran (Dönem 2) · İskelet                  5 birim    — (aylık, gün bazlı değil)
+Eylül · Kurulum ve Keşif                    3 birim   ~30 saat
+Ekim · Derinleşme                            4 birim   ~58 saat
+Kasım · Tamamlama ve Sıkılaştırma            4 birim   ~54 saat
+Aralık · Bitirme, Toparlama, Dinlenme        5 birim   ~44 saat
+Ocak · Dönem 1 Kapanışı + AP Biyoloji Girişi 3 birim   ~34 saat
+Şubat                                        3 birim   ~42 saat
+Mart                                         4 birim   ~55 saat
+Nisan · AP Sınavlarına Geri Sayım            4 birim   ~52 saat
+Mayıs · AP Sınavları ve Kapanış              5 birim   ~46 saat
+Haziran · Yıl Sonu Kapanışı                  3 birim   ~19 saat
 ```
 
-**Dönem 2 neden gün bazlı değil?** Kaynak program da Şubat-Haziran için sadece
-aylık hedefler veriyor (gün bazlı detay 23 Ocak 2027 retrospektifinde
-yazılacak, kaynağın kendi notu). Bu yüzden Dönem 2 birimleri bilinçli olarak
-sadece ay etiketiyle geliyor (ör. "(Şubat) Model kodlanması tamamlanır") —
-olmayan bir tarihi uydurmak yerine, kaynağın kendisinin de henüz bilmediğini
-şeffafça gösteriyor. Ocak sonu retrospektifinden sonra bu faz gün bazlı olarak
-yeniden yazılabilir.
+Her birim bir hafta (Hafta 0 – Hafta 37). Şubat başı ile Ocak sonu arasında
+kaynağın kendi yarıyıl tatili boşluğu var (~25 Ocak – 8 Şubat) — haftalar
+numara olarak ardışık ama takvimde değil, uygulama bunu doğru hesaplıyor.
+AP sınav haftası (Hafta 31, 3-7 Mayıs) gibi bazı bloklarda hangi günün hangi
+derse denk geleceği College Board takviminden geldiği için kaynağın kendisi
+de "değişken" diyor — o tek görev tarih aralığı olarak yazılıyor, uydurma tek
+gün değil.
 
 Laboratuvar metaforu XP değil, gerçek durum: 🧊 ham numune → ⚗️ tepkimede → 🧪 stabilize → 🔬 analiz → 💠 sonuçlandı
 
@@ -141,15 +146,16 @@ Uygulama örüntü arar ama suçlamaz:
 
 ---
 
-## ⚗️ Üç Üretim Projesi
+## ⚗️ Üretim Projeleri
 
 Müfredat açıkça söylüyor: **dersler projelere hizmet eder, tersi değil.**
 
 | | Proje | Ne |
 |---|---|---|
-| 🧠 | **P1 — Destek Eğitim Odası: Çok Bölmeli HH Nöron Modeli** | Gerçek morfoloji (NeuroMorpho.org) + gerçek elektrofizyoloji (Allen Brain Atlas) verisiyle kablo-teorisi tabanlı, stokastik iyon kanalı gürültülü, iki sinaptik bağlı nöron simülasyonu. Hedef: TÜBİTAK 2204-A. |
-| 🕸️ | **P2 — Hopfield Ağı ile İlişkisel Bellek Modellemesi** | Klasik Hopfield ağı (depolama kapasitesi, enerji manzarası, sahte durumlar), biyolojik bellek fenomenleriyle karşılaştırma, opsiyonel Transformer-attention bağlantısı. |
-| 🍀 | **P3 — UWC Başvurusu & Felsefe Kulübü** | UWC başvurusu birincil öncelik; felsefe kulübü (analitik felsefe + bilim felsefesi) topluluk katkısı kanıtı olarak sürdürülüyor. |
+| 🧠 | **P1 — Destek Eğitim Odası: Çok Bölmeli HH Nöron Modeli** | Gerçek morfoloji (NeuroMorpho.org) + gerçek elektrofizyoloji (Allen Brain Atlas) verisiyle kablo-teorisi tabanlı, stokastik iyon kanalı gürültülü, iki sinaptik bağlı nöron simülasyonu. Aralık'ta teslim, Ocak'ta arşivleniyor. |
+| 🕸️ | **P2 — Hopfield Ağı ile İlişkisel Bellek Modellemesi** | Ocak'ta başlıyor (P1'in yerini alıyor), Mart'ta teslim: klasik Hopfield ağı (Hebbian öğrenme, kapasite/gürültü testleri, enerji manzarası), biyolojik bellek fenomenleriyle karşılaştırma, opsiyonel Transformer-attention bağlantısı. |
+| 🍀 | **P3 — UWC Başvurusu & Felsefe Kulübü** | UWC başvurusu birincil öncelik (Kasım'da gönderim); felsefe kulübü (analitik felsefe + bilim felsefesi) tüm yıl boyunca topluluk katkısı kanıtı olarak sürdürülüyor. |
+| ☀️ | **Yaz Projesi (olası P3-2)** | P2 bitince (Mart'tan itibaren) planlanmaya başlayan, Mayıs-Haziran'da yürütülen üçüncü üretim projesi — kapsamı henüz netleşmedi. |
 
 Her proje kartında en önemli alan: **SIRADAKİ EYLEM**.
 "P1 üzerinde çalış" değil — *"NeuroMorpho.org'dan bir piramidal nöron morfolojisi seç ve kablo denkleminin sayısal iskeletini kur."*
@@ -236,9 +242,14 @@ steril Material, çocuksu anaokulu estetiği, aşırı animasyon.
 - **Bağımlılık yok denecek kadar az** — Room yok, Hilt yok, Navigation kütüphanesi yok
 - Durum tek bir JSON dosyasında (`filesDir/state.json`) — hızlı, taşınabilir, yedeklenebilir
 - Müfredat `assets/curriculum.json` içinde. Aktif olan, `tools/gen_curriculum_2026_2027.py`
-  ile üretilen tam 2026-2027 dönem müfredatı (Eylül-Ocak: 19 hafta, gün bazlı tarihli;
-  Şubat-Haziran: aylık iskelet), gerçek okul programından elle yapılandırılmış — AI üretimi
-  değil. Eski `gen_curriculum_eylul_aralik_2026.py` (yalnızca Eylül-Aralık) ve daha önceki
+  ile üretilen tam 2026-2027 okul yılı müfredatı — **20 Eylül 2026'dan 20 Haziran 2027'ye
+  kadar 38 hafta, hepsi gün bazlı gerçek takvim tarihli** (Şubat-Haziran artık iskelet değil,
+  kaynağın kendisi de tüm yıl için gün bazlı program veriyor). Gerçek okul programından elle
+  yapılandırılmış — AI üretimi değil. Script takvim aritmetiğini (ay geçişleri, ~25 Ocak-8
+  Şubat yarıyıl tatili boşluğu) `datetime` ile hesaplıyor ve her haftanın gün kodunu
+  (Pzt/Sal/…) gerçek haftanın günüyle çapraz doğruluyor (`assert`). Eski
+  `gen_curriculum_2026_2027_donem1_v1.py` (yalnızca Dönem 1 detaylı, Dönem 2 aylık iskelet),
+  `gen_curriculum_eylul_aralik_2026.py` (yalnızca Eylül-Aralık) ve daha önceki
   `gen_curriculum.py`/`v2`/`v3` sürümleri referans için repoda duruyor.
 - Ses: `MediaRecorder` (AAC/MP4) + `MediaPlayer`, SAF üzerinden dosya tanımlayıcı
 - minSdk 26 · targetSdk 34 · JDK 17
@@ -252,9 +263,10 @@ steril Material, çocuksu anaokulu estetiği, aşırı animasyon.
 python3 tools/gen_curriculum_2026_2027.py
 ```
 
-`tools/gen_curriculum_2026_2027.py` içindeki `WEEKS`/`PHASES`/`DONEM2_UNITS` tanımlarını
-düzenle, scripti çalıştır, `app/src/main/assets/curriculum.json` yeniden üretilir. Sonra
-yeniden derle.
+`tools/gen_curriculum_2026_2027.py` içindeki `WEEKS` listesini düzenle (her hafta bir
+`(gün, konu_kodu, metin, dakika, tür)` listesi), scripti çalıştır,
+`app/src/main/assets/curriculum.json` yeniden üretilir. Tarihler otomatik hesaplanır —
+elle tarih yazmana gerek yok. Sonra yeniden derle.
 
 Ya da hiç script'e dokunmadan: Çanta → **Müfredat Oluştur** ekranından bir `.md`/`.pdf`
 belge yükleyip (Groq veya Gemini) API anahtarını girince, uygulama o belgeye uygun,

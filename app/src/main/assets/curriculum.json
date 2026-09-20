@@ -1,1 +1,4566 @@
-{"version":1,"title":"Beril · 2026-2027 Eğitim Yılı Müfredatı","phases":[{"id":"eylul","name":"Eylül · Kurulum ve Keşif","sub":"20-30 Eylül 2026","goal":"Sistemi oturt, UWC yönünü netleştir, P1'in teorik temelini at.","hours":17,"units":[{"id":"h0","title":"Kurulum Günü","kicker":"20 Eylül","br":[],"tasks":[{"i":"h0-t01","t":"20 Eylül · Bu müfredatı işle, haftalık şablon sayfası oluştur; P1 için kaynak listesi başlat (NeuroMorpho.org, Allen Brain Atlas); UWC Türkiye Ulusal Komitesi'nden kesin son başvuru tarihini teyit et","s":"uwc","k":"produce","m":60},{"i":"h0-t02","t":"20 Eylül · Video günlüğü #0 (hedefler, motivasyon)","s":"ozdeg","k":"reflect","m":30}]},{"id":"h1","title":"Hafta 1","kicker":"21 Eylül ile başlayan hafta","br":["Kablo Teorisi Köprüsü"],"tasks":[{"i":"h1-t01","t":"21 Eylül · “Neden UWC, neden ben” beyin fırtınası — serbest yazım, düzenleme yok","s":"uwc","k":"produce","m":60},{"i":"h1-t02","t":"22 Eylül · Cable theory teorik özeti (ders notları) + tek-kompartmanlı denklemi kağıt üzerinde türet","s":"p1","k":"study","m":75},{"i":"h1-t03","t":"23 Eylül · Haftanın konusunu (fizik/biyoloji) pekiştir","s":"okul","k":"review","m":45},{"i":"h1-t04","t":"23 Eylül · N5 kelime seti 1","s":"jp","k":"review","m":15},{"i":"h1-t05","t":"24 Eylül · Python'da HH denklemlerini (Na, K, sızıntı akımı) kodlamaya başla","s":"p1","k":"produce","m":75},{"i":"h1-t06","t":"25 Eylül · Felsefe kulübü ilk toplantı materyali (okuma + tartışma soruları)","s":"fel","k":"study","m":45},{"i":"h1-t07","t":"25 Eylül · Nöron/sinaps temelleri okuma","s":"bb","k":"study","m":15},{"i":"h1-t08","t":"26 Eylül · SAT diagnostic — Reading & Writing bölümü","s":"sat","k":"test","m":100},{"i":"h1-t09","t":"27 Eylül · Video günlüğü #1 + checkpoint","s":"ozdeg","k":"reflect","m":30}]},{"id":"h2","title":"Hafta 2","kicker":"28 Eylül ile başlayan hafta","br":[],"tasks":[{"i":"h2-t01","t":"28 Eylül · Deneme taslağı — giriş paragrafı","s":"uwc","k":"produce","m":60},{"i":"h2-t02","t":"29 Eylül · HH modelini çalıştır, tek aksiyon potansiyeli simülasyonu + grafik çıktısı","s":"p1","k":"produce","m":75},{"i":"h2-t03","t":"30 Eylül · Haftalık konu tekrarı + kendi kendine mini quiz","s":"okul","k":"review","m":45},{"i":"h2-t04","t":"30 Eylül · N5 kelime seti 2","s":"jp","k":"review","m":15},{"i":"h2-t05","t":"1 Ekim · NeuroMorpho'dan gerçekçi bir morfoloji örneği indir, model parametreleriyle karşılaştır (literatür notu)","s":"p1","k":"study","m":75},{"i":"h2-t06","t":"2 Ekim · Deneme taslağı — 2. paragraf","s":"uwc","k":"produce","m":45},{"i":"h2-t07","t":"2 Ekim · Aksiyon potansiyeli mekanizması","s":"bb","k":"study","m":15},{"i":"h2-t08","t":"3 Ekim · SAT diagnostic — Math bölümü + sonuç analizi, zayıf alan listesi","s":"sat","k":"test","m":100},{"i":"h2-t09","t":"4 Ekim · Video günlüğü #2 + checkpoint","s":"ozdeg","k":"reflect","m":30}]}]},{"id":"ekim","name":"Ekim · Derinleşme","sub":"1-31 Ekim 2026","goal":"P1'i çok-kompartmanlı hale getir, UWC dosyasını bitir, SAT zayıf alanlarını sistemli çalış, felsefe kulübünü düzenli işlet.","hours":32,"units":[{"id":"h3","title":"Hafta 3","kicker":"5 Ekim ile başlayan hafta","br":[],"tasks":[{"i":"h3-t01","t":"5 Ekim · Deneme v1'i baştan sona oku, geri bildirim için bir öğretmenle/güvendiğin biriyle paylaşım planla","s":"uwc","k":"review","m":60},{"i":"h3-t02","t":"6 Ekim · Çok-kompartmanlı yapıya geçiş: dendrit-soma-akson segmentasyonu tasarımı","s":"p1","k":"study","m":75},{"i":"h3-t03","t":"7 Ekim · Konu tekrarı","s":"okul","k":"review","m":45},{"i":"h3-t04","t":"7 Ekim · N5 kelime seti 3","s":"jp","k":"review","m":15},{"i":"h3-t05","t":"8 Ekim · Çok-kompartman modelini kodla, tek kompartmanla karşılaştırmalı test","s":"p1","k":"produce","m":75},{"i":"h3-t06","t":"9 Ekim · Felsefe kulübü 2. toplantı + notlarını dosyala (başvuruda liderlik kanıtı olacak)","s":"fel","k":"explain","m":45},{"i":"h3-t07","t":"9 Ekim · İyon kanalları","s":"bb","k":"study","m":15},{"i":"h3-t08","t":"10 Ekim · Türev konusunu kendi yaptığın siteden tekrar et + ilgili oranlar (related rates) problemleri","s":"apcalc","k":"review","m":100},{"i":"h3-t09","t":"11 Ekim · Video günlüğü #3 + checkpoint","s":"ozdeg","k":"reflect","m":30}]},{"id":"h4","title":"Hafta 4","kicker":"12 Ekim ile başlayan hafta","br":[],"tasks":[{"i":"h4-t01","t":"12 Ekim · Geri bildirimlere göre deneme v2 revizyonu","s":"uwc","k":"produce","m":60},{"i":"h4-t02","t":"13 Ekim · Allen Brain Atlas'tan elektrofizyoloji verisi çek, model parametrelerini kalibre et","s":"p1","k":"produce","m":75},{"i":"h4-t03","t":"14 Ekim · Konu tekrarı","s":"okul","k":"review","m":45},{"i":"h4-t04","t":"14 Ekim · N5 kelime seti 4","s":"jp","k":"review","m":15},{"i":"h4-t05","t":"15 Ekim · Kalibrasyon sonuçlarını doğrula, sapmaları not al","s":"p1","k":"study","m":75},{"i":"h4-t06","t":"16 Ekim · Felsefe kulübü 3. toplantı hazırlığı","s":"fel","k":"study","m":45},{"i":"h4-t07","t":"16 Ekim · Sinaptik iletim","s":"bb","k":"study","m":15},{"i":"h4-t08","t":"17 Ekim · Atom yapısı ve periyodik eğilimler — giriş","s":"apchem","k":"study","m":100},{"i":"h4-t09","t":"18 Ekim · Video günlüğü #4 + checkpoint","s":"ozdeg","k":"reflect","m":30}]},{"id":"h5","title":"Hafta 5","kicker":"19 Ekim ile başlayan hafta","br":[],"tasks":[{"i":"h5-t01","t":"19 Ekim · Başvuru formunun geri kalan bölümleri (aktiviteler, referanslar için kime soracağını netleştir)","s":"uwc","k":"produce","m":60},{"i":"h5-t02","t":"20 Ekim · Kalibre edilmiş modelle uzun-süreli simülasyon, kararlılık testi","s":"p1","k":"produce","m":75},{"i":"h5-t03","t":"21 Ekim · Konu tekrarı — ilk ara sınavlar yaklaşıyorsa buna ağırlık ver","s":"okul","k":"review","m":45},{"i":"h5-t04","t":"21 Ekim · N5 kelime seti 5","s":"jp","k":"review","m":15},{"i":"h5-t05","t":"22 Ekim · Sonuçları grafikle özetle, ilk taslak metin (yöntem bölümü)","s":"p1","k":"produce","m":75},{"i":"h5-t06","t":"23 Ekim · Felsefe kulübü 3. toplantı","s":"fel","k":"explain","m":45},{"i":"h5-t07","t":"23 Ekim · Nöroanatomi — lob ve bölgeler","s":"bb","k":"study","m":15},{"i":"h5-t08","t":"24 Ekim · Tam bölüm pratik testi (R&W veya Math, dönüşümlü)","s":"sat","k":"test","m":110},{"i":"h5-t09","t":"25 Ekim · Video günlüğü #5 + checkpoint","s":"ozdeg","k":"reflect","m":30}]},{"id":"h6","title":"Hafta 6","kicker":"26 Ekim ile başlayan hafta","br":["Stokastik Süreçler ↔ Kanal Gürültüsü"],"tasks":[{"i":"h6-t01","t":"26 Ekim · Deneme v2'yi son haline getir, referans mektubu isteme (öğretmene mesaj taslağı)","s":"uwc","k":"produce","m":60},{"i":"h6-t02","t":"27 Ekim · Stokastik iyon kanalı gürültüsü için literatür okuması (Markov kanal modeli)","s":"p1","k":"study","m":75},{"i":"h6-t03","t":"28 Ekim · Konu tekrarı / varsa ara sınav hazırlığı","s":"okul","k":"review","m":45},{"i":"h6-t04","t":"28 Ekim · N5 tekrar (set 1-5)","s":"jp","k":"review","m":15},{"i":"h6-t05","t":"29 Ekim · Stokastik gürültü modülünü koda ekleme (ilk deneme)","s":"p1","k":"produce","m":75},{"i":"h6-t06","t":"30 Ekim · Felsefe kulübü 4. toplantı","s":"fel","k":"explain","m":45},{"i":"h6-t07","t":"30 Ekim · Duyu sistemleri giriş","s":"bb","k":"study","m":15},{"i":"h6-t08","t":"31 Ekim · İntegral kavramına giriş (Riemann toplamları)","s":"apcalc","k":"study","m":100},{"i":"h6-t09","t":"1 Kasım · Video günlüğü #6 + checkpoint + Ekim ayı retrosu","s":"ozdeg","k":"reflect","m":75}]}]},{"id":"kasim","name":"Kasım · Tamamlama ve Sıkılaştırma","sub":"1-30 Kasım 2026","goal":"UWC'yi gönder, P1'de stokastik gürültü + iki-nöron senkronizasyonuna geç, okulun yoğun (muhtemel ara sınav) haftasını yönet.","hours":32,"units":[{"id":"h7","title":"Hafta 7","kicker":"2 Kasım ile başlayan hafta","br":[],"tasks":[{"i":"h7-t01","t":"2 Kasım · Başvuruyu gözden geçir ve gönder (tarih Hafta 0'da teyit edilen son tarihe göre kayabilir)","s":"uwc","k":"produce","m":90},{"i":"h7-t02","t":"3 Kasım · Stokastik kanal gürültüsünü ikinci nörona da uygula","s":"p1","k":"produce","m":75},{"i":"h7-t03","t":"4 Kasım · Konu tekrarı","s":"okul","k":"review","m":45},{"i":"h7-t04","t":"4 Kasım · N5 kelime seti 6","s":"jp","k":"review","m":15},{"i":"h7-t05","t":"5 Kasım · İki nöronu sinaptik olarak bağlama — bağlantı mimarisi tasarımı","s":"p1","k":"study","m":75},{"i":"h7-t06","t":"6 Kasım · Kulüp 5. toplantı (artık UWC gönderildiği için tema: kulübün kendi bağımsız hedefi)","s":"fel","k":"explain","m":45},{"i":"h7-t07","t":"6 Kasım · İşitme/görme sistemleri","s":"bb","k":"study","m":15},{"i":"h7-t08","t":"7 Kasım · Tam deneme sınavı (tek oturum, mümkünse)","s":"sat","k":"test","m":130},{"i":"h7-t09","t":"8 Kasım · Video günlüğü #7 + checkpoint","s":"ozdeg","k":"reflect","m":30}]},{"id":"h8","title":"Hafta 8 (sınav haftası olasılığı)","kicker":"9 Kasım ile başlayan hafta","br":[],"tasks":[{"i":"h8-t01","t":"9 Kasım · Mülakat olasılığına karşı hazırlık notları (kendi hikayeni 3 dk'da anlatma pratiği)","s":"uwc","k":"produce","m":60},{"i":"h8-t02","t":"10 Kasım · Sinaptik bağlantıyı kodla, ilk ortak simülasyon testi","s":"p1","k":"produce","m":75},{"i":"h8-t03","t":"11 Kasım · Sınav odaklı yoğun tekrar (bu hafta yoğun/ara sınav olasılığı)","s":"okul","k":"review","m":60},{"i":"h8-t04","t":"11 Kasım · Bu hafta esnek/atlanabilir","s":"jp","k":"review","m":15},{"i":"h8-t05","t":"12 Kasım · Sınav odaklı yoğun tekrar (P1 bu hafta hafif)","s":"okul","k":"review","m":60},{"i":"h8-t06","t":"13 Kasım · Kulüp toplantısı (okul sınav haftasıysa kısa tutulabilir)","s":"fel","k":"explain","m":45},{"i":"h8-t07","t":"13 Kasım · Hafıza sistemleri","s":"bb","k":"study","m":15},{"i":"h8-t08","t":"14 Kasım · Bu hafta okula öncelik verildiği için hafif — 1 bölüm pratik","s":"sat","k":"test","m":60},{"i":"h8-t09","t":"15 Kasım · Video günlüğü #8 + checkpoint (sınav haftası nasıl geçti?)","s":"ozdeg","k":"reflect","m":30}]},{"id":"h9","title":"Hafta 9","kicker":"16 Kasım ile başlayan hafta","br":["Dinamik Sistemler ↔ Senkronizasyon"],"tasks":[{"i":"h9-t01","t":"16 Kasım · Kulüp için yeni dönem içeriği planlama (UWC sonrası bağımsız hedef)","s":"uwc","k":"produce","m":60},{"i":"h9-t02","t":"17 Kasım · İki nöron simülasyonunda faz kilitleme / senkronizasyon ölçümü — ilk analiz","s":"p1","k":"produce","m":75},{"i":"h9-t03","t":"18 Kasım · Konu tekrarı","s":"okul","k":"review","m":45},{"i":"h9-t04","t":"18 Kasım · N5 kelime seti 7","s":"jp","k":"review","m":15},{"i":"h9-t05","t":"19 Kasım · Cross-correlation analizi, parametre taraması (bağlantı gücü değiştikçe senkronizasyon nasıl değişiyor)","s":"p1","k":"produce","m":75},{"i":"h9-t06","t":"20 Kasım · Kulüp toplantısı","s":"fel","k":"explain","m":45},{"i":"h9-t07","t":"20 Kasım · Nörolojik hastalıklara giriş","s":"bb","k":"study","m":15},{"i":"h9-t08","t":"21 Kasım · Belirli integral, Analizin Temel Teoremi","s":"apcalc","k":"study","m":100},{"i":"h9-t09","t":"22 Kasım · Video günlüğü #9 + checkpoint","s":"ozdeg","k":"reflect","m":30}]},{"id":"h10","title":"Hafta 10","kicker":"23 Kasım ile başlayan hafta","br":[],"tasks":[{"i":"h10-t01","t":"23 Kasım · Kulüp çıktısını yazılı hale getir (rapor/blog — portföy için)","s":"uwc","k":"produce","m":60},{"i":"h10-t02","t":"24 Kasım · Senkronizasyon sonuçlarını grafikle özetle, sonuçlar bölümü taslağı","s":"p1","k":"produce","m":75},{"i":"h10-t03","t":"25 Kasım · Konu tekrarı","s":"okul","k":"review","m":45},{"i":"h10-t04","t":"25 Kasım · N5 kelime seti 8","s":"jp","k":"review","m":15},{"i":"h10-t05","t":"26 Kasım · Rapor/yazım — giriş ve yöntem bölümlerini birleştir","s":"p1","k":"produce","m":75},{"i":"h10-t06","t":"27 Kasım · Kulüp toplantısı","s":"fel","k":"explain","m":45},{"i":"h10-t07","t":"27 Kasım · Bilişsel nörobilim giriş","s":"bb","k":"study","m":15},{"i":"h10-t08","t":"28 Kasım · Tam pratik test #2","s":"sat","k":"test","m":130},{"i":"h10-t09","t":"29 Kasım · Video günlüğü #10 + checkpoint + Kasım ayı retrosu","s":"ozdeg","k":"reflect","m":75}]}]},{"id":"aralik","name":"Aralık · Bitirme, Toparlama, Dinlenme","sub":"1-31 Aralık 2026","goal":"P1 raporunu/sunumunu bitir, dönem sonu değerlendirmesi yap, tatile makul bir bitiş çizgisiyle gir.","hours":28,"units":[{"id":"h11","title":"Hafta 11","kicker":"30 Kasım ile başlayan hafta","br":[],"tasks":[{"i":"h11-t01","t":"30 Kasım · Kulüp toplantısı + dönem sonu kulüp özet raporu başlangıcı","s":"uwc","k":"explain","m":60},{"i":"h11-t02","t":"1 Aralık · Raporun tartışma/sonuç bölümü taslağı","s":"p1","k":"produce","m":75},{"i":"h11-t03","t":"2 Aralık · Konu tekrarı","s":"okul","k":"review","m":45},{"i":"h11-t04","t":"2 Aralık · N5 kelime seti 9","s":"jp","k":"review","m":15},{"i":"h11-t05","t":"3 Aralık · Destek Eğitim Odası'na sunum için slayt/görsel hazırlığı","s":"p1","k":"produce","m":75},{"i":"h11-t06","t":"4 Aralık · Kulüp toplantısı","s":"fel","k":"explain","m":45},{"i":"h11-t07","t":"4 Aralık · Genel tekrar seti 1","s":"bb","k":"review","m":15},{"i":"h11-t08","t":"5 Aralık · Kimyasal bağlar, moleküler geometri","s":"apchem","k":"study","m":90},{"i":"h11-t09","t":"6 Aralık · Video günlüğü #11 + checkpoint","s":"ozdeg","k":"reflect","m":30}]},{"id":"h12","title":"Hafta 12","kicker":"7 Aralık ile başlayan hafta","br":[],"tasks":[{"i":"h12-t01","t":"7 Aralık · Kulüp özet raporunu bitir","s":"uwc","k":"produce","m":60},{"i":"h12-t02","t":"8 Aralık · Rapor/sunum revizyonu — geri bildirim al (danışman/öğretmen)","s":"p1","k":"review","m":75},{"i":"h12-t03","t":"9 Aralık · Konu tekrarı","s":"okul","k":"review","m":45},{"i":"h12-t04","t":"9 Aralık · N5 kelime seti 10","s":"jp","k":"review","m":15},{"i":"h12-t05","t":"10 Aralık · Geri bildirime göre son düzeltmeler","s":"p1","k":"produce","m":75},{"i":"h12-t06","t":"11 Aralık · Kulüp toplantısı","s":"fel","k":"explain","m":45},{"i":"h12-t07","t":"11 Aralık · Genel tekrar seti 2","s":"bb","k":"review","m":15},{"i":"h12-t08","t":"12 Aralık · Tam pratik test #3","s":"sat","k":"test","m":130},{"i":"h12-t09","t":"13 Aralık · Video günlüğü #12 + checkpoint","s":"ozdeg","k":"reflect","m":30}]},{"id":"h13","title":"Hafta 13 (dönem sonu sınav haftası)","kicker":"14 Aralık ile başlayan hafta","br":[],"tasks":[{"i":"h13-t01","t":"14 Aralık · Sunum/rapor final teslim (Destek Eğitim Odası)","s":"p1","k":"produce","m":90},{"i":"h13-t02","t":"15 Aralık · Dönem sonu sınavlarına (varsa) yoğunlaşma","s":"okul","k":"review","m":75},{"i":"h13-t03","t":"16 Aralık · Sınav tekrarı","s":"okul","k":"review","m":45},{"i":"h13-t04","t":"16 Aralık · N5 genel tekrar","s":"jp","k":"review","m":15},{"i":"h13-t05","t":"17 Aralık · Sınav tekrarı","s":"okul","k":"review","m":75},{"i":"h13-t06","t":"18 Aralık · Termokimya — final sınavına göre hafif tekrar","s":"apchem","k":"review","m":60},{"i":"h13-t07","t":"19 Aralık · Bu hafta okul öncelikli — kaçan modülleri buraya taşı","s":"serbest","k":"review","m":60},{"i":"h13-t08","t":"20 Aralık · Video günlüğü #13 + checkpoint","s":"ozdeg","k":"reflect","m":30}]},{"id":"h14","title":"Hafta 14 (yarıyıl tatili başlangıcı olası)","kicker":"21 Aralık ile başlayan hafta","br":[],"tasks":[{"i":"h14-t01","t":"21 Aralık · Mülakat çağrısı geldiyse hazırlık; gelmediyse tam dinlenme","s":"uwc","k":"review","m":45},{"i":"h14-t02","t":"22 Aralık · Ocak dönemine hazırlık — konu haritası çıkar (hangi başlıklar eksik)","s":"bb","k":"study","m":45},{"i":"h14-t03","t":"23 Aralık · İstersen tamamen boş bırak","s":"serbest","k":"review","m":0},{"i":"h14-t04","t":"24 Aralık · Rapor sonrası “ileri adımlar” notu (Ocak'ta nereden devam edilecek)","s":"p1","k":"produce","m":45},{"i":"h14-t05","t":"25 Aralık · İstersen tamamen boş bırak","s":"serbest","k":"review","m":0},{"i":"h14-t06","t":"26 Aralık · Hafif — kendi seçtiğin zayıf konudan 1 tekrar (istersen atla)","s":"apcalc","k":"review","m":45},{"i":"h14-t07","t":"27 Aralık · Video günlüğü #14 + checkpoint","s":"ozdeg","k":"reflect","m":30}]},{"id":"h15","title":"Hafta 15 (kısa hafta, yılbaşı arası)","kicker":"28 Aralık ile başlayan hafta","br":[],"tasks":[{"i":"h15-t01","t":"28 Aralık · Dinlenme — istersen tamamen boş bırak","s":"serbest","k":"review","m":0},{"i":"h15-t02","t":"29 Aralık · Ocak'ta başlayacak Biyoloji rotasyonu için Campbell'dan hücre biyolojisi bölümünü göz gezdir (yük değil, ısınma)","s":"apbio","k":"study","m":30},{"i":"h15-t03","t":"30 Aralık · —","s":"serbest","k":"review","m":0},{"i":"h15-t04","t":"31 Aralık · Yıl ortası mini-check: video günlüğü #15 + checkpoint + kısa bir bakış (bu 3 ay nasıl geçti?)","s":"ozdeg","k":"reflect","m":45}]}]},{"id":"ocak","name":"Ocak · Dönem 1 Kapanışı + AP Biyoloji'nin Devreye Girişi","sub":"1-24 Ocak 2027","goal":"Okula dönüş, dönem sonu sınavları, Cumartesi rotasyonuna AP Biyoloji'yi ekle, Dönem 1'i sağlam kapat.","hours":21,"units":[{"id":"h16","title":"Hafta 16","kicker":"4 Ocak ile başlayan hafta","br":["Hopfield Ağı ↔ Transformer Attention"],"tasks":[{"i":"h16-t01","t":"4 Ocak · Kulübün ikinci yarıyıl planını taslakla (yeni üyeler, yeni tema)","s":"uwc","k":"produce","m":60},{"i":"h16-t02","t":"5 Ocak · P1'i kapalı dosya olarak arşivle; P2 (Hopfield network / ilişkisel bellek modeli) için literatür taraması başlat","s":"p2","k":"study","m":75},{"i":"h16-t03","t":"6 Ocak · Konu tekrarı","s":"okul","k":"review","m":45},{"i":"h16-t04","t":"6 Ocak · N5 set 11","s":"jp","k":"review","m":15},{"i":"h16-t05","t":"7 Ocak · Hopfield network'ün matematiksel temeli (enerji fonksiyonu, ağırlık matrisi) — kağıt üzerinde","s":"p2","k":"study","m":75},{"i":"h16-t06","t":"8 Ocak · Kulüp toplantısı","s":"fel","k":"explain","m":45},{"i":"h16-t07","t":"8 Ocak · Genel tekrar seti 3","s":"bb","k":"review","m":15},{"i":"h16-t08","t":"9 Ocak · Hücre biyolojisi — zar yapısı, taşınma mekanizmaları (Campbell)","s":"apbio","k":"study","m":90},{"i":"h16-t09","t":"10 Ocak · Video günlüğü #16 + checkpoint","s":"ozdeg","k":"reflect","m":30}]},{"id":"h17","title":"Hafta 17","kicker":"11 Ocak ile başlayan hafta","br":[],"tasks":[{"i":"h17-t01","t":"11 Ocak · Kulüp toplantısı","s":"uwc","k":"explain","m":45},{"i":"h17-t02","t":"12 Ocak · Hopfield network'ü Python'da kodlamaya başla (küçük örnek desenle)","s":"p2","k":"produce","m":75},{"i":"h17-t03","t":"13 Ocak · Yoğun tekrar (dönem sonu sınavlarına yaklaşılıyor)","s":"okul","k":"review","m":45},{"i":"h17-t04","t":"13 Ocak · N5 set 12","s":"jp","k":"review","m":15},{"i":"h17-t05","t":"14 Ocak · Yoğun tekrar (P2 bu hafta hafif)","s":"okul","k":"review","m":60},{"i":"h17-t06","t":"15 Ocak · Genel tekrar seti 4 (Felsefe kulübü bu hafta sınav yoğunluğundan kısa/atlanabilir)","s":"bb","k":"review","m":20},{"i":"h17-t07","t":"16 Ocak · Tam pratik test #4 — dönem sonu genel ölçüm","s":"sat","k":"test","m":130},{"i":"h17-t08","t":"17 Ocak · Video günlüğü #17 + checkpoint","s":"ozdeg","k":"reflect","m":30}]},{"id":"h18","title":"Hafta 18 (dönem sonu sınavları + karne ~23 Ocak)","kicker":"18 Ocak ile başlayan hafta","br":[],"tasks":[{"i":"h18-t01","t":"18 Ocak · Sınav tekrarı","s":"okul","k":"review","m":75},{"i":"h18-t02","t":"19 Ocak · Sınav tekrarı","s":"okul","k":"review","m":75},{"i":"h18-t03","t":"20 Ocak · Sınav tekrarı","s":"okul","k":"review","m":45},{"i":"h18-t04","t":"20 Ocak · N5 genel tekrar (1-12)","s":"jp","k":"review","m":0},{"i":"h18-t05","t":"21 Ocak · Sınav tekrarı","s":"okul","k":"review","m":60},{"i":"h18-t06","t":"22 Ocak · Bu hafta tamamen okul öncelikli","s":"serbest","k":"review","m":30},{"i":"h18-t07","t":"23 Ocak · Sınavlar bitince dinlen","s":"serbest","k":"review","m":0},{"i":"h18-t08","t":"24 Ocak · Dönem 1 büyük retrospektifi (bkz. Öz-değerlendirme Sistemi) + Dönem 2'yi bu retrospektife göre detaylandırma oturumu (karne sonrası)","s":"ozdeg","k":"reflect","m":105}],"note":"Dönem 1 sonu milestone (23 Ocak civarı): Karne alındı · P1 tamamen kapandı, P2'ye (Hopfield network) geçiş yapıldı · AP Biyoloji rotasyona girdi · SAT'ta 4 tam deneme birikti."}]},{"id":"donem2","name":"Dönem 2 · Şubat-Haziran 2027 (iskelet)","sub":"~9 Şubat - Haziran 2027","goal":"Haftalık ritim aynı kalır (bkz. Hızlı Referans), Cumartesi rotasyonu artık 4'lü döner: SAT / AP Kalkülüs / AP Kimya / AP Biyoloji. Bu faz Dönem 1 sonu retrospektifinde gün-gün yeniden yazılacak.","hours":0,"units":[{"id":"s1","title":"Şubat","kicker":"~9 Şubat 2027'den itibaren (yarıyıl tatili sonrası)","note":"Bu birim bir pusula, günlük program değil — kaynak belge de aylık hedeften daha ayrıntılı bir şey vermiyor. Dönem 1 sonu retrospektifinde (~23 Ocak 2027) UWC sonucu, AP sınav tarihleri ve Brain Bee takvimi netleştikten sonra, Eylül-Ocak bloğuyla aynı gün-gün detay seviyesinde yeniden yazılacak.","tasks":[{"i":"s1-t01","t":"(Şubat) Model kodlanması tamamlanır, kapasite testleri (kaç desen hatasız hatırlanıyor)","s":"p2","k":"produce","m":0},{"i":"s1-t02","t":"(Şubat) Kulüp yeni dönem temasıyla devam; UWC sonucu/mülakat süreci varsa buraya oturur","s":"uwc","k":"explain","m":0},{"i":"s1-t03","t":"(Şubat) Yeni dönem konularına adaptasyon","s":"okul","k":"review","m":0},{"i":"s1-t04","t":"(Şubat) AP'lerde 3 dersin de orta seviye konuları paralel ilerler; SAT'ta zayıf alan review","s":"sat","k":"review","m":0},{"i":"s1-t05","t":"(Şubat) Bölgesel/ulusal round takvimi netleşirse yoğunlaşma başlar","s":"bb","k":"study","m":0}]},{"id":"s2","title":"Mart","kicker":"Şubat sonrası","note":"Bu birim bir pusula, günlük program değil — kaynak belge de aylık hedeften daha ayrıntılı bir şey vermiyor. Dönem 1 sonu retrospektifinde (~23 Ocak 2027) UWC sonucu, AP sınav tarihleri ve Brain Bee takvimi netleştikten sonra, Eylül-Ocak bloğuyla aynı gün-gün detay seviyesinde yeniden yazılacak.","tasks":[{"i":"s2-t01","t":"(Mart) Gürültülü/eksik desenlerle geri çağırma testleri, sonuçların analizi","s":"p2","k":"produce","m":0},{"i":"s2-t02","t":"(Mart) Kulüp devam","s":"uwc","k":"explain","m":0},{"i":"s2-t03","t":"(Mart) Konu tekrarı","s":"okul","k":"review","m":0},{"i":"s2-t04","t":"(Mart) AP'ler ileri konulara geçer; SAT tam deneme #5","s":"sat","k":"test","m":0},{"i":"s2-t05","t":"(Mart) Round'a göre yoğun prova","s":"bb","k":"study","m":0}]},{"id":"s3","title":"Nisan","kicker":"Mart sonrası","note":"Bu birim bir pusula, günlük program değil — kaynak belge de aylık hedeften daha ayrıntılı bir şey vermiyor. Dönem 1 sonu retrospektifinde (~23 Ocak 2027) UWC sonucu, AP sınav tarihleri ve Brain Bee takvimi netleştikten sonra, Eylül-Ocak bloğuyla aynı gün-gün detay seviyesinde yeniden yazılacak.","tasks":[{"i":"s3-t01","t":"(Nisan) Rapor/yazım — P1 formatına benzer bir sunum hazırlığı","s":"p2","k":"produce","m":0},{"i":"s3-t02","t":"(Nisan) Kulüp devam + varsa UWC yerleştirme süreci netleşir","s":"uwc","k":"explain","m":0},{"i":"s3-t03","t":"(Nisan) Konu tekrarı + varsa ikinci ara sınavlara hazırlık","s":"okul","k":"review","m":0},{"i":"s3-t04","t":"(Nisan) AP sınavları yaklaşıyor — üç dersin de yoğun tekrar moduna geçmesi (Mayıs'ın ilk iki haftasına göre geri sayım)","s":"sat","k":"review","m":0},{"i":"s3-t05","t":"(Nisan) Round sonrası veya devam eden hazırlık","s":"bb","k":"study","m":0}]},{"id":"s4","title":"Mayıs","kicker":"Nisan sonrası — AP sınavları Mayıs'ın ilk iki haftasında (kesin tarih College Board'dan)","note":"Bu birim bir pusula, günlük program değil — kaynak belge de aylık hedeften daha ayrıntılı bir şey vermiyor. Dönem 1 sonu retrospektifinde (~23 Ocak 2027) UWC sonucu, AP sınav tarihleri ve Brain Bee takvimi netleştikten sonra, Eylül-Ocak bloğuyla aynı gün-gün detay seviyesinde yeniden yazılacak.","tasks":[{"i":"s4-t01","t":"(Mayıs) P2 final teslim (Destek Eğitim Odası)","s":"p2","k":"produce","m":0},{"i":"s4-t02","t":"(Mayıs) Kulüp dönem sonu özeti","s":"uwc","k":"explain","m":0},{"i":"s4-t03","t":"(Mayıs) Konu tekrarı","s":"okul","k":"review","m":0},{"i":"s4-t04","t":"(Mayıs) AP Kimya, AP Kalkülüs, AP Biyoloji sınavları (tarihler netleşince Cumartesi/hafta içi bloklar buna göre kayacak); SAT varsa son tam deneme","s":"sat","k":"test","m":0}]},{"id":"s5","title":"Haziran","kicker":"Mayıs sonrası","note":"Bu birim bir pusula, günlük program değil — kaynak belge de aylık hedeften daha ayrıntılı bir şey vermiyor. Dönem 1 sonu retrospektifinde (~23 Ocak 2027) UWC sonucu, AP sınav tarihleri ve Brain Bee takvimi netleştikten sonra, Eylül-Ocak bloğuyla aynı gün-gün detay seviyesinde yeniden yazılacak.","tasks":[{"i":"s5-t01","t":"(Haziran) Yaz için sıradaki proje (P3 sonrası yeni bir üretim projesi mi, yoksa bir üniversite/yaz programı mı — bu karar Dönem 1 sonu retrospektifinde netleşir)","s":"p2","k":"reflect","m":0},{"i":"s5-t02","t":"(Haziran) Yıl sonu kulüp raporu","s":"uwc","k":"explain","m":0},{"i":"s5-t03","t":"(Haziran) Yıl sonu sınavları","s":"okul","k":"test","m":0},{"i":"s5-t04","t":"(Haziran) Sınavlar bitti — dinlenme + sonuç değerlendirme","s":"sat","k":"reflect","m":0},{"i":"s5-t05","t":"(Haziran) Yıl sonu değerlendirme","s":"bb","k":"reflect","m":0}]}]}],"projects":[{"id":"P1","name":"Hodgkin-Huxley Çok-Kompartmanlı Nöron Modeli","emoji":"🧠","goal":"Gerçek nöron morfolojisi (NeuroMorpho.org) ve elektrofizyoloji verisiyle (Allen Brain Atlas) kablo-teorisi tabanlı, stokastik iyon kanalı gürültülü, iki sinaptik bağlı nöron simülasyonu — Destek Eğitim Odası resmi projesi. Ocak'ta (Hafta 16) kapanıp arşivlenir, yerini P2 alır.","phases":{"eylul":"Teorik temel: cable theory, tek-kompartmanlı HH modeli","ekim":"Çok-kompartmanlı model + gerçek veriyle kalibrasyon","kasim":"Stokastik gürültü + iki nöron sinaptik bağlantı + senkronizasyon analizi","aralik":"Rapor/sunum yazımı ve final teslimi","ocak":"Arşivleme ve P2'ye geçiş"},"topics":["Cable theory","Hodgkin-Huxley denklemleri","Çok-kompartmanlı modelleme","Stokastik iyon kanalı gürültüsü (Markov modeli)","Sinaptik bağlantı","Senkronizasyon analizi"],"next":"Cable theory teorik özetini çıkar ve tek-kompartmanlı denklemi kağıt üzerinde türet.","ms":["Tek-kompartman model çalışıyor","Çok-kompartmanlı + kalibre model çalışıyor","İki nöron senkronizasyon analizi tamam","Rapor/sunum final teslimi","Arşivlendi, P2'ye geçildi"]},{"id":"P2","name":"Hopfield Network ile İlişkisel Bellek Modellemesi","emoji":"🕸️","goal":"Klasik Hopfield ağı (enerji fonksiyonu, ağırlık matrisi, depolama kapasitesi), gürültülü/eksik desenlerle geri çağırma testleri, Mayıs'ta final teslimi (Destek Eğitim Odası).","phases":{"ocak":"Literatür taraması + matematiksel temel + ilk Python kodu","donem2":"Kapasite testleri (Şubat), geri çağırma analizi (Mart), rapor hazırlığı (Nisan), final teslim (Mayıs)"},"topics":["Enerji fonksiyonu","Ağırlık matrisi","Depolama kapasitesi","Gürültülü/eksik desenle geri çağırma"],"next":"P1'i kapalı dosya olarak arşivle, Hopfield network için literatür taramasına başla.","ms":["Matematiksel temel çıkarıldı","Python'da küçük örnek desenle kodlama başladı","Model kodlanması tamamlandı, kapasite testleri yapıldı","Final teslim (Mayıs)"]},{"id":"P3","name":"UWC Başvurusu ve Felsefe Kulübü","emoji":"🌍","goal":"UWC başvurusu birincil öncelik; felsefe kulübü, başvuru sonrası da bağımsız bir hedefle sürdürülen bir topluluk katkısı kanıtı.","phases":{"eylul":"Son başvuru tarihini teyit et, deneme taslağı v1","ekim":"Deneme v2, başvuru formu, referans süreci","kasim":"Başvuruyu gönder, mülakat hazırlığı","aralik":"Kulüp dönem özet raporu","ocak":"İkinci yarıyıl kulüp planı","donem2":"UWC sonucu/mülakat/yerleştirme süreci netleşir, kulüp yıl sonu raporu"},"topics":["Başvuru denemesi","Başvuru formu","Referans mektupları","Mülakat hazırlığı","Felsefe kulübü toplantıları"],"next":"Türkiye Ulusal Komitesi sitesinden kesin son başvuru tarihini teyit et.","ms":["Deneme taslağı v1 tamam","Başvuru formu tamam","Başvuru gönderildi","Kulüp dönem özeti yazıldı","İkinci yarıyıl planı taslaklandı","Yıl sonu kulüp raporu"]}],"assessments":[],"bridges":[{"n":"Kablo Teorisi Köprüsü","e":"🔗","d":"PDE + devre teorisi + gerçek nöron morfolojisi (P1'in matematiksel temeli).","t":["Cable theory","P1"]},{"n":"Stokastik Süreçler ↔ Kanal Gürültüsü","e":"🔗","d":"Markov modeli = iyon kanalının açılıp kapanması.","t":["Markov modeli","İyon kanalı gürültüsü","P1"]},{"n":"Dinamik Sistemler ↔ Senkronizasyon","e":"🔗","d":"Salınım + diferansiyel denklem + iki nöron senkronu.","t":["Faz kilitleme","Senkronizasyon","P1"]},{"n":"Hopfield Ağı ↔ Transformer Attention","e":"🔗","d":"İstatistiksel mekanik kökenli attractor network, güncel yapay zeka mimarileriyle bağlantısı (opsiyonel ileri konu).","t":["Hopfield network","Attention","P2"]}],"resources":[{"s":"p1","n":"NeuroMorpho.org","u":"Gerçek nöron morfolojisi verisi"},{"s":"p1","n":"Allen Brain Atlas","u":"Elektrofizyoloji verisi"},{"s":"sat","n":"SAT resmi deneme sınavları","u":"Diagnostic ve tam pratik testler"},{"s":"apcalc","n":"Kendi türev/trigonometri/polinom siteleri","u":"AP Kalkülüs tekrarı"},{"s":"apbio","n":"Campbell Biology","u":"AP Biyoloji ders kitabı"},{"s":"jp","n":"N5 kelime setleri","u":"Haftalık Japonca kelime tekrarı"}],"subjects":[{"c":"uwc","n":"UWC Başvurusu","e":"🌍","col":"#6F2A36"},{"c":"fel","n":"Felsefe Kulübü","e":"🦉","col":"#8073A5"},{"c":"p1","n":"P1 — Hodgkin-Huxley","e":"🧠","col":"#6E2430"},{"c":"p2","n":"P2 — Hopfield Network","e":"🕸️","col":"#524870"},{"c":"okul","n":"Okul Dersleri","e":"📚","col":"#9B7D4B"},{"c":"jp","n":"Japonca","e":"🌸","col":"#B99E6E"},{"c":"bb","n":"Brain Bee","e":"🥼","col":"#5F5483"},{"c":"sat","n":"SAT","e":"🎓","col":"#9C92B9"},{"c":"apcalc","n":"AP Kalkülüs","e":"📐","col":"#79344B"},{"c":"apchem","n":"AP Kimya","e":"🧪","col":"#A44666"},{"c":"apbio","n":"AP Biyoloji","e":"🧬","col":"#8F633D"},{"c":"ozdeg","n":"Öz-değerlendirme","e":"🪞","col":"#6D5F95"},{"c":"serbest","n":"Serbest / Telafi","e":"🌿","col":"#B0A47E"}],"kinds":[{"c":"study","n":"Öğren","e":"📖"},{"c":"produce","n":"Üret","e":"🛠️"},{"c":"review","n":"Tekrar","e":"🔁"},{"c":"test","n":"Sınav/Deneme","e":"📋"},{"c":"reflect","n":"Değerlendir","e":"🪞"},{"c":"explain","n":"Anlat/Sun","e":"🎙️"}]}
+{
+  "subjects": [
+    {
+      "c": "sys",
+      "n": "Sistem Kurulumu",
+      "e": "🗂️",
+      "col": "#7A6A55"
+    },
+    {
+      "c": "uwc",
+      "n": "UWC Başvurusu",
+      "e": "🌍",
+      "col": "#6F2A36"
+    },
+    {
+      "c": "fel",
+      "n": "Felsefe Kulübü",
+      "e": "🦉",
+      "col": "#8073A5"
+    },
+    {
+      "c": "p1",
+      "n": "P1 — Hodgkin-Huxley",
+      "e": "🧠",
+      "col": "#6E2430"
+    },
+    {
+      "c": "p2",
+      "n": "P2 — Hopfield Network",
+      "e": "🕸️",
+      "col": "#524870"
+    },
+    {
+      "c": "okul",
+      "n": "Okul Dersleri",
+      "e": "📚",
+      "col": "#9B7D4B"
+    },
+    {
+      "c": "jp",
+      "n": "Japonca",
+      "e": "🌸",
+      "col": "#B99E6E"
+    },
+    {
+      "c": "bb",
+      "n": "Brain Bee",
+      "e": "🥼",
+      "col": "#5F5483"
+    },
+    {
+      "c": "sat",
+      "n": "SAT",
+      "e": "🎓",
+      "col": "#9C92B9"
+    },
+    {
+      "c": "apcalc",
+      "n": "AP Kalkülüs",
+      "e": "📐",
+      "col": "#79344B"
+    },
+    {
+      "c": "apchem",
+      "n": "AP Kimya",
+      "e": "🧪",
+      "col": "#A44666"
+    },
+    {
+      "c": "apbio",
+      "n": "AP Biyoloji",
+      "e": "🧬",
+      "col": "#8F633D"
+    },
+    {
+      "c": "apexam",
+      "n": "AP Sınav Haftası",
+      "e": "📝",
+      "col": "#66314A"
+    },
+    {
+      "c": "yazproj",
+      "n": "Yaz Projesi (P3?)",
+      "e": "☀️",
+      "col": "#7C8A4E"
+    },
+    {
+      "c": "ozdeg",
+      "n": "Öz-değerlendirme",
+      "e": "🪞",
+      "col": "#6D5F95"
+    },
+    {
+      "c": "serbest",
+      "n": "Serbest / Telafi",
+      "e": "🌿",
+      "col": "#B0A47E"
+    }
+  ],
+  "kinds": [
+    {
+      "c": "study",
+      "n": "Öğren",
+      "e": "📖"
+    },
+    {
+      "c": "produce",
+      "n": "Üret",
+      "e": "🛠️"
+    },
+    {
+      "c": "review",
+      "n": "Tekrar",
+      "e": "🔁"
+    },
+    {
+      "c": "test",
+      "n": "Sınav/Deneme",
+      "e": "📋"
+    },
+    {
+      "c": "reflect",
+      "n": "Değerlendir",
+      "e": "🪞"
+    },
+    {
+      "c": "explain",
+      "n": "Anlat/Sun",
+      "e": "🎙️"
+    },
+    {
+      "c": "rest",
+      "n": "Dinlen/Telafi",
+      "e": "🌿"
+    }
+  ],
+  "phases": [
+    {
+      "id": "eylul",
+      "name": "Eylül · Kurulum ve Keşif",
+      "sub": "Hafta 0-2 · ~30 saat",
+      "goal": "Eylül · Kurulum ve Keşif",
+      "hours": 30.3,
+      "units": [
+        {
+          "id": "hafta0",
+          "title": "Hafta 0",
+          "kicker": "20 Eylül",
+          "tasks": [
+            {
+              "i": "w0-0",
+              "t": "20 Eylül · CollaNote'ta haftalık şablon sayfası oluştur; P1 için kaynak listesi başlat (NeuroMorpho.org, Allen Brain Atlas)",
+              "s": "sys",
+              "k": "produce",
+              "m": 45
+            },
+            {
+              "i": "w0-1",
+              "t": "20 Eylül · Türkiye Ulusal Komitesi'nden kesin son başvuru tarihini teyit et",
+              "s": "uwc",
+              "k": "study",
+              "m": 30
+            },
+            {
+              "i": "w0-2",
+              "t": "20 Eylül · Video günlüğü #0 (hedefler, motivasyon)",
+              "s": "ozdeg",
+              "k": "reflect",
+              "m": 15
+            }
+          ]
+        },
+        {
+          "id": "hafta1",
+          "title": "Hafta 1",
+          "kicker": "21 Eylül – 27 Eylül",
+          "tasks": [
+            {
+              "i": "w1-0",
+              "t": "21 Eylül · \"Neden UWC, neden ben\" beyin fırtınası — serbest yazım",
+              "s": "uwc",
+              "k": "produce",
+              "m": 60
+            },
+            {
+              "i": "w1-1",
+              "t": "21 Eylül · Haftanın konu planını çıkar, ödevleri listele",
+              "s": "okul",
+              "k": "study",
+              "m": 30
+            },
+            {
+              "i": "w1-2",
+              "t": "21 Eylül · Türev kurallarını (kendi sitenden) tekrar et",
+              "s": "apcalc",
+              "k": "review",
+              "m": 30
+            },
+            {
+              "i": "w1-3",
+              "t": "22 Eylül · Cable theory teorik özeti + tek-kompartmanlı denklemi kağıtta türet",
+              "s": "p1",
+              "k": "study",
+              "m": 75
+            },
+            {
+              "i": "w1-4",
+              "t": "22 Eylül · Reading & Writing diagnostic — 1. bölüm",
+              "s": "sat",
+              "k": "test",
+              "m": 30
+            },
+            {
+              "i": "w1-5",
+              "t": "22 Eylül · Nöron/sinaps temelleri — okuma 1",
+              "s": "bb",
+              "k": "study",
+              "m": 15
+            },
+            {
+              "i": "w1-6",
+              "t": "23 Eylül · Haftanın konusunu (fizik/biyoloji) pekiştir",
+              "s": "okul",
+              "k": "review",
+              "m": 60
+            },
+            {
+              "i": "w1-7",
+              "t": "23 Eylül · Madde ve ölçüm, birim dönüşümleri",
+              "s": "apchem",
+              "k": "study",
+              "m": 45
+            },
+            {
+              "i": "w1-8",
+              "t": "23 Eylül · N5 kelime seti 1",
+              "s": "jp",
+              "k": "study",
+              "m": 15
+            },
+            {
+              "i": "w1-9",
+              "t": "24 Eylül · Python'da HH denklemlerini (Na, K, sızıntı) kodlamaya başla",
+              "s": "p1",
+              "k": "produce",
+              "m": 75
+            },
+            {
+              "i": "w1-10",
+              "t": "24 Eylül · Reading & Writing diagnostic — 2. bölüm",
+              "s": "sat",
+              "k": "test",
+              "m": 30
+            },
+            {
+              "i": "w1-11",
+              "t": "24 Eylül · Nöron/sinaps temelleri — okuma 2",
+              "s": "bb",
+              "k": "study",
+              "m": 20
+            },
+            {
+              "i": "w1-12",
+              "t": "25 Eylül · Felsefe kulübü ilk toplantı materyali (okuma + tartışma soruları)",
+              "s": "uwc",
+              "k": "study",
+              "m": 60
+            },
+            {
+              "i": "w1-13",
+              "t": "25 Eylül · İlgili oranlar (related rates) — problem seti 1",
+              "s": "apcalc",
+              "k": "review",
+              "m": 45
+            },
+            {
+              "i": "w1-14",
+              "t": "25 Eylül · Haftanın ödevlerini bitir",
+              "s": "okul",
+              "k": "review",
+              "m": 20
+            },
+            {
+              "i": "w1-15",
+              "t": "26 Eylül · Math diagnostic — tam bölüm",
+              "s": "sat",
+              "k": "test",
+              "m": 90
+            },
+            {
+              "i": "w1-16",
+              "t": "26 Eylül · Atom altı parçacıklar, izotoplar",
+              "s": "apchem",
+              "k": "study",
+              "m": 45
+            },
+            {
+              "i": "w1-17",
+              "t": "27 Eylül · Video günlüğü #1 + checkpoint",
+              "s": "ozdeg",
+              "k": "reflect",
+              "m": 30
+            },
+            {
+              "i": "w1-18",
+              "t": "27 Eylül · Telafi/dinlenme",
+              "s": "serbest",
+              "k": "rest",
+              "m": 90
+            }
+          ]
+        },
+        {
+          "id": "hafta2",
+          "title": "Hafta 2",
+          "kicker": "28 Eylül – 4 Ekim",
+          "tasks": [
+            {
+              "i": "w2-0",
+              "t": "28 Eylül · Deneme taslağı — giriş paragrafı",
+              "s": "uwc",
+              "k": "produce",
+              "m": 60
+            },
+            {
+              "i": "w2-1",
+              "t": "28 Eylül · Konu takibi, quiz hazırlığı",
+              "s": "okul",
+              "k": "study",
+              "m": 30
+            },
+            {
+              "i": "w2-2",
+              "t": "28 Eylül · İlgili oranlar — problem seti 2",
+              "s": "apcalc",
+              "k": "review",
+              "m": 30
+            },
+            {
+              "i": "w2-3",
+              "t": "29 Eylül · HH modelini çalıştır, tek aksiyon potansiyeli simülasyonu + grafik",
+              "s": "p1",
+              "k": "produce",
+              "m": 75
+            },
+            {
+              "i": "w2-4",
+              "t": "29 Eylül · Math diagnostic sonuçlarını analiz et, zayıf alan listesi çıkar",
+              "s": "sat",
+              "k": "review",
+              "m": 30
+            },
+            {
+              "i": "w2-5",
+              "t": "29 Eylül · Aksiyon potansiyeli mekanizması — okuma 1",
+              "s": "bb",
+              "k": "study",
+              "m": 15
+            },
+            {
+              "i": "w2-6",
+              "t": "30 Eylül · Haftalık konu tekrarı + kendi kendine mini quiz",
+              "s": "okul",
+              "k": "review",
+              "m": 60
+            },
+            {
+              "i": "w2-7",
+              "t": "30 Eylül · Elektron konfigürasyonu, kuantum sayıları",
+              "s": "apchem",
+              "k": "study",
+              "m": 45
+            },
+            {
+              "i": "w2-8",
+              "t": "30 Eylül · N5 kelime seti 2",
+              "s": "jp",
+              "k": "study",
+              "m": 15
+            },
+            {
+              "i": "w2-9",
+              "t": "1 Ekim · NeuroMorpho'dan morfoloji örneği indir, model parametreleriyle karşılaştır",
+              "s": "p1",
+              "k": "study",
+              "m": 75
+            },
+            {
+              "i": "w2-10",
+              "t": "1 Ekim · R&W zayıf alan review",
+              "s": "sat",
+              "k": "review",
+              "m": 30
+            },
+            {
+              "i": "w2-11",
+              "t": "1 Ekim · Aksiyon potansiyeli mekanizması — okuma 2",
+              "s": "bb",
+              "k": "study",
+              "m": 20
+            },
+            {
+              "i": "w2-12",
+              "t": "2 Ekim · Deneme taslağı — 2. paragraf",
+              "s": "uwc",
+              "k": "produce",
+              "m": 60
+            },
+            {
+              "i": "w2-13",
+              "t": "2 Ekim · Periyodik eğilimler (iyonlaşma enerjisi, elektronegatiflik)",
+              "s": "apchem",
+              "k": "study",
+              "m": 45
+            },
+            {
+              "i": "w2-14",
+              "t": "2 Ekim · Haftanın ödevlerini bitir",
+              "s": "okul",
+              "k": "review",
+              "m": 20
+            },
+            {
+              "i": "w2-15",
+              "t": "3 Ekim · Tam pratik bölüm (R&W)",
+              "s": "sat",
+              "k": "test",
+              "m": 90
+            },
+            {
+              "i": "w2-16",
+              "t": "3 Ekim · Optimizasyon problemleri — giriş",
+              "s": "apcalc",
+              "k": "study",
+              "m": 45
+            },
+            {
+              "i": "w2-17",
+              "t": "4 Ekim · Video günlüğü #2 + checkpoint",
+              "s": "ozdeg",
+              "k": "reflect",
+              "m": 30
+            },
+            {
+              "i": "w2-18",
+              "t": "4 Ekim · Telafi/dinlenme",
+              "s": "serbest",
+              "k": "rest",
+              "m": 90
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ekim",
+      "name": "Ekim · Derinleşme",
+      "sub": "Hafta 3-6 · ~58 saat",
+      "goal": "Ekim · Derinleşme",
+      "hours": 57.8,
+      "units": [
+        {
+          "id": "hafta3",
+          "title": "Hafta 3",
+          "kicker": "5 Ekim – 11 Ekim",
+          "tasks": [
+            {
+              "i": "w3-0",
+              "t": "5 Ekim · Deneme v1'i baştan sona oku, geri bildirim için paylaşım planla",
+              "s": "uwc",
+              "k": "produce",
+              "m": 60
+            },
+            {
+              "i": "w3-1",
+              "t": "5 Ekim · Konu takibi",
+              "s": "okul",
+              "k": "study",
+              "m": 30
+            },
+            {
+              "i": "w3-2",
+              "t": "5 Ekim · Optimizasyon problemleri — devam",
+              "s": "apcalc",
+              "k": "review",
+              "m": 30
+            },
+            {
+              "i": "w3-3",
+              "t": "6 Ekim · Çok-kompartmanlı yapıya geçiş: dendrit-soma-akson segmentasyonu tasarımı",
+              "s": "p1",
+              "k": "produce",
+              "m": 75
+            },
+            {
+              "i": "w3-4",
+              "t": "6 Ekim · Zayıf alan #1 üzerine odaklı çalışma",
+              "s": "sat",
+              "k": "review",
+              "m": 30
+            },
+            {
+              "i": "w3-5",
+              "t": "6 Ekim · İyon kanalları — okuma 1",
+              "s": "bb",
+              "k": "study",
+              "m": 15
+            },
+            {
+              "i": "w3-6",
+              "t": "7 Ekim · Konu tekrarı",
+              "s": "okul",
+              "k": "review",
+              "m": 60
+            },
+            {
+              "i": "w3-7",
+              "t": "7 Ekim · İyonik ve kovalent bağlar",
+              "s": "apchem",
+              "k": "study",
+              "m": 45
+            },
+            {
+              "i": "w3-8",
+              "t": "7 Ekim · N5 kelime seti 3",
+              "s": "jp",
+              "k": "study",
+              "m": 15
+            },
+            {
+              "i": "w3-9",
+              "t": "8 Ekim · Çok-kompartman modelini kodla, tek kompartmanla karşılaştırmalı test",
+              "s": "p1",
+              "k": "produce",
+              "m": 75
+            },
+            {
+              "i": "w3-10",
+              "t": "8 Ekim · Zayıf alan #2 üzerine odaklı çalışma",
+              "s": "sat",
+              "k": "review",
+              "m": 30
+            },
+            {
+              "i": "w3-11",
+              "t": "8 Ekim · İyon kanalları — okuma 2",
+              "s": "bb",
+              "k": "study",
+              "m": 20
+            },
+            {
+              "i": "w3-12",
+              "t": "9 Ekim · Felsefe kulübü 2. toplantı + notlarını dosyala",
+              "s": "uwc",
+              "k": "study",
+              "m": 60
+            },
+            {
+              "i": "w3-13",
+              "t": "9 Ekim · Eğri çizimi (1. ve 2. türev testleri)",
+              "s": "apcalc",
+              "k": "review",
+              "m": 45
+            },
+            {
+              "i": "w3-14",
+              "t": "9 Ekim · Haftanın ödevlerini bitir",
+              "s": "okul",
+              "k": "review",
+              "m": 20
+            },
+            {
+              "i": "w3-15",
+              "t": "10 Ekim · Tam pratik bölüm (Math)",
+              "s": "sat",
+              "k": "test",
+              "m": 90
+            },
+            {
+              "i": "w3-16",
+              "t": "10 Ekim · Molekül geometrisi (VSEPR)",
+              "s": "apchem",
+              "k": "study",
+              "m": 45
+            },
+            {
+              "i": "w3-17",
+              "t": "11 Ekim · Video günlüğü #3 + checkpoint",
+              "s": "ozdeg",
+              "k": "reflect",
+              "m": 30
+            },
+            {
+              "i": "w3-18",
+              "t": "11 Ekim · Telafi/dinlenme",
+              "s": "serbest",
+              "k": "rest",
+              "m": 90
+            }
+          ]
+        },
+        {
+          "id": "hafta4",
+          "title": "Hafta 4",
+          "kicker": "12 Ekim – 18 Ekim",
+          "tasks": [
+            {
+              "i": "w4-0",
+              "t": "12 Ekim · Geri bildirimlere göre deneme v2 revizyonu",
+              "s": "uwc",
+              "k": "produce",
+              "m": 60
+            },
+            {
+              "i": "w4-1",
+              "t": "12 Ekim · Konu takibi",
+              "s": "okul",
+              "k": "study",
+              "m": 30
+            },
+            {
+              "i": "w4-2",
+              "t": "12 Ekim · Limit ve süreklilik (ileri)",
+              "s": "apcalc",
+              "k": "study",
+              "m": 30
+            },
+            {
+              "i": "w4-3",
+              "t": "13 Ekim · Allen Brain Atlas'tan elektrofizyoloji verisi çek, parametreleri kalibre et",
+              "s": "p1",
+              "k": "produce",
+              "m": 75
+            },
+            {
+              "i": "w4-4",
+              "t": "13 Ekim · Tam pratik bölüm (R&W, hızlanma amaçlı)",
+              "s": "sat",
+              "k": "test",
+              "m": 30
+            },
+            {
+              "i": "w4-5",
+              "t": "13 Ekim · Sinaptik iletim — okuma 1",
+              "s": "bb",
+              "k": "study",
+              "m": 15
+            },
+            {
+              "i": "w4-6",
+              "t": "14 Ekim · Konu tekrarı",
+              "s": "okul",
+              "k": "review",
+              "m": 60
+            },
+            {
+              "i": "w4-7",
+              "t": "14 Ekim · Mol kavramı, stokiyometri temelleri",
+              "s": "apchem",
+              "k": "study",
+              "m": 45
+            },
+            {
+              "i": "w4-8",
+              "t": "14 Ekim · N5 kelime seti 4",
+              "s": "jp",
+              "k": "study",
+              "m": 15
+            },
+            {
+              "i": "w4-9",
+              "t": "15 Ekim · Kalibrasyon sonuçlarını doğrula, sapmaları not al",
+              "s": "p1",
+              "k": "review",
+              "m": 75
+            },
+            {
+              "i": "w4-10",
+              "t": "15 Ekim · Tam pratik bölüm (Math, hızlanma amaçlı)",
+              "s": "sat",
+              "k": "test",
+              "m": 30
+            },
+            {
+              "i": "w4-11",
+              "t": "15 Ekim · Sinaptik iletim — okuma 2",
+              "s": "bb",
+              "k": "study",
+              "m": 20
+            },
+            {
+              "i": "w4-12",
+              "t": "16 Ekim · Felsefe kulübü 3. toplantı hazırlığı",
+              "s": "uwc",
+              "k": "study",
+              "m": 60
+            },
+            {
+              "i": "w4-13",
+              "t": "16 Ekim · Kimyasal reaksiyon denklemleri, denkleştirme",
+              "s": "apchem",
+              "k": "study",
+              "m": 45
+            },
+            {
+              "i": "w4-14",
+              "t": "16 Ekim · Haftanın ödevlerini bitir",
+              "s": "okul",
+              "k": "review",
+              "m": 20
+            },
+            {
+              "i": "w4-15",
+              "t": "17 Ekim · Tam bölüm pratik (dönüşümlü)",
+              "s": "sat",
+              "k": "test",
+              "m": 90
+            },
+            {
+              "i": "w4-16",
+              "t": "17 Ekim · İntegral kavramına giriş (Riemann toplamları)",
+              "s": "apcalc",
+              "k": "study",
+              "m": 45
+            },
+            {
+              "i": "w4-17",
+              "t": "18 Ekim · Video günlüğü #4 + checkpoint",
+              "s": "ozdeg",
+              "k": "reflect",
+              "m": 30
+            },
+            {
+              "i": "w4-18",
+              "t": "18 Ekim · Telafi/dinlenme",
+              "s": "serbest",
+              "k": "rest",
+              "m": 90
+            }
+          ]
+        },
+        {
+          "id": "hafta5",
+          "title": "Hafta 5",
+          "kicker": "19 Ekim – 25 Ekim",
+          "tasks": [
+            {
+              "i": "w5-0",
+              "t": "19 Ekim · Başvuru formunun geri kalan bölümleri (aktiviteler, referanslar)",
+              "s": "uwc",
+              "k": "produce",
+              "m": 60
+            },
+            {
+              "i": "w5-1",
+              "t": "19 Ekim · Ara sınavlar yaklaşıyorsa buna ağırlık ver",
+              "s": "okul",
+              "k": "review",
+              "m": 30
+            },
+            {
+              "i": "w5-2",
+              "t": "19 Ekim · Belirsiz integral, temel kurallar",
+              "s": "apcalc",
+              "k": "study",
+              "m": 30
+            },
+            {
+              "i": "w5-3",
+              "t": "20 Ekim · Kalibre edilmiş modelle uzun-süreli simülasyon, kararlılık testi",
+              "s": "p1",
+              "k": "produce",
+              "m": 75
+            },
+            {
+              "i": "w5-4",
+              "t": "20 Ekim · Zayıf alan review (güncel)",
+              "s": "sat",
+              "k": "review",
+              "m": 30
+            },
+            {
+              "i": "w5-5",
+              "t": "20 Ekim · Nöroanatomi — lob ve bölgeler, okuma 1",
+              "s": "bb",
+              "k": "study",
+              "m": 15
+            },
+            {
+              "i": "w5-6",
+              "t": "21 Ekim · Konu tekrarı — ara sınav hazırlığı",
+              "s": "okul",
+              "k": "review",
+              "m": 60
+            },
+            {
+              "i": "w5-7",
+              "t": "21 Ekim · Gazlar — ideal gaz yasası",
+              "s": "apchem",
+              "k": "study",
+              "m": 45
+            },
+            {
+              "i": "w5-8",
+              "t": "21 Ekim · N5 kelime seti 5",
+              "s": "jp",
+              "k": "study",
+              "m": 15
+            },
+            {
+              "i": "w5-9",
+              "t": "22 Ekim · Sonuçları grafikle özetle, ilk taslak metin (yöntem bölümü)",
+              "s": "p1",
+              "k": "produce",
+              "m": 75
+            },
+            {
+              "i": "w5-10",
+              "t": "22 Ekim · Zayıf alan review (güncel)",
+              "s": "sat",
+              "k": "review",
+              "m": 30
+            },
+            {
+              "i": "w5-11",
+              "t": "22 Ekim · Nöroanatomi — lob ve bölgeler, okuma 2",
+              "s": "bb",
+              "k": "study",
+              "m": 20
+            },
+            {
+              "i": "w5-12",
+              "t": "23 Ekim · Felsefe kulübü 3. toplantı",
+              "s": "uwc",
+              "k": "study",
+              "m": 60
+            },
+            {
+              "i": "w5-13",
+              "t": "23 Ekim · Çözeltiler, molarite",
+              "s": "apchem",
+              "k": "study",
+              "m": 45
+            },
+            {
+              "i": "w5-14",
+              "t": "23 Ekim · Haftanın ödevlerini bitir",
+              "s": "okul",
+              "k": "review",
+              "m": 20
+            },
+            {
+              "i": "w5-15",
+              "t": "24 Ekim · Tam deneme (tek oturum, R&W+Math)",
+              "s": "sat",
+              "k": "test",
+              "m": 100
+            },
+            {
+              "i": "w5-16",
+              "t": "24 Ekim · Analizin Temel Teoremi (FTC) — giriş",
+              "s": "apcalc",
+              "k": "study",
+              "m": 45
+            },
+            {
+              "i": "w5-17",
+              "t": "25 Ekim · Video günlüğü #5 + checkpoint",
+              "s": "ozdeg",
+              "k": "reflect",
+              "m": 30
+            },
+            {
+              "i": "w5-18",
+              "t": "25 Ekim · Telafi/dinlenme",
+              "s": "serbest",
+              "k": "rest",
+              "m": 90
+            }
+          ]
+        },
+        {
+          "id": "hafta6",
+          "title": "Hafta 6",
+          "kicker": "26 Ekim – 1 Kasım",
+          "tasks": [
+            {
+              "i": "w6-0",
+              "t": "26 Ekim · Deneme v2'yi son haline getir",
+              "s": "uwc",
+              "k": "produce",
+              "m": 60
+            },
+            {
+              "i": "w6-1",
+              "t": "26 Ekim · Konu takibi",
+              "s": "okul",
+              "k": "study",
+              "m": 30
+            },
+            {
+              "i": "w6-2",
+              "t": "26 Ekim · u-substitüsyon — giriş",
+              "s": "apcalc",
+              "k": "study",
+              "m": 30
+            },
+            {
+              "i": "w6-3",
+              "t": "27 Ekim · Stokastik iyon kanalı gürültüsü için literatür okuması (Markov modeli)",
+              "s": "p1",
+              "k": "study",
+              "m": 75
+            },
+            {
+              "i": "w6-4",
+              "t": "27 Ekim · Tam pratik bölüm",
+              "s": "sat",
+              "k": "test",
+              "m": 30
+            },
+            {
+              "i": "w6-5",
+              "t": "27 Ekim · Duyu sistemleri giriş — okuma 1",
+              "s": "bb",
+              "k": "study",
+              "m": 15
+            },
+            {
+              "i": "w6-6",
+              "t": "28 Ekim · Konu tekrarı / ara sınav hazırlığı",
+              "s": "okul",
+              "k": "review",
+              "m": 60
+            },
+            {
+              "i": "w6-7",
+              "t": "28 Ekim · Termokimya — entalpi",
+              "s": "apchem",
+              "k": "study",
+              "m": 45
+            },
+            {
+              "i": "w6-8",
+              "t": "28 Ekim · N5 tekrar (set 1-5)",
+              "s": "jp",
+              "k": "review",
+              "m": 15
+            },
+            {
+              "i": "w6-9",
+              "t": "29 Ekim · Stokastik gürültü modülünü koda ekleme (ilk deneme)",
+              "s": "p1",
+              "k": "produce",
+              "m": 75
+            },
+            {
+              "i": "w6-10",
+              "t": "29 Ekim · Zayıf alan review",
+              "s": "sat",
+              "k": "review",
+              "m": 30
+            },
+            {
+              "i": "w6-11",
+              "t": "29 Ekim · Duyu sistemleri giriş — okuma 2",
+              "s": "bb",
+              "k": "study",
+              "m": 20
+            },
+            {
+              "i": "w6-12",
+              "t": "30 Ekim · Felsefe kulübü 4. toplantı",
+              "s": "uwc",
+              "k": "study",
+              "m": 60
+            },
+            {
+              "i": "w6-13",
+              "t": "30 Ekim · Termokimya — devam, örnekler",
+              "s": "apchem",
+              "k": "study",
+              "m": 45
+            },
+            {
+              "i": "w6-14",
+              "t": "30 Ekim · Haftanın ödevlerini bitir",
+              "s": "okul",
+              "k": "review",
+              "m": 20
+            },
+            {
+              "i": "w6-15",
+              "t": "31 Ekim · Zayıf alan review + kısa pratik",
+              "s": "sat",
+              "k": "review",
+              "m": 90
+            },
+            {
+              "i": "w6-16",
+              "t": "31 Ekim · u-substitüsyon — problem seti",
+              "s": "apcalc",
+              "k": "review",
+              "m": 45
+            },
+            {
+              "i": "w6-17",
+              "t": "1 Kasım · Video günlüğü #6 + checkpoint + Ekim ayı retrosu",
+              "s": "ozdeg",
+              "k": "reflect",
+              "m": 75
+            },
+            {
+              "i": "w6-18",
+              "t": "1 Kasım · Telafi/dinlenme",
+              "s": "serbest",
+              "k": "rest",
+              "m": 45
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "kasim",
+      "name": "Kasım · Tamamlama ve Sıkılaştırma",
+      "sub": "Hafta 7-10 · ~54 saat",
+      "goal": "Kasım · Tamamlama ve Sıkılaştırma",
+      "hours": 54.3,
+      "units": [
+        {
+          "id": "hafta7",
+          "title": "Hafta 7",
+          "kicker": "2 Kasım – 8 Kasım",
+          "tasks": [
+            {
+              "i": "w7-0",
+              "t": "2 Kasım · Başvuruyu gözden geçir ve gönder (gerçek son tarihe göre kayabilir)",
+              "s": "uwc",
+              "k": "produce",
+              "m": 90
+            },
+            {
+              "i": "w7-1",
+              "t": "2 Kasım · u-substitüsyon — devam",
+              "s": "apcalc",
+              "k": "review",
+              "m": 30
+            },
+            {
+              "i": "w7-2",
+              "t": "3 Kasım · Stokastik kanal gürültüsünü ikinci nörona da uygula",
+              "s": "p1",
+              "k": "produce",
+              "m": 75
+            },
+            {
+              "i": "w7-3",
+              "t": "3 Kasım · Tam pratik bölüm",
+              "s": "sat",
+              "k": "test",
+              "m": 30
+            },
+            {
+              "i": "w7-4",
+              "t": "3 Kasım · İşitme sistemi — okuma",
+              "s": "bb",
+              "k": "study",
+              "m": 15
+            },
+            {
+              "i": "w7-5",
+              "t": "4 Kasım · Konu tekrarı",
+              "s": "okul",
+              "k": "review",
+              "m": 60
+            },
+            {
+              "i": "w7-6",
+              "t": "4 Kasım · Kimyasal kinetik — giriş",
+              "s": "apchem",
+              "k": "study",
+              "m": 45
+            },
+            {
+              "i": "w7-7",
+              "t": "4 Kasım · N5 kelime seti 6",
+              "s": "jp",
+              "k": "study",
+              "m": 15
+            },
+            {
+              "i": "w7-8",
+              "t": "5 Kasım · İki nöronu sinaptik olarak bağlama — bağlantı mimarisi tasarımı",
+              "s": "p1",
+              "k": "produce",
+              "m": 75
+            },
+            {
+              "i": "w7-9",
+              "t": "5 Kasım · Tam pratik bölüm",
+              "s": "sat",
+              "k": "test",
+              "m": 30
+            },
+            {
+              "i": "w7-10",
+              "t": "5 Kasım · Görme sistemi — okuma",
+              "s": "bb",
+              "k": "study",
+              "m": 20
+            },
+            {
+              "i": "w7-11",
+              "t": "6 Kasım · Kulüp 5. toplantı (UWC gönderildi, artık kulübün bağımsız hedefi)",
+              "s": "fel",
+              "k": "study",
+              "m": 60
+            },
+            {
+              "i": "w7-12",
+              "t": "6 Kasım · Alanlar (eğriler arası alan) — giriş",
+              "s": "apcalc",
+              "k": "study",
+              "m": 45
+            },
+            {
+              "i": "w7-13",
+              "t": "6 Kasım · Haftanın ödevlerini bitir",
+              "s": "okul",
+              "k": "review",
+              "m": 20
+            },
+            {
+              "i": "w7-14",
+              "t": "7 Kasım · Tam deneme sınavı (tek oturum)",
+              "s": "sat",
+              "k": "test",
+              "m": 100
+            },
+            {
+              "i": "w7-15",
+              "t": "7 Kasım · Denge (Le Chatelier) — giriş",
+              "s": "apchem",
+              "k": "study",
+              "m": 45
+            },
+            {
+              "i": "w7-16",
+              "t": "8 Kasım · Video günlüğü #7 + checkpoint",
+              "s": "ozdeg",
+              "k": "reflect",
+              "m": 30
+            },
+            {
+              "i": "w7-17",
+              "t": "8 Kasım · Telafi/dinlenme",
+              "s": "serbest",
+              "k": "rest",
+              "m": 90
+            }
+          ]
+        },
+        {
+          "id": "hafta8",
+          "title": "Hafta 8",
+          "kicker": "9 Kasım – 15 Kasım",
+          "tasks": [
+            {
+              "i": "w8-0",
+              "t": "9 Kasım · Mülakat olasılığına karşı hazırlık notları",
+              "s": "uwc",
+              "k": "study",
+              "m": 45
+            },
+            {
+              "i": "w8-1",
+              "t": "9 Kasım · Sınav odaklı yoğun tekrar",
+              "s": "okul",
+              "k": "review",
+              "m": 60
+            },
+            {
+              "i": "w8-2",
+              "t": "10 Kasım · Sınav odaklı yoğun tekrar",
+              "s": "okul",
+              "k": "review",
+              "m": 60
+            },
+            {
+              "i": "w8-3",
+              "t": "10 Kasım · Hafif: 1 bölüm pratik",
+              "s": "sat",
+              "k": "review",
+              "m": 30
+            },
+            {
+              "i": "w8-4",
+              "t": "11 Kasım · Sınav odaklı yoğun tekrar",
+              "s": "okul",
+              "k": "review",
+              "m": 75
+            },
+            {
+              "i": "w8-5",
+              "t": "11 Kasım · N5 seti (bu hafta esnek, atlanabilir)",
+              "s": "jp",
+              "k": "study",
+              "m": 15
+            },
+            {
+              "i": "w8-6",
+              "t": "12 Kasım · Sınav odaklı yoğun tekrar",
+              "s": "okul",
+              "k": "review",
+              "m": 60
+            },
+            {
+              "i": "w8-7",
+              "t": "12 Kasım · Bu hafta hafif: sinaptik bağlantıyı kodla",
+              "s": "p1",
+              "k": "produce",
+              "m": 45
+            },
+            {
+              "i": "w8-8",
+              "t": "13 Kasım · Kulüp toplantısı (kısa tutulabilir)",
+              "s": "fel",
+              "k": "study",
+              "m": 30
+            },
+            {
+              "i": "w8-9",
+              "t": "13 Kasım · Hafıza sistemleri — okuma",
+              "s": "bb",
+              "k": "study",
+              "m": 20
+            },
+            {
+              "i": "w8-10",
+              "t": "14 Kasım · Hafif: 1 bölüm pratik",
+              "s": "sat",
+              "k": "review",
+              "m": 60
+            },
+            {
+              "i": "w8-11",
+              "t": "14 Kasım · Hafif: kendi seçtiğin zayıf konu (Kimya/Kalkülüs dönüşümlü)",
+              "s": "apchem",
+              "k": "review",
+              "m": 45
+            },
+            {
+              "i": "w8-12",
+              "t": "15 Kasım · Video günlüğü #8 + checkpoint (sınav haftası nasıl geçti?)",
+              "s": "ozdeg",
+              "k": "reflect",
+              "m": 30
+            },
+            {
+              "i": "w8-13",
+              "t": "15 Kasım · Telafi/dinlenme",
+              "s": "serbest",
+              "k": "rest",
+              "m": 60
+            }
+          ]
+        },
+        {
+          "id": "hafta9",
+          "title": "Hafta 9",
+          "kicker": "16 Kasım – 22 Kasım",
+          "tasks": [
+            {
+              "i": "w9-0",
+              "t": "16 Kasım · Kulüp için yeni dönem içeriği planlama",
+              "s": "uwc",
+              "k": "study",
+              "m": 60
+            },
+            {
+              "i": "w9-1",
+              "t": "16 Kasım · Konu takibi",
+              "s": "okul",
+              "k": "study",
+              "m": 30
+            },
+            {
+              "i": "w9-2",
+              "t": "16 Kasım · Alanlar — problem seti",
+              "s": "apcalc",
+              "k": "review",
+              "m": 30
+            },
+            {
+              "i": "w9-3",
+              "t": "17 Kasım · İki nöron simülasyonunda faz kilitleme/senkronizasyon ölçümü — ilk analiz",
+              "s": "p1",
+              "k": "produce",
+              "m": 75
+            },
+            {
+              "i": "w9-4",
+              "t": "17 Kasım · Tam pratik bölüm",
+              "s": "sat",
+              "k": "test",
+              "m": 30
+            },
+            {
+              "i": "w9-5",
+              "t": "17 Kasım · Nörolojik hastalıklara giriş — okuma 1",
+              "s": "bb",
+              "k": "study",
+              "m": 15
+            },
+            {
+              "i": "w9-6",
+              "t": "18 Kasım · Konu tekrarı",
+              "s": "okul",
+              "k": "review",
+              "m": 60
+            },
+            {
+              "i": "w9-7",
+              "t": "18 Kasım · Denge — Le Chatelier, devam",
+              "s": "apchem",
+              "k": "study",
+              "m": 45
+            },
+            {
+              "i": "w9-8",
+              "t": "18 Kasım · N5 kelime seti 7",
+              "s": "jp",
+              "k": "study",
+              "m": 15
+            },
+            {
+              "i": "w9-9",
+              "t": "19 Kasım · Cross-correlation analizi, parametre taraması",
+              "s": "p1",
+              "k": "produce",
+              "m": 75
+            },
+            {
+              "i": "w9-10",
+              "t": "19 Kasım · Tam pratik bölüm",
+              "s": "sat",
+              "k": "test",
+              "m": 30
+            },
+            {
+              "i": "w9-11",
+              "t": "19 Kasım · Nörolojik hastalıklara giriş — okuma 2",
+              "s": "bb",
+              "k": "study",
+              "m": 20
+            },
+            {
+              "i": "w9-12",
+              "t": "20 Kasım · Kulüp toplantısı",
+              "s": "fel",
+              "k": "study",
+              "m": 60
+            },
+            {
+              "i": "w9-13",
+              "t": "20 Kasım · Analizin Temel Teoremi — problem seti",
+              "s": "apcalc",
+              "k": "review",
+              "m": 45
+            },
+            {
+              "i": "w9-14",
+              "t": "20 Kasım · Haftanın ödevlerini bitir",
+              "s": "okul",
+              "k": "review",
+              "m": 20
+            },
+            {
+              "i": "w9-15",
+              "t": "21 Kasım · Tam pratik test #2",
+              "s": "sat",
+              "k": "test",
+              "m": 100
+            },
+            {
+              "i": "w9-16",
+              "t": "21 Kasım · Kimyasal kinetik — problem seti",
+              "s": "apchem",
+              "k": "review",
+              "m": 45
+            },
+            {
+              "i": "w9-17",
+              "t": "22 Kasım · Video günlüğü #9 + checkpoint",
+              "s": "ozdeg",
+              "k": "reflect",
+              "m": 30
+            },
+            {
+              "i": "w9-18",
+              "t": "22 Kasım · Telafi/dinlenme",
+              "s": "serbest",
+              "k": "rest",
+              "m": 90
+            }
+          ]
+        },
+        {
+          "id": "hafta10",
+          "title": "Hafta 10",
+          "kicker": "23 Kasım – 29 Kasım",
+          "tasks": [
+            {
+              "i": "w10-0",
+              "t": "23 Kasım · Kulüp çıktısını yazılı hale getir (portföy için)",
+              "s": "uwc",
+              "k": "produce",
+              "m": 60
+            },
+            {
+              "i": "w10-1",
+              "t": "23 Kasım · Konu takibi",
+              "s": "okul",
+              "k": "study",
+              "m": 30
+            },
+            {
+              "i": "w10-2",
+              "t": "23 Kasım · Genel tekrar — türev+integral karışık problemler",
+              "s": "apcalc",
+              "k": "review",
+              "m": 30
+            },
+            {
+              "i": "w10-3",
+              "t": "24 Kasım · Senkronizasyon sonuçlarını grafikle özetle, sonuçlar bölümü taslağı",
+              "s": "p1",
+              "k": "produce",
+              "m": 75
+            },
+            {
+              "i": "w10-4",
+              "t": "24 Kasım · Zayıf alan review (Kasım deneme sonucuna göre)",
+              "s": "sat",
+              "k": "review",
+              "m": 30
+            },
+            {
+              "i": "w10-5",
+              "t": "24 Kasım · Bilişsel nörobilim giriş — okuma 1",
+              "s": "bb",
+              "k": "study",
+              "m": 15
+            },
+            {
+              "i": "w10-6",
+              "t": "25 Kasım · Konu tekrarı",
+              "s": "okul",
+              "k": "review",
+              "m": 60
+            },
+            {
+              "i": "w10-7",
+              "t": "25 Kasım · Genel tekrar — bağlar+stokiyometri karışık problemler",
+              "s": "apchem",
+              "k": "review",
+              "m": 45
+            },
+            {
+              "i": "w10-8",
+              "t": "25 Kasım · N5 kelime seti 8",
+              "s": "jp",
+              "k": "study",
+              "m": 15
+            },
+            {
+              "i": "w10-9",
+              "t": "26 Kasım · Rapor/yazım — giriş ve yöntem bölümlerini birleştir",
+              "s": "p1",
+              "k": "produce",
+              "m": 75
+            },
+            {
+              "i": "w10-10",
+              "t": "26 Kasım · Zayıf alan review",
+              "s": "sat",
+              "k": "review",
+              "m": 30
+            },
+            {
+              "i": "w10-11",
+              "t": "26 Kasım · Bilişsel nörobilim giriş — okuma 2",
+              "s": "bb",
+              "k": "study",
+              "m": 20
+            },
+            {
+              "i": "w10-12",
+              "t": "27 Kasım · Kulüp toplantısı",
+              "s": "fel",
+              "k": "study",
+              "m": 60
+            },
+            {
+              "i": "w10-13",
+              "t": "27 Kasım · Genel tekrar — devam",
+              "s": "apchem",
+              "k": "review",
+              "m": 45
+            },
+            {
+              "i": "w10-14",
+              "t": "27 Kasım · Haftanın ödevlerini bitir",
+              "s": "okul",
+              "k": "review",
+              "m": 20
+            },
+            {
+              "i": "w10-15",
+              "t": "28 Kasım · Tam deneme sınavı (tek oturum)",
+              "s": "sat",
+              "k": "test",
+              "m": 100
+            },
+            {
+              "i": "w10-16",
+              "t": "28 Kasım · Genel tekrar — devam",
+              "s": "apcalc",
+              "k": "review",
+              "m": 45
+            },
+            {
+              "i": "w10-17",
+              "t": "29 Kasım · Video günlüğü #10 + checkpoint + Kasım ayı retrosu",
+              "s": "ozdeg",
+              "k": "reflect",
+              "m": 75
+            },
+            {
+              "i": "w10-18",
+              "t": "29 Kasım · Telafi/dinlenme",
+              "s": "serbest",
+              "k": "rest",
+              "m": 45
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "aralik",
+      "name": "Aralık · Bitirme, Toparlama, Dinlenme",
+      "sub": "Hafta 11-15 · ~44 saat",
+      "goal": "Aralık · Bitirme, Toparlama, Dinlenme",
+      "hours": 44.5,
+      "units": [
+        {
+          "id": "hafta11",
+          "title": "Hafta 11",
+          "kicker": "30 Kasım – 6 Aralık",
+          "tasks": [
+            {
+              "i": "w11-0",
+              "t": "30 Kasım · Kulüp toplantısı + dönem sonu özet raporu başlangıcı",
+              "s": "uwc",
+              "k": "study",
+              "m": 60
+            },
+            {
+              "i": "w11-1",
+              "t": "30 Kasım · Konu takibi",
+              "s": "okul",
+              "k": "study",
+              "m": 30
+            },
+            {
+              "i": "w11-2",
+              "t": "30 Kasım · Hacim (disk yöntemi) — giriş",
+              "s": "apcalc",
+              "k": "study",
+              "m": 30
+            },
+            {
+              "i": "w11-3",
+              "t": "1 Aralık · Raporun tartışma/sonuç bölümü taslağı",
+              "s": "p1",
+              "k": "produce",
+              "m": 75
+            },
+            {
+              "i": "w11-4",
+              "t": "1 Aralık · Tam pratik bölüm",
+              "s": "sat",
+              "k": "test",
+              "m": 30
+            },
+            {
+              "i": "w11-5",
+              "t": "1 Aralık · Genel tekrar seti 1",
+              "s": "bb",
+              "k": "review",
+              "m": 15
+            },
+            {
+              "i": "w11-6",
+              "t": "2 Aralık · Konu tekrarı",
+              "s": "okul",
+              "k": "review",
+              "m": 60
+            },
+            {
+              "i": "w11-7",
+              "t": "2 Aralık · Asit-baz kimyası — giriş",
+              "s": "apchem",
+              "k": "study",
+              "m": 45
+            },
+            {
+              "i": "w11-8",
+              "t": "2 Aralık · N5 kelime seti 9",
+              "s": "jp",
+              "k": "study",
+              "m": 15
+            },
+            {
+              "i": "w11-9",
+              "t": "3 Aralık · Destek Eğitim Odası'na sunum için slayt/görsel hazırlığı",
+              "s": "p1",
+              "k": "produce",
+              "m": 75
+            },
+            {
+              "i": "w11-10",
+              "t": "3 Aralık · Tam pratik bölüm",
+              "s": "sat",
+              "k": "test",
+              "m": 30
+            },
+            {
+              "i": "w11-11",
+              "t": "3 Aralık · Genel tekrar seti 2",
+              "s": "bb",
+              "k": "review",
+              "m": 20
+            },
+            {
+              "i": "w11-12",
+              "t": "4 Aralık · Kulüp toplantısı",
+              "s": "fel",
+              "k": "study",
+              "m": 60
+            },
+            {
+              "i": "w11-13",
+              "t": "4 Aralık · Asit-baz — pH hesapları",
+              "s": "apchem",
+              "k": "review",
+              "m": 45
+            },
+            {
+              "i": "w11-14",
+              "t": "4 Aralık · Haftanın ödevlerini bitir",
+              "s": "okul",
+              "k": "review",
+              "m": 20
+            },
+            {
+              "i": "w11-15",
+              "t": "5 Aralık · Tam pratik test #3",
+              "s": "sat",
+              "k": "test",
+              "m": 100
+            },
+            {
+              "i": "w11-16",
+              "t": "5 Aralık · Hacim — disk/shell problem seti",
+              "s": "apcalc",
+              "k": "review",
+              "m": 45
+            },
+            {
+              "i": "w11-17",
+              "t": "6 Aralık · Video günlüğü #11 + checkpoint",
+              "s": "ozdeg",
+              "k": "reflect",
+              "m": 30
+            },
+            {
+              "i": "w11-18",
+              "t": "6 Aralık · Telafi/dinlenme",
+              "s": "serbest",
+              "k": "rest",
+              "m": 90
+            }
+          ]
+        },
+        {
+          "id": "hafta12",
+          "title": "Hafta 12",
+          "kicker": "7 Aralık – 13 Aralık",
+          "tasks": [
+            {
+              "i": "w12-0",
+              "t": "7 Aralık · Kulüp özet raporunu bitir",
+              "s": "uwc",
+              "k": "produce",
+              "m": 60
+            },
+            {
+              "i": "w12-1",
+              "t": "7 Aralık · Konu takibi",
+              "s": "okul",
+              "k": "study",
+              "m": 30
+            },
+            {
+              "i": "w12-2",
+              "t": "7 Aralık · Diferansiyel denklemlere giriş",
+              "s": "apcalc",
+              "k": "study",
+              "m": 30
+            },
+            {
+              "i": "w12-3",
+              "t": "8 Aralık · Rapor/sunum revizyonu — geri bildirim al",
+              "s": "p1",
+              "k": "review",
+              "m": 75
+            },
+            {
+              "i": "w12-4",
+              "t": "8 Aralık · Tam pratik bölüm",
+              "s": "sat",
+              "k": "test",
+              "m": 30
+            },
+            {
+              "i": "w12-5",
+              "t": "8 Aralık · Genel tekrar seti 3",
+              "s": "bb",
+              "k": "review",
+              "m": 15
+            },
+            {
+              "i": "w12-6",
+              "t": "9 Aralık · Konu tekrarı",
+              "s": "okul",
+              "k": "review",
+              "m": 60
+            },
+            {
+              "i": "w12-7",
+              "t": "9 Aralık · Genel tekrar — asit-baz+denge karışık",
+              "s": "apchem",
+              "k": "review",
+              "m": 45
+            },
+            {
+              "i": "w12-8",
+              "t": "9 Aralık · N5 kelime seti 10",
+              "s": "jp",
+              "k": "study",
+              "m": 15
+            },
+            {
+              "i": "w12-9",
+              "t": "10 Aralık · Geri bildirime göre son düzeltmeler",
+              "s": "p1",
+              "k": "produce",
+              "m": 75
+            },
+            {
+              "i": "w12-10",
+              "t": "10 Aralık · Zayıf alan son review",
+              "s": "sat",
+              "k": "review",
+              "m": 30
+            },
+            {
+              "i": "w12-11",
+              "t": "10 Aralık · Genel tekrar seti 4",
+              "s": "bb",
+              "k": "review",
+              "m": 20
+            },
+            {
+              "i": "w12-12",
+              "t": "11 Aralık · Kulüp toplantısı",
+              "s": "fel",
+              "k": "study",
+              "m": 60
+            },
+            {
+              "i": "w12-13",
+              "t": "11 Aralık · Genel tekrar — tüm dönem karışık problemler",
+              "s": "apcalc",
+              "k": "review",
+              "m": 45
+            },
+            {
+              "i": "w12-14",
+              "t": "11 Aralık · Haftanın ödevlerini bitir",
+              "s": "okul",
+              "k": "review",
+              "m": 20
+            },
+            {
+              "i": "w12-15",
+              "t": "12 Aralık · Tam deneme sınavı (tek oturum)",
+              "s": "sat",
+              "k": "test",
+              "m": 100
+            },
+            {
+              "i": "w12-16",
+              "t": "12 Aralık · Genel tekrar — tüm dönem karışık problemler",
+              "s": "apchem",
+              "k": "review",
+              "m": 45
+            },
+            {
+              "i": "w12-17",
+              "t": "13 Aralık · Video günlüğü #12 + checkpoint",
+              "s": "ozdeg",
+              "k": "reflect",
+              "m": 30
+            },
+            {
+              "i": "w12-18",
+              "t": "13 Aralık · Telafi/dinlenme",
+              "s": "serbest",
+              "k": "rest",
+              "m": 90
+            }
+          ]
+        },
+        {
+          "id": "hafta13",
+          "title": "Hafta 13",
+          "kicker": "14 Aralık – 20 Aralık",
+          "tasks": [
+            {
+              "i": "w13-0",
+              "t": "14 Aralık · Sunum/rapor final teslim (Destek Eğitim Odası)",
+              "s": "p1",
+              "k": "produce",
+              "m": 90
+            },
+            {
+              "i": "w13-1",
+              "t": "14 Aralık · Sınav tekrarı",
+              "s": "okul",
+              "k": "review",
+              "m": 30
+            },
+            {
+              "i": "w13-2",
+              "t": "15 Aralık · Sınav tekrarı",
+              "s": "okul",
+              "k": "review",
+              "m": 75
+            },
+            {
+              "i": "w13-3",
+              "t": "15 Aralık · Hafif: 1 bölüm pratik",
+              "s": "sat",
+              "k": "review",
+              "m": 30
+            },
+            {
+              "i": "w13-4",
+              "t": "16 Aralık · Sınav tekrarı",
+              "s": "okul",
+              "k": "review",
+              "m": 75
+            },
+            {
+              "i": "w13-5",
+              "t": "16 Aralık · N5 genel tekrar",
+              "s": "jp",
+              "k": "review",
+              "m": 15
+            },
+            {
+              "i": "w13-6",
+              "t": "17 Aralık · Sınav tekrarı",
+              "s": "okul",
+              "k": "review",
+              "m": 75
+            },
+            {
+              "i": "w13-7",
+              "t": "17 Aralık · Hafif: termokimya tekrar",
+              "s": "apchem",
+              "k": "review",
+              "m": 30
+            },
+            {
+              "i": "w13-8",
+              "t": "18 Aralık · Sınav tekrarı",
+              "s": "okul",
+              "k": "review",
+              "m": 60
+            },
+            {
+              "i": "w13-9",
+              "t": "18 Aralık · Hafif: FTC tekrar",
+              "s": "apcalc",
+              "k": "review",
+              "m": 30
+            },
+            {
+              "i": "w13-10",
+              "t": "19 Aralık · Bu hafta okul öncelikli — kaçan görevleri buraya taşı",
+              "s": "serbest",
+              "k": "rest",
+              "m": 60
+            },
+            {
+              "i": "w13-11",
+              "t": "20 Aralık · Video günlüğü #13 + checkpoint",
+              "s": "ozdeg",
+              "k": "reflect",
+              "m": 30
+            },
+            {
+              "i": "w13-12",
+              "t": "20 Aralık · Dinlenme",
+              "s": "serbest",
+              "k": "rest",
+              "m": 60
+            }
+          ]
+        },
+        {
+          "id": "hafta14",
+          "title": "Hafta 14",
+          "kicker": "21 Aralık – 27 Aralık",
+          "tasks": [
+            {
+              "i": "w14-0",
+              "t": "21 Aralık · Mülakat çağrısı geldiyse hazırlık; gelmediyse tam dinlenme (0-45 dk)",
+              "s": "serbest",
+              "k": "rest",
+              "m": 20
+            },
+            {
+              "i": "w14-1",
+              "t": "22 Aralık · Ocak dönemine hazırlık: konu haritası çıkar",
+              "s": "bb",
+              "k": "study",
+              "m": 30
+            },
+            {
+              "i": "w14-2",
+              "t": "23 Aralık · İstersen tamamen boş bırak",
+              "s": "serbest",
+              "k": "rest",
+              "m": 0
+            },
+            {
+              "i": "w14-3",
+              "t": "24 Aralık · \"İleri adımlar\" notu — Ocak'ta P2'ye nasıl başlanacak",
+              "s": "p2",
+              "k": "study",
+              "m": 45
+            },
+            {
+              "i": "w14-4",
+              "t": "25 Aralık · Hafif: zayıf konu seçip 1 tekrar",
+              "s": "apcalc",
+              "k": "review",
+              "m": 30
+            },
+            {
+              "i": "w14-5",
+              "t": "26 Aralık · Hafif: zayıf konu seçip 1 tekrar",
+              "s": "apchem",
+              "k": "review",
+              "m": 30
+            },
+            {
+              "i": "w14-6",
+              "t": "27 Aralık · Video günlüğü #14 + checkpoint",
+              "s": "ozdeg",
+              "k": "reflect",
+              "m": 30
+            }
+          ]
+        },
+        {
+          "id": "hafta15",
+          "title": "Hafta 15",
+          "kicker": "28 Aralık – 31 Aralık",
+          "tasks": [
+            {
+              "i": "w15-0",
+              "t": "28 Aralık · Dinlenme",
+              "s": "serbest",
+              "k": "rest",
+              "m": 0
+            },
+            {
+              "i": "w15-1",
+              "t": "29 Aralık · Ocak'ta başlayacak rotasyon için Campbell'dan hücre biyolojisi göz gezdirme",
+              "s": "apbio",
+              "k": "study",
+              "m": 30
+            },
+            {
+              "i": "w15-2",
+              "t": "30 Aralık · Tamamen boş",
+              "s": "serbest",
+              "k": "rest",
+              "m": 0
+            },
+            {
+              "i": "w15-3",
+              "t": "31 Aralık · Yıl ortası mini-check: video günlüğü #15 + checkpoint",
+              "s": "ozdeg",
+              "k": "reflect",
+              "m": 45
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ocak",
+      "name": "Ocak · Dönem 1 Kapanışı + AP Biyoloji'nin Devreye Girişi",
+      "sub": "Hafta 16-18 · ~34 saat",
+      "goal": "Ocak · Dönem 1 Kapanışı + AP Biyoloji'nin Devreye Girişi",
+      "hours": 34.4,
+      "units": [
+        {
+          "id": "hafta16",
+          "title": "Hafta 16",
+          "kicker": "4 Ocak – 10 Ocak",
+          "tasks": [
+            {
+              "i": "w16-0",
+              "t": "4 Ocak · Kulübün ikinci yarıyıl planını taslakla",
+              "s": "uwc",
+              "k": "study",
+              "m": 60
+            },
+            {
+              "i": "w16-1",
+              "t": "4 Ocak · Konu takibi",
+              "s": "okul",
+              "k": "study",
+              "m": 30
+            },
+            {
+              "i": "w16-2",
+              "t": "4 Ocak · Diferansiyel denklemler — problem seti",
+              "s": "apcalc",
+              "k": "review",
+              "m": 30
+            },
+            {
+              "i": "w16-3",
+              "t": "5 Ocak · P1'i kapalı dosya olarak arşivle; P2 (Hopfield network) için literatür taraması",
+              "s": "p2",
+              "k": "study",
+              "m": 75
+            },
+            {
+              "i": "w16-4",
+              "t": "5 Ocak · Tam pratik bölüm",
+              "s": "sat",
+              "k": "test",
+              "m": 30
+            },
+            {
+              "i": "w16-5",
+              "t": "5 Ocak · Genel tekrar seti 5",
+              "s": "bb",
+              "k": "review",
+              "m": 15
+            },
+            {
+              "i": "w16-6",
+              "t": "6 Ocak · Konu tekrarı",
+              "s": "okul",
+              "k": "review",
+              "m": 60
+            },
+            {
+              "i": "w16-7",
+              "t": "6 Ocak · Genel tekrar — dönem 1 kapsamlı",
+              "s": "apchem",
+              "k": "review",
+              "m": 45
+            },
+            {
+              "i": "w16-8",
+              "t": "6 Ocak · N5 kelime seti 11",
+              "s": "jp",
+              "k": "study",
+              "m": 15
+            },
+            {
+              "i": "w16-9",
+              "t": "7 Ocak · Hopfield network'ün matematiksel temeli (enerji fonksiyonu, ağırlık matrisi)",
+              "s": "p2",
+              "k": "study",
+              "m": 75
+            },
+            {
+              "i": "w16-10",
+              "t": "7 Ocak · Tam pratik bölüm",
+              "s": "sat",
+              "k": "test",
+              "m": 30
+            },
+            {
+              "i": "w16-11",
+              "t": "7 Ocak · Genel tekrar seti 6",
+              "s": "bb",
+              "k": "review",
+              "m": 20
+            },
+            {
+              "i": "w16-12",
+              "t": "8 Ocak · Kulüp toplantısı",
+              "s": "fel",
+              "k": "study",
+              "m": 60
+            },
+            {
+              "i": "w16-13",
+              "t": "8 Ocak · Hücre biyolojisi — zar yapısı, taşınma mekanizmaları (Campbell)",
+              "s": "apbio",
+              "k": "study",
+              "m": 45
+            },
+            {
+              "i": "w16-14",
+              "t": "8 Ocak · Haftanın ödevlerini bitir",
+              "s": "okul",
+              "k": "review",
+              "m": 20
+            },
+            {
+              "i": "w16-15",
+              "t": "9 Ocak · Tam deneme sınavı #4",
+              "s": "sat",
+              "k": "test",
+              "m": 100
+            },
+            {
+              "i": "w16-16",
+              "t": "9 Ocak · Hücre biyolojisi — devam, organeller",
+              "s": "apbio",
+              "k": "study",
+              "m": 45
+            },
+            {
+              "i": "w16-17",
+              "t": "10 Ocak · Video günlüğü #16 + checkpoint",
+              "s": "ozdeg",
+              "k": "reflect",
+              "m": 30
+            },
+            {
+              "i": "w16-18",
+              "t": "10 Ocak · Telafi/dinlenme",
+              "s": "serbest",
+              "k": "rest",
+              "m": 90
+            }
+          ]
+        },
+        {
+          "id": "hafta17",
+          "title": "Hafta 17",
+          "kicker": "11 Ocak – 17 Ocak",
+          "tasks": [
+            {
+              "i": "w17-0",
+              "t": "11 Ocak · Kulüp toplantısı",
+              "s": "uwc",
+              "k": "study",
+              "m": 45
+            },
+            {
+              "i": "w17-1",
+              "t": "11 Ocak · Sınav tekrarı",
+              "s": "okul",
+              "k": "review",
+              "m": 45
+            },
+            {
+              "i": "w17-2",
+              "t": "12 Ocak · Hopfield network'ü Python'da kodlamaya başla (küçük örnek desenle)",
+              "s": "p2",
+              "k": "produce",
+              "m": 75
+            },
+            {
+              "i": "w17-3",
+              "t": "12 Ocak · Sınav tekrarı",
+              "s": "okul",
+              "k": "review",
+              "m": 30
+            },
+            {
+              "i": "w17-4",
+              "t": "13 Ocak · Sınav tekrarı — yoğun",
+              "s": "okul",
+              "k": "review",
+              "m": 75
+            },
+            {
+              "i": "w17-5",
+              "t": "13 Ocak · N5 kelime seti 12",
+              "s": "jp",
+              "k": "study",
+              "m": 15
+            },
+            {
+              "i": "w17-6",
+              "t": "14 Ocak · Sınav tekrarı — yoğun",
+              "s": "okul",
+              "k": "review",
+              "m": 75
+            },
+            {
+              "i": "w17-7",
+              "t": "14 Ocak · Genel tekrar seti 7",
+              "s": "bb",
+              "k": "review",
+              "m": 20
+            },
+            {
+              "i": "w17-8",
+              "t": "15 Ocak · Sınav tekrarı",
+              "s": "okul",
+              "k": "review",
+              "m": 60
+            },
+            {
+              "i": "w17-9",
+              "t": "15 Ocak · Hücre solunumu — giriş",
+              "s": "apbio",
+              "k": "study",
+              "m": 30
+            },
+            {
+              "i": "w17-10",
+              "t": "16 Ocak · Zayıf alan son review + kısa pratik",
+              "s": "sat",
+              "k": "review",
+              "m": 90
+            },
+            {
+              "i": "w17-11",
+              "t": "16 Ocak · Haftalık dönüşüm: zayıf konu tekrarı (Kalkülüs/Kimya)",
+              "s": "apcalc",
+              "k": "review",
+              "m": 30
+            },
+            {
+              "i": "w17-12",
+              "t": "17 Ocak · Video günlüğü #17 + checkpoint",
+              "s": "ozdeg",
+              "k": "reflect",
+              "m": 30
+            },
+            {
+              "i": "w17-13",
+              "t": "17 Ocak · Telafi/dinlenme",
+              "s": "serbest",
+              "k": "rest",
+              "m": 60
+            }
+          ]
+        },
+        {
+          "id": "hafta18",
+          "title": "Hafta 18",
+          "kicker": "18 Ocak – 24 Ocak",
+          "tasks": [
+            {
+              "i": "w18-0",
+              "t": "18 Ocak · Sınav tekrarı",
+              "s": "okul",
+              "k": "review",
+              "m": 90
+            },
+            {
+              "i": "w18-1",
+              "t": "19 Ocak · Sınav tekrarı",
+              "s": "okul",
+              "k": "review",
+              "m": 90
+            },
+            {
+              "i": "w18-2",
+              "t": "20 Ocak · Sınav tekrarı",
+              "s": "okul",
+              "k": "review",
+              "m": 90
+            },
+            {
+              "i": "w18-3",
+              "t": "20 Ocak · N5 genel tekrar (1-12)",
+              "s": "jp",
+              "k": "review",
+              "m": 15
+            },
+            {
+              "i": "w18-4",
+              "t": "21 Ocak · Sınav tekrarı",
+              "s": "okul",
+              "k": "review",
+              "m": 75
+            },
+            {
+              "i": "w18-5",
+              "t": "22 Ocak · Bu hafta tamamen okul öncelikli",
+              "s": "serbest",
+              "k": "rest",
+              "m": 30
+            },
+            {
+              "i": "w18-6",
+              "t": "23 Ocak · Sınavlar bitince dinlen",
+              "s": "serbest",
+              "k": "rest",
+              "m": 0
+            },
+            {
+              "i": "w18-7",
+              "t": "24 Ocak · (karne sonrası) Dönem 1 büyük retrospektifi + Dönem 2'yi bu detayla yeniden yazma oturumu",
+              "s": "ozdeg",
+              "k": "reflect",
+              "m": 120
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "subat",
+      "name": "Şubat",
+      "sub": "Hafta 19-21 · ~42 saat",
+      "goal": "Şubat",
+      "hours": 42.2,
+      "units": [
+        {
+          "id": "hafta19",
+          "title": "Hafta 19",
+          "kicker": "8 Şubat – 14 Şubat",
+          "tasks": [
+            {
+              "i": "w19-0",
+              "t": "9 Şubat · Kulüp dönem başı toplantısı — yeni tema, yeni üyeler",
+              "s": "uwc",
+              "k": "study",
+              "m": 45
+            },
+            {
+              "i": "w19-1",
+              "t": "9 Şubat · Hopfield network kodlamasına devam (öğrenme kuralı — Hebbian)",
+              "s": "p2",
+              "k": "produce",
+              "m": 75
+            },
+            {
+              "i": "w19-2",
+              "t": "9 Şubat · Round hazırlığı — genel tekrar seti 8",
+              "s": "bb",
+              "k": "review",
+              "m": 20
+            },
+            {
+              "i": "w19-3",
+              "t": "10 Şubat · Konu tekrarı",
+              "s": "okul",
+              "k": "review",
+              "m": 60
+            },
+            {
+              "i": "w19-4",
+              "t": "10 Şubat · Elektrokimya — galvanik hücreler, hücre potansiyeli",
+              "s": "apchem",
+              "k": "study",
+              "m": 45
+            },
+            {
+              "i": "w19-5",
+              "t": "10 Şubat · N5 kelime seti 13",
+              "s": "jp",
+              "k": "study",
+              "m": 15
+            },
+            {
+              "i": "w19-6",
+              "t": "11 Şubat · Kapasite testi — kaç desen hatasız hatırlanıyor",
+              "s": "p2",
+              "k": "review",
+              "m": 75
+            },
+            {
+              "i": "w19-7",
+              "t": "11 Şubat · Mart sınavına hazırlık — zayıf alan review",
+              "s": "sat",
+              "k": "review",
+              "m": 30
+            },
+            {
+              "i": "w19-8",
+              "t": "11 Şubat · Round hazırlığı — genel tekrar seti 9",
+              "s": "bb",
+              "k": "review",
+              "m": 20
+            },
+            {
+              "i": "w19-9",
+              "t": "12 Şubat · Kulüp toplantısı",
+              "s": "uwc",
+              "k": "study",
+              "m": 60
+            },
+            {
+              "i": "w19-10",
+              "t": "12 Şubat · Genetik giriş — Mendel kalıtım kuralları",
+              "s": "apbio",
+              "k": "study",
+              "m": 45
+            },
+            {
+              "i": "w19-11",
+              "t": "12 Şubat · Haftanın ödevlerini bitir",
+              "s": "okul",
+              "k": "review",
+              "m": 20
+            },
+            {
+              "i": "w19-12",
+              "t": "13 Şubat · Tam deneme sınavı",
+              "s": "sat",
+              "k": "test",
+              "m": 100
+            },
+            {
+              "i": "w19-13",
+              "t": "13 Şubat · Seriler/diziler — yakınsaklık kavramına giriş",
+              "s": "apcalc",
+              "k": "study",
+              "m": 45
+            },
+            {
+              "i": "w19-14",
+              "t": "14 Şubat · Video günlüğü #19 + checkpoint",
+              "s": "ozdeg",
+              "k": "reflect",
+              "m": 30
+            },
+            {
+              "i": "w19-15",
+              "t": "14 Şubat · Telafi/dinlenme",
+              "s": "serbest",
+              "k": "rest",
+              "m": 90
+            }
+          ]
+        },
+        {
+          "id": "hafta20",
+          "title": "Hafta 20",
+          "kicker": "15 Şubat – 21 Şubat",
+          "tasks": [
+            {
+              "i": "w20-0",
+              "t": "15 Şubat · Kulüp toplantısı",
+              "s": "uwc",
+              "k": "study",
+              "m": 60
+            },
+            {
+              "i": "w20-1",
+              "t": "15 Şubat · Konu takibi",
+              "s": "okul",
+              "k": "study",
+              "m": 30
+            },
+            {
+              "i": "w20-2",
+              "t": "15 Şubat · Yakınsaklık testleri (oran testi, karşılaştırma testi)",
+              "s": "apcalc",
+              "k": "study",
+              "m": 30
+            },
+            {
+              "i": "w20-3",
+              "t": "16 Şubat · Gürültülü/eksik desenlerle geri çağırma testi",
+              "s": "p2",
+              "k": "review",
+              "m": 75
+            },
+            {
+              "i": "w20-4",
+              "t": "16 Şubat · Tam pratik bölüm",
+              "s": "sat",
+              "k": "test",
+              "m": 30
+            },
+            {
+              "i": "w20-5",
+              "t": "16 Şubat · Round hazırlığı — genel tekrar seti 10",
+              "s": "bb",
+              "k": "review",
+              "m": 15
+            },
+            {
+              "i": "w20-6",
+              "t": "17 Şubat · Konu tekrarı",
+              "s": "okul",
+              "k": "review",
+              "m": 60
+            },
+            {
+              "i": "w20-7",
+              "t": "17 Şubat · Elektrokimya — pil hesapları, Faraday yasası",
+              "s": "apchem",
+              "k": "study",
+              "m": 45
+            },
+            {
+              "i": "w20-8",
+              "t": "17 Şubat · N5 kelime seti 14",
+              "s": "jp",
+              "k": "study",
+              "m": 15
+            },
+            {
+              "i": "w20-9",
+              "t": "18 Şubat · Test sonuçlarının analizi, grafik özet",
+              "s": "p2",
+              "k": "review",
+              "m": 75
+            },
+            {
+              "i": "w20-10",
+              "t": "18 Şubat · Tam pratik bölüm",
+              "s": "sat",
+              "k": "test",
+              "m": 30
+            },
+            {
+              "i": "w20-11",
+              "t": "18 Şubat · Round hazırlığı — genel tekrar seti 11",
+              "s": "bb",
+              "k": "review",
+              "m": 20
+            },
+            {
+              "i": "w20-12",
+              "t": "19 Şubat · Kulüp toplantısı",
+              "s": "fel",
+              "k": "study",
+              "m": 60
+            },
+            {
+              "i": "w20-13",
+              "t": "19 Şubat · Genetik — kalıtım problemleri, Punnett kareleri",
+              "s": "apbio",
+              "k": "review",
+              "m": 45
+            },
+            {
+              "i": "w20-14",
+              "t": "19 Şubat · Haftanın ödevlerini bitir",
+              "s": "okul",
+              "k": "review",
+              "m": 20
+            },
+            {
+              "i": "w20-15",
+              "t": "20 Şubat · Tam deneme sınavı",
+              "s": "sat",
+              "k": "test",
+              "m": 100
+            },
+            {
+              "i": "w20-16",
+              "t": "20 Şubat · Elektrokimya problem seti",
+              "s": "apchem",
+              "k": "review",
+              "m": 45
+            },
+            {
+              "i": "w20-17",
+              "t": "21 Şubat · Video günlüğü #20 + checkpoint",
+              "s": "ozdeg",
+              "k": "reflect",
+              "m": 30
+            },
+            {
+              "i": "w20-18",
+              "t": "21 Şubat · Telafi/dinlenme",
+              "s": "serbest",
+              "k": "rest",
+              "m": 90
+            }
+          ]
+        },
+        {
+          "id": "hafta21",
+          "title": "Hafta 21",
+          "kicker": "22 Şubat – 28 Şubat",
+          "tasks": [
+            {
+              "i": "w21-0",
+              "t": "22 Şubat · Kulüp toplantısı",
+              "s": "uwc",
+              "k": "study",
+              "m": 60
+            },
+            {
+              "i": "w21-1",
+              "t": "22 Şubat · Konu takibi",
+              "s": "okul",
+              "k": "study",
+              "m": 30
+            },
+            {
+              "i": "w21-2",
+              "t": "22 Şubat · Taylor/Maclaurin serilerine giriş",
+              "s": "apcalc",
+              "k": "study",
+              "m": 30
+            },
+            {
+              "i": "w21-3",
+              "t": "23 Şubat · Rapor taslağı — giriş ve yöntem",
+              "s": "p2",
+              "k": "produce",
+              "m": 75
+            },
+            {
+              "i": "w21-4",
+              "t": "23 Şubat · Tam pratik bölüm",
+              "s": "sat",
+              "k": "test",
+              "m": 30
+            },
+            {
+              "i": "w21-5",
+              "t": "23 Şubat · Round günü / son hazırlık",
+              "s": "bb",
+              "k": "review",
+              "m": 20
+            },
+            {
+              "i": "w21-6",
+              "t": "24 Şubat · Konu tekrarı",
+              "s": "okul",
+              "k": "review",
+              "m": 60
+            },
+            {
+              "i": "w21-7",
+              "t": "24 Şubat · Nükleer kimya — bozunma türleri, yarı ömür",
+              "s": "apchem",
+              "k": "study",
+              "m": 45
+            },
+            {
+              "i": "w21-8",
+              "t": "24 Şubat · N5 kelime seti 15",
+              "s": "jp",
+              "k": "study",
+              "m": 15
+            },
+            {
+              "i": "w21-9",
+              "t": "25 Şubat · Rapor — sonuçlar bölümü",
+              "s": "p2",
+              "k": "produce",
+              "m": 75
+            },
+            {
+              "i": "w21-10",
+              "t": "25 Şubat · Tam pratik bölüm",
+              "s": "sat",
+              "k": "test",
+              "m": 30
+            },
+            {
+              "i": "w21-11",
+              "t": "25 Şubat · (Brain Bee bittiyse buradan itibaren) hücre bölünmesi — mitoz/mayoz",
+              "s": "apbio",
+              "k": "study",
+              "m": 20
+            },
+            {
+              "i": "w21-12",
+              "t": "26 Şubat · Kulüp toplantısı",
+              "s": "fel",
+              "k": "study",
+              "m": 60
+            },
+            {
+              "i": "w21-13",
+              "t": "26 Şubat · Moleküler genetik — DNA replikasyonu",
+              "s": "apbio",
+              "k": "study",
+              "m": 45
+            },
+            {
+              "i": "w21-14",
+              "t": "26 Şubat · Haftanın ödevlerini bitir",
+              "s": "okul",
+              "k": "review",
+              "m": 20
+            },
+            {
+              "i": "w21-15",
+              "t": "27 Şubat · Tam deneme — Mart sınavına son prova",
+              "s": "sat",
+              "k": "test",
+              "m": 100
+            },
+            {
+              "i": "w21-16",
+              "t": "27 Şubat · Seri yakınsaklık — problem seti",
+              "s": "apcalc",
+              "k": "review",
+              "m": 45
+            },
+            {
+              "i": "w21-17",
+              "t": "28 Şubat · Video günlüğü #21 + checkpoint + Şubat ayı retrosu",
+              "s": "ozdeg",
+              "k": "reflect",
+              "m": 75
+            },
+            {
+              "i": "w21-18",
+              "t": "28 Şubat · Telafi/dinlenme",
+              "s": "serbest",
+              "k": "rest",
+              "m": 45
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mart",
+      "name": "Mart",
+      "sub": "Hafta 22-25 · ~55 saat",
+      "goal": "Mart",
+      "hours": 55.0,
+      "units": [
+        {
+          "id": "hafta22",
+          "title": "Hafta 22",
+          "kicker": "1 Mart – 7 Mart",
+          "tasks": [
+            {
+              "i": "w22-0",
+              "t": "1 Mart · Kulüp toplantısı",
+              "s": "uwc",
+              "k": "study",
+              "m": 60
+            },
+            {
+              "i": "w22-1",
+              "t": "1 Mart · Konu takibi",
+              "s": "okul",
+              "k": "study",
+              "m": 30
+            },
+            {
+              "i": "w22-2",
+              "t": "1 Mart · Parametrik denklemler — türev, eğim",
+              "s": "apcalc",
+              "k": "study",
+              "m": 30
+            },
+            {
+              "i": "w22-3",
+              "t": "2 Mart · Rapor — tartışma bölümü",
+              "s": "p2",
+              "k": "produce",
+              "m": 75
+            },
+            {
+              "i": "w22-4",
+              "t": "2 Mart · Sınav haftası — hafif review",
+              "s": "sat",
+              "k": "review",
+              "m": 30
+            },
+            {
+              "i": "w22-5",
+              "t": "2 Mart · Gen ifadesi — transkripsiyon",
+              "s": "apbio",
+              "k": "study",
+              "m": 20
+            },
+            {
+              "i": "w22-6",
+              "t": "3 Mart · Konu tekrarı",
+              "s": "okul",
+              "k": "review",
+              "m": 60
+            },
+            {
+              "i": "w22-7",
+              "t": "3 Mart · Organik kimya — fonksiyonel gruplar, isimlendirme",
+              "s": "apchem",
+              "k": "study",
+              "m": 45
+            },
+            {
+              "i": "w22-8",
+              "t": "3 Mart · N5 kelime seti 16",
+              "s": "jp",
+              "k": "study",
+              "m": 15
+            },
+            {
+              "i": "w22-9",
+              "t": "4 Mart · Sunum için slayt/görsel hazırlığı",
+              "s": "p2",
+              "k": "produce",
+              "m": 75
+            },
+            {
+              "i": "w22-10",
+              "t": "4 Mart · Hafif review (sınav bu hafta)",
+              "s": "sat",
+              "k": "review",
+              "m": 30
+            },
+            {
+              "i": "w22-11",
+              "t": "4 Mart · Gen ifadesi — translasyon",
+              "s": "apbio",
+              "k": "study",
+              "m": 20
+            },
+            {
+              "i": "w22-12",
+              "t": "5 Mart · Kulüp toplantısı",
+              "s": "fel",
+              "k": "study",
+              "m": 60
+            },
+            {
+              "i": "w22-13",
+              "t": "5 Mart · Gen regülasyonu — operonlar (lac operon)",
+              "s": "apbio",
+              "k": "study",
+              "m": 45
+            },
+            {
+              "i": "w22-14",
+              "t": "5 Mart · Haftanın ödevlerini bitir",
+              "s": "okul",
+              "k": "review",
+              "m": 20
+            },
+            {
+              "i": "w22-15",
+              "t": "6 Mart · Gerçek sınav günü (varsayılan tarih — kendi kayıt tarihine göre kayabilir)",
+              "s": "sat",
+              "k": "test",
+              "m": 0
+            },
+            {
+              "i": "w22-16",
+              "t": "6 Mart · Polar koordinatlar — alan, türev",
+              "s": "apcalc",
+              "k": "study",
+              "m": 45
+            },
+            {
+              "i": "w22-17",
+              "t": "7 Mart · Video günlüğü #22 + checkpoint (sınav sonrası dinlenme öncelikli)",
+              "s": "ozdeg",
+              "k": "reflect",
+              "m": 30
+            },
+            {
+              "i": "w22-18",
+              "t": "7 Mart · Dinlenme (sınav sonrası)",
+              "s": "serbest",
+              "k": "rest",
+              "m": 90
+            }
+          ]
+        },
+        {
+          "id": "hafta23",
+          "title": "Hafta 23",
+          "kicker": "8 Mart – 14 Mart",
+          "tasks": [
+            {
+              "i": "w23-0",
+              "t": "8 Mart · Kulüp toplantısı",
+              "s": "uwc",
+              "k": "study",
+              "m": 60
+            },
+            {
+              "i": "w23-1",
+              "t": "8 Mart · Konu takibi",
+              "s": "okul",
+              "k": "study",
+              "m": 30
+            },
+            {
+              "i": "w23-2",
+              "t": "8 Mart · Vektör değerli fonksiyonlar — hız/ivme",
+              "s": "apcalc",
+              "k": "study",
+              "m": 30
+            },
+            {
+              "i": "w23-3",
+              "t": "9 Mart · Rapor son hâli — giriş/yöntem/sonuç birleştirme",
+              "s": "p2",
+              "k": "produce",
+              "m": 75
+            },
+            {
+              "i": "w23-4",
+              "t": "9 Mart · Termodinamik — entropi",
+              "s": "apchem",
+              "k": "study",
+              "m": 30
+            },
+            {
+              "i": "w23-5",
+              "t": "9 Mart · Evrim — doğal seçilim mekanizmaları",
+              "s": "apbio",
+              "k": "study",
+              "m": 20
+            },
+            {
+              "i": "w23-6",
+              "t": "10 Mart · Konu tekrarı",
+              "s": "okul",
+              "k": "review",
+              "m": 60
+            },
+            {
+              "i": "w23-7",
+              "t": "10 Mart · Termodinamik — Gibbs serbest enerji",
+              "s": "apchem",
+              "k": "study",
+              "m": 45
+            },
+            {
+              "i": "w23-8",
+              "t": "10 Mart · N5 kelime seti 17",
+              "s": "jp",
+              "k": "study",
+              "m": 15
+            },
+            {
+              "i": "w23-9",
+              "t": "11 Mart · Danışman/öğretmenden geri bildirim al",
+              "s": "p2",
+              "k": "review",
+              "m": 75
+            },
+            {
+              "i": "w23-10",
+              "t": "11 Mart · Termodinamik problem seti",
+              "s": "apchem",
+              "k": "review",
+              "m": 30
+            },
+            {
+              "i": "w23-11",
+              "t": "11 Mart · Evrim — popülasyon genetiği (Hardy-Weinberg)",
+              "s": "apbio",
+              "k": "study",
+              "m": 20
+            },
+            {
+              "i": "w23-12",
+              "t": "12 Mart · Kulüp toplantısı",
+              "s": "fel",
+              "k": "study",
+              "m": 60
+            },
+            {
+              "i": "w23-13",
+              "t": "12 Mart · Evrim — tür oluşumu (speciation)",
+              "s": "apbio",
+              "k": "study",
+              "m": 45
+            },
+            {
+              "i": "w23-14",
+              "t": "12 Mart · Haftanın ödevlerini bitir",
+              "s": "okul",
+              "k": "review",
+              "m": 20
+            },
+            {
+              "i": "w23-15",
+              "t": "13 Mart · Problem seti — parametrik/polar/vektör karışık",
+              "s": "apcalc",
+              "k": "review",
+              "m": 60
+            },
+            {
+              "i": "w23-16",
+              "t": "13 Mart · Problem seti — termodinamik karışık",
+              "s": "apchem",
+              "k": "review",
+              "m": 30
+            },
+            {
+              "i": "w23-17",
+              "t": "14 Mart · Video günlüğü #23 + checkpoint",
+              "s": "ozdeg",
+              "k": "reflect",
+              "m": 30
+            },
+            {
+              "i": "w23-18",
+              "t": "14 Mart · Telafi/dinlenme",
+              "s": "serbest",
+              "k": "rest",
+              "m": 90
+            }
+          ]
+        },
+        {
+          "id": "hafta24",
+          "title": "Hafta 24",
+          "kicker": "15 Mart – 21 Mart",
+          "tasks": [
+            {
+              "i": "w24-0",
+              "t": "15 Mart · Kulüp toplantısı",
+              "s": "uwc",
+              "k": "study",
+              "m": 60
+            },
+            {
+              "i": "w24-1",
+              "t": "15 Mart · Konu takibi",
+              "s": "okul",
+              "k": "study",
+              "m": 30
+            },
+            {
+              "i": "w24-2",
+              "t": "15 Mart · Euler yöntemi, eğim alanları",
+              "s": "apcalc",
+              "k": "study",
+              "m": 30
+            },
+            {
+              "i": "w24-3",
+              "t": "16 Mart · Geri bildirime göre revizyon",
+              "s": "p2",
+              "k": "produce",
+              "m": 75
+            },
+            {
+              "i": "w24-4",
+              "t": "16 Mart · Asit-baz — tampon çözeltiler (buffer)",
+              "s": "apchem",
+              "k": "study",
+              "m": 30
+            },
+            {
+              "i": "w24-5",
+              "t": "16 Mart · Ekoloji giriş — popülasyon ekolojisi",
+              "s": "apbio",
+              "k": "study",
+              "m": 20
+            },
+            {
+              "i": "w24-6",
+              "t": "17 Mart · Konu tekrarı",
+              "s": "okul",
+              "k": "review",
+              "m": 60
+            },
+            {
+              "i": "w24-7",
+              "t": "17 Mart · Asit-baz — titrasyon eğrileri",
+              "s": "apchem",
+              "k": "study",
+              "m": 45
+            },
+            {
+              "i": "w24-8",
+              "t": "17 Mart · N5 kelime seti 18",
+              "s": "jp",
+              "k": "study",
+              "m": 15
+            },
+            {
+              "i": "w24-9",
+              "t": "18 Mart · Rapor/sunum final teslim (Destek Eğitim Odası)",
+              "s": "p2",
+              "k": "produce",
+              "m": 75
+            },
+            {
+              "i": "w24-10",
+              "t": "18 Mart · Titrasyon problem seti",
+              "s": "apchem",
+              "k": "review",
+              "m": 30
+            },
+            {
+              "i": "w24-11",
+              "t": "18 Mart · Ekoloji — topluluk etkileşimleri (predasyon, rekabet)",
+              "s": "apbio",
+              "k": "study",
+              "m": 20
+            },
+            {
+              "i": "w24-12",
+              "t": "19 Mart · Kulüp toplantısı",
+              "s": "fel",
+              "k": "study",
+              "m": 60
+            },
+            {
+              "i": "w24-13",
+              "t": "19 Mart · Ekoloji — ekosistem, biyojeokimyasal döngüler",
+              "s": "apbio",
+              "k": "study",
+              "m": 45
+            },
+            {
+              "i": "w24-14",
+              "t": "19 Mart · Haftanın ödevlerini bitir",
+              "s": "okul",
+              "k": "review",
+              "m": 20
+            },
+            {
+              "i": "w24-15",
+              "t": "20 Mart · Lojistik büyüme modelleri",
+              "s": "apcalc",
+              "k": "study",
+              "m": 45
+            },
+            {
+              "i": "w24-16",
+              "t": "20 Mart · Genel tekrar — genetik+hücre bölünmesi",
+              "s": "apbio",
+              "k": "review",
+              "m": 45
+            },
+            {
+              "i": "w24-17",
+              "t": "21 Mart · Video günlüğü #24 + checkpoint + Mart ayı retrosu",
+              "s": "ozdeg",
+              "k": "reflect",
+              "m": 75
+            },
+            {
+              "i": "w24-18",
+              "t": "21 Mart · Telafi/dinlenme",
+              "s": "serbest",
+              "k": "rest",
+              "m": 45
+            }
+          ]
+        },
+        {
+          "id": "hafta25",
+          "title": "Hafta 25",
+          "kicker": "22 Mart – 28 Mart",
+          "tasks": [
+            {
+              "i": "w25-0",
+              "t": "22 Mart · Kulüp toplantısı",
+              "s": "uwc",
+              "k": "study",
+              "m": 60
+            },
+            {
+              "i": "w25-1",
+              "t": "22 Mart · Konu takibi — ikinci ara sınavlar yaklaşıyorsa ağırlık ver",
+              "s": "okul",
+              "k": "review",
+              "m": 30
+            },
+            {
+              "i": "w25-2",
+              "t": "22 Mart · Genel tekrar — AB konuları (türev/integral) cumulative",
+              "s": "apcalc",
+              "k": "review",
+              "m": 30
+            },
+            {
+              "i": "w25-3",
+              "t": "23 Mart · P2 sonrası ne yapılacak (P3?) — literatür/ilgi taraması",
+              "s": "yazproj",
+              "k": "study",
+              "m": 75
+            },
+            {
+              "i": "w25-4",
+              "t": "23 Mart · Kinetik — hız yasaları, tepkime mekanizmaları",
+              "s": "apchem",
+              "k": "study",
+              "m": 30
+            },
+            {
+              "i": "w25-5",
+              "t": "23 Mart · Ekoloji — enerji akışı, besin ağları",
+              "s": "apbio",
+              "k": "study",
+              "m": 20
+            },
+            {
+              "i": "w25-6",
+              "t": "24 Mart · Konu tekrarı",
+              "s": "okul",
+              "k": "review",
+              "m": 60
+            },
+            {
+              "i": "w25-7",
+              "t": "24 Mart · Denge — Ksp, çözünürlük dengeleri",
+              "s": "apchem",
+              "k": "study",
+              "m": 45
+            },
+            {
+              "i": "w25-8",
+              "t": "24 Mart · N5 kelime seti 19",
+              "s": "jp",
+              "k": "study",
+              "m": 15
+            },
+            {
+              "i": "w25-9",
+              "t": "25 Mart · Proje fikrini somutlaştır, kapsam belirle",
+              "s": "yazproj",
+              "k": "produce",
+              "m": 75
+            },
+            {
+              "i": "w25-10",
+              "t": "25 Mart · Ksp problem seti",
+              "s": "apchem",
+              "k": "review",
+              "m": 30
+            },
+            {
+              "i": "w25-11",
+              "t": "25 Mart · Biyoteknoloji — PCR, jel elektroforez, CRISPR temelleri",
+              "s": "apbio",
+              "k": "study",
+              "m": 20
+            },
+            {
+              "i": "w25-12",
+              "t": "26 Mart · Kulüp toplantısı",
+              "s": "fel",
+              "k": "study",
+              "m": 60
+            },
+            {
+              "i": "w25-13",
+              "t": "26 Mart · Genel tekrar — evrim+ekoloji cumulative",
+              "s": "apbio",
+              "k": "review",
+              "m": 45
+            },
+            {
+              "i": "w25-14",
+              "t": "26 Mart · Haftanın ödevlerini bitir",
+              "s": "okul",
+              "k": "review",
+              "m": 20
+            },
+            {
+              "i": "w25-15",
+              "t": "27 Mart · Tam pratik sınav — MCQ+FRQ (BC formatında)",
+              "s": "apcalc",
+              "k": "test",
+              "m": 90
+            },
+            {
+              "i": "w25-16",
+              "t": "27 Mart · Genel tekrar — bağlar+gazlar+çözeltiler cumulative",
+              "s": "apchem",
+              "k": "review",
+              "m": 45
+            },
+            {
+              "i": "w25-17",
+              "t": "28 Mart · Video günlüğü #25 + checkpoint",
+              "s": "ozdeg",
+              "k": "reflect",
+              "m": 30
+            },
+            {
+              "i": "w25-18",
+              "t": "28 Mart · Telafi/dinlenme",
+              "s": "serbest",
+              "k": "rest",
+              "m": 90
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "nisan",
+      "name": "Nisan · AP Sınavlarına Geri Sayım",
+      "sub": "Hafta 26-29 · ~52 saat",
+      "goal": "Nisan · AP Sınavlarına Geri Sayım",
+      "hours": 51.7,
+      "units": [
+        {
+          "id": "hafta26",
+          "title": "Hafta 26",
+          "kicker": "29 Mart – 4 Nisan",
+          "tasks": [
+            {
+              "i": "w26-0",
+              "t": "29 Mart · Kulüp toplantısı",
+              "s": "uwc",
+              "k": "study",
+              "m": 60
+            },
+            {
+              "i": "w26-1",
+              "t": "29 Mart · Konu takibi",
+              "s": "okul",
+              "k": "study",
+              "m": 30
+            },
+            {
+              "i": "w26-2",
+              "t": "29 Mart · Tam pratik sınav sonuçlarını analiz et, zayıf alan listesi",
+              "s": "apcalc",
+              "k": "review",
+              "m": 30
+            },
+            {
+              "i": "w26-3",
+              "t": "30 Mart · Proje planını yaz (hedef, üretim adımları)",
+              "s": "yazproj",
+              "k": "produce",
+              "m": 75
+            },
+            {
+              "i": "w26-4",
+              "t": "30 Mart · Genel tekrar — termodinamik+kinetik+denge cumulative",
+              "s": "apchem",
+              "k": "review",
+              "m": 30
+            },
+            {
+              "i": "w26-5",
+              "t": "30 Mart · Genel tekrar — gen ifadesi+biyoteknoloji cumulative",
+              "s": "apbio",
+              "k": "review",
+              "m": 20
+            },
+            {
+              "i": "w26-6",
+              "t": "31 Mart · Konu tekrarı / ikinci ara sınav hazırlığı",
+              "s": "okul",
+              "k": "review",
+              "m": 60
+            },
+            {
+              "i": "w26-7",
+              "t": "31 Mart · Tam pratik sınav — MCQ+FRQ",
+              "s": "apchem",
+              "k": "test",
+              "m": 60
+            },
+            {
+              "i": "w26-8",
+              "t": "31 Mart · N5 kelime seti 20",
+              "s": "jp",
+              "k": "study",
+              "m": 15
+            },
+            {
+              "i": "w26-9",
+              "t": "1 Nisan · İlk teknik adım (literatür/kod iskeleti)",
+              "s": "yazproj",
+              "k": "produce",
+              "m": 60
+            },
+            {
+              "i": "w26-10",
+              "t": "1 Nisan · Pratik sınav sonuçlarını analiz et",
+              "s": "apchem",
+              "k": "review",
+              "m": 30
+            },
+            {
+              "i": "w26-11",
+              "t": "1 Nisan · Tam pratik sınav — MCQ+FRQ",
+              "s": "apbio",
+              "k": "test",
+              "m": 45
+            },
+            {
+              "i": "w26-12",
+              "t": "2 Nisan · Kulüp toplantısı",
+              "s": "fel",
+              "k": "study",
+              "m": 60
+            },
+            {
+              "i": "w26-13",
+              "t": "2 Nisan · Pratik sınav sonuçlarını analiz et, zayıf alan listesi",
+              "s": "apbio",
+              "k": "review",
+              "m": 45
+            },
+            {
+              "i": "w26-14",
+              "t": "2 Nisan · Haftanın ödevlerini bitir",
+              "s": "okul",
+              "k": "review",
+              "m": 20
+            },
+            {
+              "i": "w26-15",
+              "t": "3 Nisan · Zayıf alan #1 üzerine odaklı çalışma",
+              "s": "apcalc",
+              "k": "review",
+              "m": 60
+            },
+            {
+              "i": "w26-16",
+              "t": "3 Nisan · Zayıf alan #1 üzerine odaklı çalışma",
+              "s": "apchem",
+              "k": "review",
+              "m": 45
+            },
+            {
+              "i": "w26-17",
+              "t": "4 Nisan · Video günlüğü #26 + checkpoint",
+              "s": "ozdeg",
+              "k": "reflect",
+              "m": 30
+            },
+            {
+              "i": "w26-18",
+              "t": "4 Nisan · Telafi/dinlenme",
+              "s": "serbest",
+              "k": "rest",
+              "m": 90
+            }
+          ]
+        },
+        {
+          "id": "hafta27",
+          "title": "Hafta 27",
+          "kicker": "5 Nisan – 11 Nisan",
+          "tasks": [
+            {
+              "i": "w27-0",
+              "t": "5 Nisan · Kulüp toplantısı",
+              "s": "uwc",
+              "k": "study",
+              "m": 60
+            },
+            {
+              "i": "w27-1",
+              "t": "5 Nisan · Ara sınav hazırlığı",
+              "s": "okul",
+              "k": "review",
+              "m": 30
+            },
+            {
+              "i": "w27-2",
+              "t": "5 Nisan · Zayıf alan #2",
+              "s": "apcalc",
+              "k": "review",
+              "m": 30
+            },
+            {
+              "i": "w27-3",
+              "t": "6 Nisan · Devam",
+              "s": "yazproj",
+              "k": "produce",
+              "m": 60
+            },
+            {
+              "i": "w27-4",
+              "t": "6 Nisan · Zayıf alan #2",
+              "s": "apchem",
+              "k": "review",
+              "m": 30
+            },
+            {
+              "i": "w27-5",
+              "t": "6 Nisan · Zayıf alan #1",
+              "s": "apbio",
+              "k": "review",
+              "m": 20
+            },
+            {
+              "i": "w27-6",
+              "t": "7 Nisan · Ara sınav hazırlığı — yoğun",
+              "s": "okul",
+              "k": "review",
+              "m": 75
+            },
+            {
+              "i": "w27-7",
+              "t": "7 Nisan · FRQ (açık uçlu soru) pratik seti 1",
+              "s": "apchem",
+              "k": "review",
+              "m": 45
+            },
+            {
+              "i": "w27-8",
+              "t": "7 Nisan · N5 genel tekrar (11-20)",
+              "s": "jp",
+              "k": "review",
+              "m": 15
+            },
+            {
+              "i": "w27-9",
+              "t": "8 Nisan · Ara sınav hazırlığı — yoğun",
+              "s": "okul",
+              "k": "review",
+              "m": 60
+            },
+            {
+              "i": "w27-10",
+              "t": "8 Nisan · FRQ pratik seti 2",
+              "s": "apchem",
+              "k": "review",
+              "m": 30
+            },
+            {
+              "i": "w27-11",
+              "t": "8 Nisan · Zayıf alan #2",
+              "s": "apbio",
+              "k": "review",
+              "m": 20
+            },
+            {
+              "i": "w27-12",
+              "t": "9 Nisan · Kulüp toplantısı",
+              "s": "fel",
+              "k": "study",
+              "m": 45
+            },
+            {
+              "i": "w27-13",
+              "t": "9 Nisan · FRQ (açık uçlu soru) pratik seti 1",
+              "s": "apbio",
+              "k": "review",
+              "m": 45
+            },
+            {
+              "i": "w27-14",
+              "t": "9 Nisan · Ara sınav hazırlığı",
+              "s": "okul",
+              "k": "review",
+              "m": 30
+            },
+            {
+              "i": "w27-15",
+              "t": "10 Nisan · FRQ pratik seti 1",
+              "s": "apcalc",
+              "k": "review",
+              "m": 60
+            },
+            {
+              "i": "w27-16",
+              "t": "10 Nisan · FRQ pratik seti 2",
+              "s": "apbio",
+              "k": "review",
+              "m": 45
+            },
+            {
+              "i": "w27-17",
+              "t": "11 Nisan · Video günlüğü #27 + checkpoint",
+              "s": "ozdeg",
+              "k": "reflect",
+              "m": 30
+            },
+            {
+              "i": "w27-18",
+              "t": "11 Nisan · Telafi/dinlenme",
+              "s": "serbest",
+              "k": "rest",
+              "m": 90
+            }
+          ]
+        },
+        {
+          "id": "hafta28",
+          "title": "Hafta 28",
+          "kicker": "12 Nisan – 18 Nisan",
+          "tasks": [
+            {
+              "i": "w28-0",
+              "t": "12 Nisan · Sınav tekrarı",
+              "s": "okul",
+              "k": "review",
+              "m": 75
+            },
+            {
+              "i": "w28-1",
+              "t": "12 Nisan · Hafif: FRQ pratik seti 2",
+              "s": "apcalc",
+              "k": "review",
+              "m": 45
+            },
+            {
+              "i": "w28-2",
+              "t": "13 Nisan · Sınav tekrarı",
+              "s": "okul",
+              "k": "review",
+              "m": 75
+            },
+            {
+              "i": "w28-3",
+              "t": "13 Nisan · Hafif: FRQ pratik seti 3",
+              "s": "apchem",
+              "k": "review",
+              "m": 30
+            },
+            {
+              "i": "w28-4",
+              "t": "14 Nisan · Sınav tekrarı",
+              "s": "okul",
+              "k": "review",
+              "m": 75
+            },
+            {
+              "i": "w28-5",
+              "t": "14 Nisan · N5 tekrar",
+              "s": "jp",
+              "k": "review",
+              "m": 15
+            },
+            {
+              "i": "w28-6",
+              "t": "15 Nisan · Sınav tekrarı",
+              "s": "okul",
+              "k": "review",
+              "m": 60
+            },
+            {
+              "i": "w28-7",
+              "t": "15 Nisan · Hafif: FRQ pratik seti 3",
+              "s": "apbio",
+              "k": "review",
+              "m": 30
+            },
+            {
+              "i": "w28-8",
+              "t": "16 Nisan · Kulüp toplantısı (kısa)",
+              "s": "uwc",
+              "k": "study",
+              "m": 30
+            },
+            {
+              "i": "w28-9",
+              "t": "16 Nisan · Sınav tekrarı",
+              "s": "okul",
+              "k": "review",
+              "m": 45
+            },
+            {
+              "i": "w28-10",
+              "t": "17 Nisan · Bu hafta okul öncelikli — kaçan görevleri buraya taşı",
+              "s": "serbest",
+              "k": "rest",
+              "m": 60
+            },
+            {
+              "i": "w28-11",
+              "t": "18 Nisan · Video günlüğü #28 + checkpoint",
+              "s": "ozdeg",
+              "k": "reflect",
+              "m": 30
+            },
+            {
+              "i": "w28-12",
+              "t": "18 Nisan · Telafi/dinlenme",
+              "s": "serbest",
+              "k": "rest",
+              "m": 60
+            }
+          ]
+        },
+        {
+          "id": "hafta29",
+          "title": "Hafta 29",
+          "kicker": "19 Nisan – 25 Nisan",
+          "tasks": [
+            {
+              "i": "w29-0",
+              "t": "19 Nisan · Kulüp toplantısı",
+              "s": "uwc",
+              "k": "study",
+              "m": 45
+            },
+            {
+              "i": "w29-1",
+              "t": "19 Nisan · Konu takibi",
+              "s": "okul",
+              "k": "study",
+              "m": 30
+            },
+            {
+              "i": "w29-2",
+              "t": "19 Nisan · Tam pratik sınav #2 — MCQ+FRQ",
+              "s": "apcalc",
+              "k": "test",
+              "m": 60
+            },
+            {
+              "i": "w29-3",
+              "t": "20 Nisan · Devam",
+              "s": "yazproj",
+              "k": "produce",
+              "m": 60
+            },
+            {
+              "i": "w29-4",
+              "t": "20 Nisan · Tam pratik sınav #2 — MCQ+FRQ",
+              "s": "apchem",
+              "k": "test",
+              "m": 60
+            },
+            {
+              "i": "w29-5",
+              "t": "21 Nisan · Konu tekrarı",
+              "s": "okul",
+              "k": "review",
+              "m": 60
+            },
+            {
+              "i": "w29-6",
+              "t": "21 Nisan · Pratik sınav #2 sonuçlarını analiz et",
+              "s": "apchem",
+              "k": "review",
+              "m": 30
+            },
+            {
+              "i": "w29-7",
+              "t": "21 Nisan · N5 tekrar",
+              "s": "jp",
+              "k": "review",
+              "m": 15
+            },
+            {
+              "i": "w29-8",
+              "t": "22 Nisan · Devam",
+              "s": "yazproj",
+              "k": "produce",
+              "m": 45
+            },
+            {
+              "i": "w29-9",
+              "t": "22 Nisan · Tam pratik sınav #2 — MCQ+FRQ",
+              "s": "apbio",
+              "k": "test",
+              "m": 60
+            },
+            {
+              "i": "w29-10",
+              "t": "23 Nisan · Kulüp toplantısı",
+              "s": "fel",
+              "k": "study",
+              "m": 45
+            },
+            {
+              "i": "w29-11",
+              "t": "23 Nisan · Pratik sınav #2 sonuçlarını analiz et",
+              "s": "apbio",
+              "k": "review",
+              "m": 30
+            },
+            {
+              "i": "w29-12",
+              "t": "23 Nisan · Haftanın ödevlerini bitir",
+              "s": "okul",
+              "k": "review",
+              "m": 20
+            },
+            {
+              "i": "w29-13",
+              "t": "24 Nisan · Pratik sınav #2 sonuçlarını analiz et + zayıf alan",
+              "s": "apcalc",
+              "k": "review",
+              "m": 60
+            },
+            {
+              "i": "w29-14",
+              "t": "24 Nisan · Zayıf alan review",
+              "s": "apchem",
+              "k": "review",
+              "m": 45
+            },
+            {
+              "i": "w29-15",
+              "t": "25 Nisan · Video günlüğü #29 + checkpoint + Nisan ayı retrosu",
+              "s": "ozdeg",
+              "k": "reflect",
+              "m": 75
+            },
+            {
+              "i": "w29-16",
+              "t": "25 Nisan · Telafi/dinlenme",
+              "s": "serbest",
+              "k": "rest",
+              "m": 45
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mayis",
+      "name": "Mayıs · AP Sınavları ve Kapanış",
+      "sub": "Hafta 30-34 · ~46 saat",
+      "goal": "Mayıs · AP Sınavları ve Kapanış",
+      "hours": 46.5,
+      "units": [
+        {
+          "id": "hafta30",
+          "title": "Hafta 30",
+          "kicker": "26 Nisan – 2 Mayıs",
+          "tasks": [
+            {
+              "i": "w30-0",
+              "t": "26 Nisan · Kapsamlı son tekrar — formül listesi + hızlı problem turu",
+              "s": "apcalc",
+              "k": "review",
+              "m": 60
+            },
+            {
+              "i": "w30-1",
+              "t": "26 Nisan · Konu takibi",
+              "s": "okul",
+              "k": "study",
+              "m": 30
+            },
+            {
+              "i": "w30-2",
+              "t": "27 Nisan · Kapsamlı son tekrar — formül listesi + hızlı problem turu",
+              "s": "apchem",
+              "k": "review",
+              "m": 60
+            },
+            {
+              "i": "w30-3",
+              "t": "27 Nisan · Kulüp toplantısı",
+              "s": "uwc",
+              "k": "study",
+              "m": 45
+            },
+            {
+              "i": "w30-4",
+              "t": "28 Nisan · Kapsamlı son tekrar — 8 ünite hızlı tur",
+              "s": "apbio",
+              "k": "review",
+              "m": 60
+            },
+            {
+              "i": "w30-5",
+              "t": "28 Nisan · Konu tekrarı",
+              "s": "okul",
+              "k": "review",
+              "m": 45
+            },
+            {
+              "i": "w30-6",
+              "t": "28 Nisan · N5 tekrar",
+              "s": "jp",
+              "k": "review",
+              "m": 15
+            },
+            {
+              "i": "w30-7",
+              "t": "29 Nisan · Son FRQ pratik seti",
+              "s": "apcalc",
+              "k": "review",
+              "m": 45
+            },
+            {
+              "i": "w30-8",
+              "t": "29 Nisan · Son FRQ pratik seti",
+              "s": "apchem",
+              "k": "review",
+              "m": 45
+            },
+            {
+              "i": "w30-9",
+              "t": "30 Nisan · Son FRQ pratik seti",
+              "s": "apbio",
+              "k": "review",
+              "m": 45
+            },
+            {
+              "i": "w30-10",
+              "t": "30 Nisan · Kulüp toplantısı (kısa)",
+              "s": "fel",
+              "k": "study",
+              "m": 30
+            },
+            {
+              "i": "w30-11",
+              "t": "1 Mayıs · Hafif — dinlenme, erken yatma düzeni",
+              "s": "serbest",
+              "k": "rest",
+              "m": 30
+            },
+            {
+              "i": "w30-12",
+              "t": "2 Mayıs · Video günlüğü #30 + checkpoint (sınav haftasına moral hazırlığı)",
+              "s": "ozdeg",
+              "k": "reflect",
+              "m": 30
+            }
+          ]
+        },
+        {
+          "id": "hafta31",
+          "title": "Hafta 31",
+          "kicker": "3 Mayıs – 9 Mayıs",
+          "tasks": [
+            {
+              "i": "w31-exam",
+              "t": "3 Mayıs-7 Mayıs · AP sınavları: Kimya, Kalkülüs BC, Biyoloji (hangi gün hangi ders College Board takviminden gelir) — sınav olmayan günlerde hafif tekrar (30-45 dk) dışında görev yok",
+              "s": "apexam",
+              "k": "test",
+              "m": 0
+            },
+            {
+              "i": "w31-0",
+              "t": "8 Mayıs · Dinlenme — bir haftadır yoğun sınav modundaydı",
+              "s": "serbest",
+              "k": "rest",
+              "m": 0
+            },
+            {
+              "i": "w31-1",
+              "t": "9 Mayıs · Video günlüğü #31 + checkpoint",
+              "s": "ozdeg",
+              "k": "reflect",
+              "m": 30
+            }
+          ]
+        },
+        {
+          "id": "hafta32",
+          "title": "Hafta 32",
+          "kicker": "10 Mayıs – 16 Mayıs",
+          "tasks": [
+            {
+              "i": "w32-0",
+              "t": "10 Mayıs · Kulüp toplantısı",
+              "s": "uwc",
+              "k": "study",
+              "m": 60
+            },
+            {
+              "i": "w32-1",
+              "t": "10 Mayıs · Konu takibi (AP'ler bitince tüm enerji okula kayabilir)",
+              "s": "okul",
+              "k": "review",
+              "m": 45
+            },
+            {
+              "i": "w32-2",
+              "t": "11 Mayıs · Devam",
+              "s": "yazproj",
+              "k": "produce",
+              "m": 90
+            },
+            {
+              "i": "w32-3",
+              "t": "11 Mayıs · Konu tekrarı",
+              "s": "okul",
+              "k": "review",
+              "m": 30
+            },
+            {
+              "i": "w32-4",
+              "t": "12 Mayıs · Konu tekrarı",
+              "s": "okul",
+              "k": "review",
+              "m": 75
+            },
+            {
+              "i": "w32-5",
+              "t": "12 Mayıs · N5 tekrar",
+              "s": "jp",
+              "k": "review",
+              "m": 15
+            },
+            {
+              "i": "w32-6",
+              "t": "13 Mayıs · Devam",
+              "s": "yazproj",
+              "k": "produce",
+              "m": 90
+            },
+            {
+              "i": "w32-7",
+              "t": "13 Mayıs · Konu tekrarı",
+              "s": "okul",
+              "k": "review",
+              "m": 30
+            },
+            {
+              "i": "w32-8",
+              "t": "14 Mayıs · Kulüp toplantısı — dönem sonu özet raporuna başla",
+              "s": "fel",
+              "k": "study",
+              "m": 60
+            },
+            {
+              "i": "w32-9",
+              "t": "14 Mayıs · Haftanın ödevlerini bitir",
+              "s": "okul",
+              "k": "review",
+              "m": 30
+            },
+            {
+              "i": "w32-10",
+              "t": "15 Mayıs · Yıl sonu sınavlarına hazırlık başlangıcı",
+              "s": "okul",
+              "k": "review",
+              "m": 60
+            },
+            {
+              "i": "w32-11",
+              "t": "15 Mayıs · Devam",
+              "s": "yazproj",
+              "k": "produce",
+              "m": 45
+            },
+            {
+              "i": "w32-12",
+              "t": "16 Mayıs · Video günlüğü #32 + checkpoint",
+              "s": "ozdeg",
+              "k": "reflect",
+              "m": 30
+            },
+            {
+              "i": "w32-13",
+              "t": "16 Mayıs · Telafi/dinlenme",
+              "s": "serbest",
+              "k": "rest",
+              "m": 90
+            }
+          ]
+        },
+        {
+          "id": "hafta33",
+          "title": "Hafta 33",
+          "kicker": "17 Mayıs – 23 Mayıs",
+          "tasks": [
+            {
+              "i": "w33-0",
+              "t": "17 Mayıs · Kulüp toplantısı",
+              "s": "uwc",
+              "k": "study",
+              "m": 60
+            },
+            {
+              "i": "w33-1",
+              "t": "17 Mayıs · Yıl sonu sınav hazırlığı",
+              "s": "okul",
+              "k": "review",
+              "m": 45
+            },
+            {
+              "i": "w33-2",
+              "t": "18 Mayıs · Devam",
+              "s": "yazproj",
+              "k": "produce",
+              "m": 90
+            },
+            {
+              "i": "w33-3",
+              "t": "18 Mayıs · Konu tekrarı",
+              "s": "okul",
+              "k": "review",
+              "m": 30
+            },
+            {
+              "i": "w33-4",
+              "t": "19 Mayıs · Yıl sonu sınav hazırlığı",
+              "s": "okul",
+              "k": "review",
+              "m": 75
+            },
+            {
+              "i": "w33-5",
+              "t": "19 Mayıs · N5 tekrar",
+              "s": "jp",
+              "k": "review",
+              "m": 15
+            },
+            {
+              "i": "w33-6",
+              "t": "20 Mayıs · Devam",
+              "s": "yazproj",
+              "k": "produce",
+              "m": 90
+            },
+            {
+              "i": "w33-7",
+              "t": "20 Mayıs · Konu tekrarı",
+              "s": "okul",
+              "k": "review",
+              "m": 30
+            },
+            {
+              "i": "w33-8",
+              "t": "21 Mayıs · Kulüp dönem sonu özet raporu — devam",
+              "s": "fel",
+              "k": "study",
+              "m": 60
+            },
+            {
+              "i": "w33-9",
+              "t": "21 Mayıs · Haftanın ödevlerini bitir",
+              "s": "okul",
+              "k": "review",
+              "m": 30
+            },
+            {
+              "i": "w33-10",
+              "t": "22 Mayıs · Yıl sonu sınav hazırlığı",
+              "s": "okul",
+              "k": "review",
+              "m": 60
+            },
+            {
+              "i": "w33-11",
+              "t": "22 Mayıs · Devam",
+              "s": "yazproj",
+              "k": "produce",
+              "m": 45
+            },
+            {
+              "i": "w33-12",
+              "t": "23 Mayıs · Video günlüğü #33 + checkpoint",
+              "s": "ozdeg",
+              "k": "reflect",
+              "m": 30
+            },
+            {
+              "i": "w33-13",
+              "t": "23 Mayıs · Telafi/dinlenme",
+              "s": "serbest",
+              "k": "rest",
+              "m": 90
+            }
+          ]
+        },
+        {
+          "id": "hafta34",
+          "title": "Hafta 34",
+          "kicker": "24 Mayıs – 30 Mayıs",
+          "tasks": [
+            {
+              "i": "w34-0",
+              "t": "24 Mayıs · Yıl sonu sınav hazırlığı",
+              "s": "okul",
+              "k": "review",
+              "m": 75
+            },
+            {
+              "i": "w34-1",
+              "t": "24 Mayıs · Kulüp toplantısı",
+              "s": "uwc",
+              "k": "study",
+              "m": 45
+            },
+            {
+              "i": "w34-2",
+              "t": "25 Mayıs · Yıl sonu sınav hazırlığı",
+              "s": "okul",
+              "k": "review",
+              "m": 75
+            },
+            {
+              "i": "w34-3",
+              "t": "25 Mayıs · Devam",
+              "s": "yazproj",
+              "k": "produce",
+              "m": 45
+            },
+            {
+              "i": "w34-4",
+              "t": "26 Mayıs · Yıl sonu sınav hazırlığı",
+              "s": "okul",
+              "k": "review",
+              "m": 75
+            },
+            {
+              "i": "w34-5",
+              "t": "26 Mayıs · N5 tekrar",
+              "s": "jp",
+              "k": "review",
+              "m": 15
+            },
+            {
+              "i": "w34-6",
+              "t": "27 Mayıs · Yıl sonu sınav hazırlığı",
+              "s": "okul",
+              "k": "review",
+              "m": 75
+            },
+            {
+              "i": "w34-7",
+              "t": "27 Mayıs · Devam",
+              "s": "yazproj",
+              "k": "produce",
+              "m": 45
+            },
+            {
+              "i": "w34-8",
+              "t": "28 Mayıs · Kulüp dönem sonu özet raporunu bitir",
+              "s": "fel",
+              "k": "study",
+              "m": 60
+            },
+            {
+              "i": "w34-9",
+              "t": "28 Mayıs · Haftanın ödevlerini bitir",
+              "s": "okul",
+              "k": "review",
+              "m": 30
+            },
+            {
+              "i": "w34-10",
+              "t": "29 Mayıs · Yıl sonu sınav hazırlığı",
+              "s": "okul",
+              "k": "review",
+              "m": 60
+            },
+            {
+              "i": "w34-11",
+              "t": "30 Mayıs · Video günlüğü #34 + checkpoint + Mayıs ayı retrosu",
+              "s": "ozdeg",
+              "k": "reflect",
+              "m": 75
+            },
+            {
+              "i": "w34-12",
+              "t": "30 Mayıs · Telafi/dinlenme",
+              "s": "serbest",
+              "k": "rest",
+              "m": 45
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "haziran",
+      "name": "Haziran · Yıl Sonu Kapanışı",
+      "sub": "Hafta 35-37 · ~19 saat",
+      "goal": "Haziran · Yıl Sonu Kapanışı",
+      "hours": 19.0,
+      "units": [
+        {
+          "id": "hafta35",
+          "title": "Hafta 35",
+          "kicker": "31 Mayıs – 6 Haziran",
+          "tasks": [
+            {
+              "i": "w35-0",
+              "t": "31 Mayıs · Yıl sonu sınavları (varsa bu hafta başlıyor)",
+              "s": "okul",
+              "k": "test",
+              "m": 90
+            },
+            {
+              "i": "w35-1",
+              "t": "1 Haziran · Sınav",
+              "s": "okul",
+              "k": "test",
+              "m": 90
+            },
+            {
+              "i": "w35-2",
+              "t": "2 Haziran · Sınav",
+              "s": "okul",
+              "k": "test",
+              "m": 90
+            },
+            {
+              "i": "w35-3",
+              "t": "2 Haziran · N5 genel tekrar (tüm setler)",
+              "s": "jp",
+              "k": "review",
+              "m": 15
+            },
+            {
+              "i": "w35-4",
+              "t": "3 Haziran · Sınav",
+              "s": "okul",
+              "k": "test",
+              "m": 75
+            },
+            {
+              "i": "w35-5",
+              "t": "4 Haziran · Sınav yoğunluğuna göre esnek",
+              "s": "serbest",
+              "k": "rest",
+              "m": 45
+            },
+            {
+              "i": "w35-6",
+              "t": "5 Haziran · Devam (sınavlar izin verirse)",
+              "s": "yazproj",
+              "k": "produce",
+              "m": 45
+            },
+            {
+              "i": "w35-7",
+              "t": "6 Haziran · Video günlüğü #35 + checkpoint",
+              "s": "ozdeg",
+              "k": "reflect",
+              "m": 30
+            },
+            {
+              "i": "w35-8",
+              "t": "6 Haziran · Dinlenme",
+              "s": "serbest",
+              "k": "rest",
+              "m": 60
+            }
+          ]
+        },
+        {
+          "id": "hafta36",
+          "title": "Hafta 36",
+          "kicker": "7 Haziran – 13 Haziran",
+          "tasks": [
+            {
+              "i": "w36-0",
+              "t": "7 Haziran · Sınav / son değerlendirmeler",
+              "s": "okul",
+              "k": "test",
+              "m": 60
+            },
+            {
+              "i": "w36-1",
+              "t": "8 Haziran · Devam",
+              "s": "yazproj",
+              "k": "produce",
+              "m": 90
+            },
+            {
+              "i": "w36-2",
+              "t": "9 Haziran · Karne öncesi son toparlanma",
+              "s": "okul",
+              "k": "review",
+              "m": 45
+            },
+            {
+              "i": "w36-3",
+              "t": "9 Haziran · N5 genel tekrar",
+              "s": "jp",
+              "k": "review",
+              "m": 15
+            },
+            {
+              "i": "w36-4",
+              "t": "10 Haziran · Devam",
+              "s": "yazproj",
+              "k": "produce",
+              "m": 90
+            },
+            {
+              "i": "w36-5",
+              "t": "11 Haziran · Kulüp — yıl sonu kapanış toplantısı",
+              "s": "fel",
+              "k": "study",
+              "m": 60
+            },
+            {
+              "i": "w36-6",
+              "t": "12 Haziran · Dinlenme",
+              "s": "serbest",
+              "k": "rest",
+              "m": 30
+            },
+            {
+              "i": "w36-7",
+              "t": "13 Haziran · Video günlüğü #36 + checkpoint",
+              "s": "ozdeg",
+              "k": "reflect",
+              "m": 30
+            },
+            {
+              "i": "w36-8",
+              "t": "13 Haziran · Dinlenme",
+              "s": "serbest",
+              "k": "rest",
+              "m": 60
+            }
+          ]
+        },
+        {
+          "id": "hafta37",
+          "title": "Hafta 37",
+          "kicker": "14 Haziran – 16 Haziran",
+          "tasks": [
+            {
+              "i": "w37-0",
+              "t": "14 Haziran · Karne/yıl sonu — dinlenme",
+              "s": "serbest",
+              "k": "rest",
+              "m": 0
+            },
+            {
+              "i": "w37-1",
+              "t": "15 Haziran · Tamamen boş",
+              "s": "serbest",
+              "k": "rest",
+              "m": 0
+            },
+            {
+              "i": "w37-2",
+              "t": "16 Haziran · Yıl sonu büyük retrospektif: tüm yılın video günlüklerinden seçmeler izle, 5 alanda 1-10 puanlama, en büyük 5 ders çıkarımı, yaz planı + gelecek yıl (11. sınıf / UWC ise yurt dışı) için kararlar",
+              "s": "ozdeg",
+              "k": "reflect",
+              "m": 120
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "projects": [
+    {
+      "id": "P1",
+      "name": "P1 — Hodgkin-Huxley Çok-Kompartmanlı Nöron Modeli",
+      "emoji": "🧠",
+      "goal": "Gerçek morfoloji (NeuroMorpho.org) + gerçek elektrofizyoloji (Allen Brain Atlas) verisiyle kablo-teorisi tabanlı, stokastik iyon kanalı gürültülü, iki sinaptik bağlı nöron simülasyonu.",
+      "topics": [
+        "Cable theory",
+        "Hodgkin-Huxley",
+        "Stokastik kanal gürültüsü",
+        "Senkronizasyon"
+      ],
+      "next": "NeuroMorpho.org'dan bir piramidal nöron morfolojisi seç ve kablo denkleminin sayısal iskeletini kur.",
+      "ms": [
+        "Tek-kompartman model çalışıyor",
+        "Çok-kompartmanlı + kalibre model çalışıyor",
+        "İki nöron senkronizasyon analizi tamam",
+        "Rapor/sunum Destek Eğitim Odası'na teslim edildi"
+      ]
+    },
+    {
+      "id": "P2",
+      "name": "P2 — Hopfield Network ile İlişkisel Bellek Modellemesi",
+      "emoji": "🕸️",
+      "goal": "Klasik Hopfield ağı (depolama kapasitesi, enerji manzarası, sahte durumlar), biyolojik bellek fenomenleriyle karşılaştırma, Hebbian öğrenme kuralı, gürültülü desenlerle geri çağırma testi, opsiyonel Transformer-attention bağlantısı.",
+      "topics": [
+        "Hopfield network",
+        "Hebbian öğrenme",
+        "Attractor network",
+        "Attention"
+      ],
+      "next": "Hopfield network'ün matematiksel temelini (enerji fonksiyonu, ağırlık matrisi) çıkar.",
+      "ms": [
+        "Kodlama tamam (küçük örnek desenle)",
+        "Kapasite/gürültü testleri tamam",
+        "Rapor/sunum Destek Eğitim Odası'na teslim edildi"
+      ]
+    },
+    {
+      "id": "P3",
+      "name": "UWC Başvurusu & Felsefe Kulübü",
+      "emoji": "🍀",
+      "goal": "UWC başvurusu birincil öncelik (Kasım'da gönderim); felsefe kulübü (analitik felsefe + bilim felsefesi) tüm yıl boyunca topluluk katkısı kanıtı olarak sürdürülüyor, yıl sonunda yazılı arşiv.",
+      "topics": [
+        "UWC başvurusu",
+        "Felsefe kulübü"
+      ],
+      "next": "\"Neden UWC, neden ben\" beyin fırtınası ile deneme taslağına başla.",
+      "ms": [
+        "Başvuru gönderildi (Kasım)",
+        "Kulüp dönem sonu özet raporu (Aralık, Mayıs)",
+        "Yıl sonu yazılı arşiv tamam"
+      ]
+    },
+    {
+      "id": "P3-yaz",
+      "name": "Yaz Projesi (olası P3-2)",
+      "emoji": "☀️",
+      "goal": "P2 tamamlandıktan sonra (Mart-Nisan) planlanmaya başlanan, Mayıs-Haziran'da yürütülen üçüncü üretim projesi — kapsamı Mart'ta netleşiyor.",
+      "topics": [],
+      "next": "P2 sonrası ne yapılacağına dair literatür/ilgi taraması yap.",
+      "ms": [
+        "Proje fikri netleşti, kapsam belirlendi",
+        "Proje planı yazıldı",
+        "İlk teknik adım atıldı"
+      ]
+    }
+  ],
+  "bridges": [
+    {
+      "n": "Kablo Teorisi Köprüsü",
+      "e": "🔗",
+      "d": "PDE + devre teorisi + gerçek nöron morfolojisi (P1'in matematiksel temeli).",
+      "t": [
+        "Cable theory",
+        "P1"
+      ]
+    },
+    {
+      "n": "Stokastik Süreçler ↔ Kanal Gürültüsü",
+      "e": "🔗",
+      "d": "Markov modeli = iyon kanalının açılıp kapanması.",
+      "t": [
+        "Markov modeli",
+        "İyon kanalı gürültüsü",
+        "P1"
+      ]
+    },
+    {
+      "n": "Dinamik Sistemler ↔ Senkronizasyon",
+      "e": "🔗",
+      "d": "Salınım + diferansiyel denklem + iki nöron senkronu.",
+      "t": [
+        "Faz kilitleme",
+        "Senkronizasyon",
+        "P1"
+      ]
+    },
+    {
+      "n": "Hopfield Ağı ↔ Transformer Attention",
+      "e": "🔗",
+      "d": "İstatistiksel mekanik kökenli attractor network, güncel yapay zeka mimarileriyle bağlantısı (opsiyonel ileri konu).",
+      "t": [
+        "Hopfield network",
+        "Attention",
+        "P2"
+      ]
+    }
+  ]
+}
