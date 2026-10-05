@@ -9,13 +9,13 @@ import com.beril.kaomoji.lab.model.KnowledgeObjectEntity
 import com.beril.kaomoji.lab.model.ObjectKind
 import com.beril.kaomoji.lab.model.RelationshipEntity
 import kotlinx.coroutines.flow.Flow
+import java.time.Instant
 import java.time.LocalDate
 
 /**
- * Lab 2.0'ın tek giriş noktası. Henüz hiçbir ekran bunu kullanmıyor (bu Aşama 1'in kapsamı
- * dışında — ekranların yeni modele taşınması sonraki aşamanın işi); bu aşamada amaç
- * domain model + Room + curriculum contract/importer'ın gerçekten derlendiğini ve
- * gerçekten çalıştığını (birim testleriyle) kanıtlamak.
+ * Lab 2.0'ın tek giriş noktası. Aşama 3'ten itibaren `ui/lab2/Lab2HomeScreen.kt` bunu
+ * kullanıyor — eski ekranlar (GardenScreen, Store.kt vb.) hâlâ dokunulmadı, Lab 2.0 ekranı
+ * mevcut uygulamanın yanında ayrı bir giriş noktası (Çanta → 🧪 Lab 2.0).
  */
 class LabRepository(private val dao: LabDao) {
 
@@ -34,6 +34,21 @@ class LabRepository(private val dao: LabDao) {
 
     suspend fun upcoming(days: Long = 14, today: LocalDate = LocalDate.now()): List<KnowledgeObjectEntity> =
         dao.upcoming(today.toEpochDay(), today.plusDays(days).toEpochDay())
+
+    /** Brain Inbox'ın yeni modeldeki karşılığı (§22) — sınıflandırma zorunlu değil, bu
+     *  yüzden IDEA türünde, bağlamsız, zamanlamasız bir nesne olarak yazılır. Kullanıcı ya
+     *  da AI (izin verilirse) sonradan türünü/bağlamını değiştirebilir — bu bir güncelleme,
+     *  yeni bir nesne değil. */
+    suspend fun quickCapture(title: String): String {
+        val obj = KnowledgeObjectEntity(
+            kind = ObjectKind.IDEA,
+            title = title,
+            createdAt = Instant.now(),
+            updatedAt = Instant.now(),
+        )
+        dao.upsert(obj)
+        return obj.id
+    }
 
     /** Eski `assets/curriculum.json`'u (henüz contract v1 şeklinde değilse) adapte edip
      *  içe aktarır. Uygulama, müfredat üretim projesi contract v1'i doğrudan üretmeye

@@ -41,6 +41,9 @@ sealed class Screen {
     data object CurriculumEdit : Screen()
     data object Evaluation : Screen()
     data object Stats : Screen()
+    /** Lab 2.0'ın yeni bilgi grafiği altyapısına dayanan, eski ekranların yanında duran
+     *  ayrı giriş noktası — kademeli geçişin bir parçası, GardenScreen'in yerini almıyor. */
+    data object Lab2 : Screen()
     data class UnitDetail(val id: String) : Screen()
     data class ProjectDetail(val id: String) : Screen()
     data class UnitEdit(val id: String) : Screen()
@@ -190,6 +193,7 @@ private fun Body(
         is Screen.CurriculumEdit -> CurriculumEditScreen(store, onOpenUnit = { onGo(Screen.UnitEdit(it)) }, onBack = onBack)
         is Screen.Evaluation -> EvaluationScreen(store, onBack)
         is Screen.Stats -> StatsScreen(store, onBack)
+        is Screen.Lab2 -> com.beril.kaomoji.ui.lab2.Lab2HomeScreen(onBack)
         is Screen.UnitDetail -> UnitDetailScreen(
             store, screen.id, onBack, onRecord, onAddMistake, onLogProblems
         )

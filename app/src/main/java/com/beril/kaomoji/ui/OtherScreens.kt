@@ -863,7 +863,8 @@ fun StudyBagScreen(store: Store, onGo: (Screen) -> Unit, onExplainIt: () -> Unit
         Triple("🗂️", "Müfredat Oluştur", Screen.CurriculumGen),
         Triple("✏️", "Müfredatı Düzenle", Screen.CurriculumEdit),
         Triple("🤖", "Durumu Değerlendir (AI)", Screen.Evaluation),
-        Triple("📈", "İstatistikler", Screen.Stats)
+        Triple("📈", "İstatistikler", Screen.Stats),
+        Triple("🧪", "Lab 2.0 (Beta)", Screen.Lab2)
     )
 
     LazyColumn(
