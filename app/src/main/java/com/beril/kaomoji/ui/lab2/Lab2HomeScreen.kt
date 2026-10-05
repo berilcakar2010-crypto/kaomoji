@@ -63,11 +63,14 @@ fun Lab2HomeScreen(onBack: () -> Unit, onOpenConcept: (id: String, title: String
     var capture by remember { mutableStateOf("") }
     var newConcept by remember { mutableStateOf("") }
     var refreshTick by remember { mutableStateOf(0) }
+    var importedCount by remember { mutableStateOf(0) }
+    var importing by remember { mutableStateOf(false) }
 
     LaunchedEffect(refreshTick) {
         upcoming = repo.upcoming(days = 14)
         pastTarget = repo.pastTargetDate()
         concepts = repo.getByKind(ObjectKind.CONCEPT)
+        importedCount = repo.countFromPackage("lab2-personal-curriculum")
     }
     LaunchedEffect(Unit) {
         repo.observeAll().collect { recent = it.take(10) }
@@ -113,6 +116,34 @@ fun Lab2HomeScreen(onBack: () -> Unit, onOpenConcept: (id: String, title: String
         } else {
             items(pastTarget, key = { "past-${it.id}" }) { obj -> KnowledgeRow(obj, label = "HEDEF TARİHİ GEÇTİ — seçenek, hata değil") }
             items(upcoming, key = { "up-${it.id}" }) { obj -> KnowledgeRow(obj, label = statusLabel(obj)) }
+        }
+
+        item {
+            SectionLabel("müfredat paketi", "📚")
+            Row(Modifier.fillMaxWidth()) {
+                Column(Modifier.fillMaxWidth()) {
+                    Text(
+                        if (importedCount > 0) "İçe aktarıldı: $importedCount nesne (önkoşul grafiği + bağlantılar)"
+                        else "Henüz içe aktarılmadı",
+                        style = Small,
+                    )
+                    Spacer(Modifier.height(6.dp))
+                    Btn(
+                        if (importing) "İçe aktarılıyor…" else "📚 Kişisel Müfredatı İçe Aktar",
+                        {
+                            if (!importing) {
+                                importing = true
+                                scope.launch {
+                                    repo.importExternalCurriculum(ctx)
+                                    importing = false
+                                    refreshTick++
+                                }
+                            }
+                        },
+                        enabled = !importing,
+                    )
+                }
+            }
         }
 
         item {

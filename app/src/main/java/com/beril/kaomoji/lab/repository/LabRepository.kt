@@ -2,6 +2,7 @@ package com.beril.kaomoji.lab.repository
 
 import android.content.Context
 import com.beril.kaomoji.lab.curriculum.CurriculumImporter
+import com.beril.kaomoji.lab.curriculum.ExternalCurriculumAdapter
 import com.beril.kaomoji.lab.curriculum.LegacyCurriculumAdapter
 import com.beril.kaomoji.lab.db.LabDao
 import com.beril.kaomoji.lab.db.LabDatabase
@@ -106,6 +107,19 @@ class LabRepository(private val dao: LabDao) {
         val raw = context.assets.open("curriculum.json").bufferedReader().use { it.readText() }
         importer.import(LegacyCurriculumAdapter.toContractPackage(raw))
     }
+
+    /** `assets/lab2_curriculum.json` — 123 öğrenme nesnesi, gerçek önkoşul grafiği, bilingual
+     *  başlıklar, soru bankaları, ustalık kanıtı. Contract v1'den daha zengin bir dış şema;
+     *  [ExternalCurriculumAdapter] bunu doğrudan Room grafiğine çevirir. Yeniden çağırmak
+     *  güvenli — sourcePackageId'ye göre silinip yeniden yazılır, çoğalmaz. */
+    suspend fun importExternalCurriculum(context: Context) {
+        val raw = context.assets.open("lab2_curriculum.json").bufferedReader().use { it.readText() }
+        ExternalCurriculumAdapter.import(raw, dao)
+    }
+
+    /** Bu paketten gelen nesne sayısı — içe aktarma gerçekten olmuş mu, kaç nesne var,
+     *  bir "İçe Aktarıldı (123)" göstergesi için. */
+    suspend fun countFromPackage(packageId: String): Int = dao.getBySourcePackage(packageId).size
 
     companion object {
         fun forDao(dao: LabDao) = LabRepository(dao)
