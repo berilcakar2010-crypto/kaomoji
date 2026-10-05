@@ -206,7 +206,11 @@ compiling or working at any point):
 - **Aşama 10** — data ownership (§34/§41): `LabDataScreen` exports every object/relationship/
   context the user has produced in Lab 2.0 to one plain JSON file via SAF
   (`CreateDocument`/`OpenDocument` — no new permission, no server), and restores from one.
-  This closing status ledger.
+- **Aşama 11** — `ProjectsScreen` (§21: research question fixed, notes/next-action evolve,
+  "SIRADAKİ EYLEM" is the headline, not a task list) and `ExamsScreen` (§20: scope + prep
+  status, date lives in the same `Schedule` the home screen's "upcoming" query already reads
+  — creating an exam here makes it show up there with zero extra wiring). README.md now
+  points to Lab 2.0 and this ledger; before this it was undiscoverable outside the app itself.
 
 ### Honestly still NOT built (not a short list — said plainly, not glossed over)
 
@@ -214,9 +218,6 @@ compiling or working at any point):
   and the OLD mistake/flashcard records specifically — Aşama 9 built NEW ones on the new
   model, it did not migrate the old ones) has not been migrated. The old screens and the new
   Lab 2.0 screen still read from two separate stores.
-- **Exams and projects rebuilt on the new model** (§20/§21) — `ObjectKind.EXAM`/`ASSIGNMENT`/
-  `PROJECT` exist and the curriculum importer (Aşama 6) can create `EXAM` rows from an
-  imported package's assessments, but there is no screen to create/browse/manage one by hand.
 - **Motion/micro-interactions** (§11/§38) — screens render instantly with no transition design;
   the spec's "small, satisfying animations" are not implemented.
 - **Widget/notifications rebuilt on the new model** (§43/§44) — the existing widget still reads

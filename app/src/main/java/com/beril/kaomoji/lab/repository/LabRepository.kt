@@ -9,11 +9,15 @@ import com.beril.kaomoji.lab.db.LabDatabase
 import com.beril.kaomoji.lab.export.LabDataExport
 import com.beril.kaomoji.lab.learning.LearningDiscipline
 import com.beril.kaomoji.lab.learning.LearningSessionState
+import com.beril.kaomoji.lab.model.ExamPayload
 import com.beril.kaomoji.lab.model.FlashcardPayload
 import com.beril.kaomoji.lab.model.KnowledgeObjectEntity
 import com.beril.kaomoji.lab.model.LearningSessionPayload
 import com.beril.kaomoji.lab.model.MistakePayload
 import com.beril.kaomoji.lab.model.ObjectKind
+import com.beril.kaomoji.lab.model.ProjectPayload
+import com.beril.kaomoji.lab.model.Schedule
+import com.beril.kaomoji.lab.model.ScheduleStatus
 import com.beril.kaomoji.lab.model.RelationshipEntity
 import com.beril.kaomoji.lab.model.RelationshipType
 import com.beril.kaomoji.lab.srs.SM2Engine
@@ -184,6 +188,63 @@ class LabRepository(private val dao: LabDao) {
         val updated = SM2Engine.review(payload, quality, today.toEpochDay())
         dao.update(obj.copy(payload = updated.toJson(), updatedAt = Instant.now()))
     }
+
+    // ── Projeler (§21) ──
+    suspend fun createProject(title: String, researchQuestion: String): String {
+        val obj = KnowledgeObjectEntity(
+            kind = ObjectKind.PROJECT,
+            title = title,
+            payload = ProjectPayload(researchQuestion).toJson(),
+            createdAt = Instant.now(), updatedAt = Instant.now(),
+        )
+        dao.upsert(obj)
+        return obj.id
+    }
+
+    suspend fun allProjects(): List<KnowledgeObjectEntity> = dao.getByKind(ObjectKind.PROJECT)
+
+    /** Projenin sadece notes/hypothesis/nextAction/status alanlarını günceller — başlık ve
+     *  researchQuestion sabit kalır, bir proje zamanla "ne sorduğunu" unutmamalı. */
+    suspend fun updateProject(projectId: String, notes: String? = null, hypothesis: String? = null, nextAction: String? = null, status: String? = null) {
+        val obj = dao.getById(projectId) ?: return
+        val p = runCatching { ProjectPayload.fromJson(obj.payload) }.getOrNull() ?: return
+        val updated = p.copy(
+            notes = notes ?: p.notes,
+            hypothesis = hypothesis ?: p.hypothesis,
+            nextAction = nextAction ?: p.nextAction,
+            status = status ?: p.status,
+        )
+        dao.update(obj.copy(payload = updated.toJson(), updatedAt = Instant.now()))
+    }
+
+    // ── Sınavlar / Ödevler (§20) ──
+    suspend fun createExam(title: String, scope: String, examDate: LocalDate? = null, isAssignment: Boolean = false): String {
+        val obj = KnowledgeObjectEntity(
+            kind = if (isAssignment) ObjectKind.ASSIGNMENT else ObjectKind.EXAM,
+            title = title,
+            payload = ExamPayload(scope).toJson(),
+            schedule = examDate?.let { Schedule(examDate = it.toEpochDay(), status = ScheduleStatus.SCHEDULED) },
+            createdAt = Instant.now(), updatedAt = Instant.now(),
+        )
+        dao.upsert(obj)
+        return obj.id
+    }
+
+    suspend fun allExams(): List<KnowledgeObjectEntity> =
+        (dao.getByKind(ObjectKind.EXAM) + dao.getByKind(ObjectKind.ASSIGNMENT)).sortedBy { it.schedule?.examDate }
+
+    suspend fun updateExamPrepStatus(examId: String, prepStatus: String) {
+        val obj = dao.getById(examId) ?: return
+        val p = runCatching { ExamPayload.fromJson(obj.payload) }.getOrNull() ?: return
+        dao.update(obj.copy(payload = p.copy(prepStatus = prepStatus).toJson(), updatedAt = Instant.now()))
+    }
+
+    /** Bu sınav/ödevin kapsadığı kavramlar — ConceptGraph'tan ASSESSES ilişkisiyle (müfredat
+     *  paketinden gelmişse) ya da elle eklenmiş olabilir. "Bu sınav için ne önemli?" (§20). */
+    suspend fun conceptsAssessedBy(examId: String): List<KnowledgeObjectEntity> =
+        dao.relationshipsOf(examId)
+            .filter { it.type == RelationshipType.ASSESSES && it.fromId == examId }
+            .mapNotNull { dao.getById(it.toId) }
 
     // ── Veri sahipliği: dışa/içe aktarma (§34/§41) ──
     /** Kullanıcının ürettiği HER şeyi (bir müfredat paketi değil — kendi verisi) tek bir

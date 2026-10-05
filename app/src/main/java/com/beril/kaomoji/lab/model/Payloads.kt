@@ -137,3 +137,60 @@ data class LearningSessionPayload(
 
 fun LearningSessionPayload.currentStage(): LearningStage =
     com.beril.kaomoji.lab.learning.LearningSessionEngine.stagesFor(discipline)[stageIndex]
+
+/** Proje (§21) — görev listesi değil. Soru/hipotez/sıradaki-eylem bilerek en küçük tutarlı
+ *  alt küme; notes serbest metin olarak büyür (deneyler/kararlar/kanıtlar oraya yazılabilir,
+ *  her biri için ayrı alan açmak bu aşamada erken optimizasyon olurdu). */
+data class ProjectPayload(
+    val researchQuestion: String,
+    val hypothesis: String? = null,
+    val nextAction: String? = null,
+    val notes: String = "",
+    val status: String = "active",
+) {
+    fun toJson(): String = JSONObject().apply {
+        put("researchQuestion", researchQuestion)
+        hypothesis?.let { put("hypothesis", it) }
+        nextAction?.let { put("nextAction", it) }
+        put("notes", notes)
+        put("status", status)
+    }.toString()
+
+    companion object {
+        fun fromJson(raw: String): ProjectPayload {
+            val j = JSONObject(raw)
+            return ProjectPayload(
+                researchQuestion = j.optString("researchQuestion"),
+                hypothesis = if (j.has("hypothesis")) j.optString("hypothesis") else null,
+                nextAction = if (j.has("nextAction")) j.optString("nextAction") else null,
+                notes = j.optString("notes"),
+                status = j.optString("status", "active"),
+            )
+        }
+    }
+}
+
+/** Sınav/ödev (§20) — "bu sınav için ne önemli" sorusuna cevap verebilmek için scope +
+ *  hazırlık durumu. Tarih zaten Schedule.examDate'te, burada tekrarlanmıyor. */
+data class ExamPayload(
+    val scope: String,
+    val importance: String = "normal",
+    val prepStatus: String = "not-started",
+) {
+    fun toJson(): String = JSONObject().apply {
+        put("scope", scope)
+        put("importance", importance)
+        put("prepStatus", prepStatus)
+    }.toString()
+
+    companion object {
+        fun fromJson(raw: String): ExamPayload {
+            val j = JSONObject(raw)
+            return ExamPayload(
+                scope = j.optString("scope"),
+                importance = j.optString("importance", "normal"),
+                prepStatus = j.optString("prepStatus", "not-started"),
+            )
+        }
+    }
+}

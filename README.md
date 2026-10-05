@@ -64,6 +64,24 @@ Beş alan. Onlarca sekme yok — tek bir küçük dünya.
 
 ---
 
+## 🧪 Lab 2.0 (Beta)
+
+Uygulamanın yanında, Çanta → **🧪 Lab 2.0** üzerinden ayrı bir giriş noktası olarak büyüyen,
+yeni bir bilgi grafiği mimarisi. Yukarıdaki beş alanın yerini almıyor — eski uygulama hiç
+dokunulmadan çalışmayı sürdürüyor, Lab 2.0 onun yanında.
+
+Fark: müfredat burada bir takvim değil, bir **bilgi grafiği** — kavramlar önkoşul/bağlantı
+ilişkileriyle birbirine bağlı, öğrenme "soru-önce" (önce kendi tahminini yaz, sonra sadece
+gereken kadarını aç) ilkesiyle ilerliyor. Şu an çalışan: gerçek bir 123-kavramlık müfredat
+paketinin içe aktarılması, önkoşul grafiğinde gezinme, disiplin-uyarlanabilir öğrenme
+oturumları, hata defteri, tekrar kartları (SM-2), projeler, sınavlar, AI destekli açıklama/
+değerlendirme (opsiyonel, kendi API anahtarınla), genel arama, kendi verini dışa/içe aktarma.
+
+Tam teknik durum, neyin gerçekten bittiği ve neyin hâlâ eksik olduğunun dürüst listesi:
+[`LAB_2.0_ARCHITECTURE.md`](./LAB_2.0_ARCHITECTURE.md).
+
+---
+
 ## ⏳ Zamansız Müfredat, Tarihli Görevler
 
 Fazlar arası sıra hâlâ zamansız — bir birimin görevleri bitince sıradaki açılır,

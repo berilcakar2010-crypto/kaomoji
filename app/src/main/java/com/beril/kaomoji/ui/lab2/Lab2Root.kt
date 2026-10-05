@@ -23,6 +23,8 @@ private sealed class Lab2Screen {
     data object Mistakes : Lab2Screen()
     data object Flashcards : Lab2Screen()
     data object Data : Lab2Screen()
+    data object Projects : Lab2Screen()
+    data object Exams : Lab2Screen()
 }
 
 @Composable
@@ -50,6 +52,8 @@ fun Lab2Root(onExit: () -> Unit) {
                     onOpenMistakes = { screen = Lab2Screen.Mistakes },
                     onOpenFlashcards = { screen = Lab2Screen.Flashcards },
                     onOpenData = { screen = Lab2Screen.Data },
+                    onOpenProjects = { screen = Lab2Screen.Projects },
+                    onOpenExams = { screen = Lab2Screen.Exams },
                 )
             }
         } else {
@@ -63,6 +67,8 @@ fun Lab2Root(onExit: () -> Unit) {
                         onOpenMistakes = { screen = Lab2Screen.Mistakes },
                         onOpenFlashcards = { screen = Lab2Screen.Flashcards },
                         onOpenData = { screen = Lab2Screen.Data },
+                        onOpenProjects = { screen = Lab2Screen.Projects },
+                        onOpenExams = { screen = Lab2Screen.Exams },
                     )
                     else -> Lab2DetailScreen(s, onBack = { screen = Lab2Screen.Home }, onNavigate = { next -> screen = next })
                 }
@@ -94,6 +100,8 @@ private fun Lab2DetailScreen(screen: Lab2Screen, onBack: () -> Unit, onNavigate:
         is Lab2Screen.Mistakes -> MistakeJournalScreen(onBack = onBack)
         is Lab2Screen.Flashcards -> FlashcardReviewScreen(onBack = onBack)
         is Lab2Screen.Data -> LabDataScreen(onBack = onBack)
+        is Lab2Screen.Projects -> ProjectsScreen(onBack = onBack)
+        is Lab2Screen.Exams -> ExamsScreen(onBack = onBack)
         is Lab2Screen.Home -> Unit
     }
 }
