@@ -62,6 +62,7 @@ fun Lab2HomeScreen(onBack: () -> Unit, onOpenConcept: (id: String, title: String
     var concepts by remember { mutableStateOf<List<KnowledgeObjectEntity>>(emptyList()) }
     var capture by remember { mutableStateOf("") }
     var newConcept by remember { mutableStateOf("") }
+    var conceptFilter by remember { mutableStateOf("") }
     var refreshTick by remember { mutableStateOf(0) }
     var importedCount by remember { mutableStateOf(0) }
     var importing by remember { mutableStateOf(false) }
@@ -162,11 +163,19 @@ fun Lab2HomeScreen(onBack: () -> Unit, onOpenConcept: (id: String, title: String
                     scope.launch { repo.createConcept(t); newConcept = ""; refreshTick++ }
                 }
             }, emoji = "🧠")
+            if (concepts.size > 8) {
+                Spacer(Modifier.height(6.dp))
+                Field(conceptFilter, { conceptFilter = it }, placeholder = "${concepts.size} kavram içinde ara…")
+            }
         }
+        val filteredConcepts = if (conceptFilter.isBlank()) concepts
+            else concepts.filter { it.title.contains(conceptFilter, ignoreCase = true) }
         if (concepts.isEmpty()) {
             item { Empty("🧠", "Henüz bir kavram yok", "Yukarıdan bir kavram ekle, öğrenme oturumu ona bağlanacak.") }
+        } else if (filteredConcepts.isEmpty()) {
+            item { Empty("🧠", "Eşleşen kavram yok", "\"$conceptFilter\" için bir sonuç bulunamadı.") }
         } else {
-            items(concepts, key = { "concept-${it.id}" }) { c ->
+            items(filteredConcepts, key = { "concept-${it.id}" }) { c ->
                 Row(
                     Modifier
                         .fillMaxWidth()

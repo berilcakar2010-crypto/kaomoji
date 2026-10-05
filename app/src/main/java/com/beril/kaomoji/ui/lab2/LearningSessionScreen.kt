@@ -71,6 +71,7 @@ fun LearningSessionScreen(conceptId: String, conceptTitle: String, onBack: () ->
                     options = LearningDiscipline.entries.map { it.name },
                     selected = discipline.name,
                     onSelect = { discipline = LearningDiscipline.valueOf(it) },
+                    labels = { disciplineLabel(LearningDiscipline.valueOf(it)) },
                 )
                 Spacer(Modifier.height(10.dp))
                 Btn("Oturumu Başlat", {
@@ -141,6 +142,14 @@ private fun StageBody(s: LearningSessionState, onAttemptChange: (String) -> Unit
         LearningStage.RETAIN -> Text("Bunu aralıklı tekrara eklemeyi düşün.", style = Small)
         LearningStage.CONNECT -> Text("Bu başka hangi kavram/projeyle ilişkili?", style = Small)
     }
+}
+
+private fun disciplineLabel(d: LearningDiscipline): String = when (d) {
+    LearningDiscipline.MATH -> "Matematik"
+    LearningDiscipline.PHYSICS -> "Fizik"
+    LearningDiscipline.PROGRAMMING -> "Programlama"
+    LearningDiscipline.THEORY -> "Teori"
+    LearningDiscipline.GENERAL -> "Genel"
 }
 
 private fun stageLabel(stage: LearningStage): String = when (stage) {

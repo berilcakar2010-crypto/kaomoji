@@ -172,3 +172,50 @@ assignments, contexts), **Archive** (recordings, mistakes, flashcards review, st
 Given the scope, two things need your call before I start writing code (see question below):
 delivery shape (in-place vs. parallel) and phasing. Everything else above I'm treating as
 decided and will build against.
+
+## 9. Status after Aşama 1–7 (final pass for this round)
+
+Built, tested, CI-green on every phase, additive (the old `app/` screens never stopped
+compiling or working at any point):
+
+- **Aşama 1** — domain model (`KnowledgeObjectEntity`/`RelationshipEntity`/`ContextEntity`),
+  Room, Curriculum Contract v1 + legacy-JSON adapter.
+- **Aşama 2** — `AIProvider`/`AICapabilityGate` (capability-scoped, offline-safe), real fix to
+  `ApiKeyStore` (plaintext → `EncryptedSharedPreferences`).
+- **Aşama 3** — first real screen (Lab 2.0 home: quick capture, upcoming/overdue-as-option,
+  recent objects), backed by the real repository, real empty states.
+- **Aşama 4** — question-first learning engine (§12–14): discipline-adaptive stage sequencing,
+  attempt text preserved across every transition.
+- **Aşama 5** — portrait-tablet nav shell (COMPACT/TABLET_PORTRAIT/TABLET_LANDSCAPE), landscape
+  secondary panel so opening a session/graph never hides where you came from.
+- **Aşama 6** — the user's real 123-object curriculum package imported end to end (hierarchy,
+  typed prerequisite edges, cross-discipline connections, context mappings), nothing silently
+  dropped (full raw object kept in `payload`).
+- **Aşama 7** — the knowledge graph's first real UI: a navigable prerequisites/enables/related
+  screen, not a decorative diagram.
+- **Final pass** — Turkish labels for discipline selection, a search filter on the concept list
+  (needed now that it can hold 123+ real items), this status ledger.
+
+### Honestly still NOT built (not a short list — said plainly, not glossed over)
+
+- **Old data migration**: `Store.kt`'s JSON blob (curriculum progress, mistakes, flashcards,
+  explanations, stats) has not been migrated into the new model. The old screens and the new
+  Lab 2.0 screen currently read from two separate stores.
+- **Mistake journal, exams, projects, flashcards (SM-2) rebuilt on the new model** (§23/§24/
+  §20/§21) — they still only exist in the old `Store.kt` world.
+- **Global search UI** (§30) — `LabRepository.search()` exists and is tested, no screen calls it.
+- **Export/import UI** (§41) — the data layer can import a curriculum package; there is no
+  settings screen for backup/restore/export of the user's own Lab 2.0 data yet.
+- **AI actually wired into any Lab 2.0 screen** — `AICapabilityGate` (Aşama 2) has no caller yet;
+  self-evaluation, writing assistance, and "explain this concept" are not reachable from the UI.
+- **Motion/micro-interactions** (§11/§38) — screens render instantly with no transition design;
+  the spec's "small, satisfying animations" are not implemented.
+- **Widget/notifications rebuilt on the new model** (§43/§44) — the existing widget still reads
+  the old `Store.kt`/legacy curriculum, unaware Lab 2.0 exists.
+- **A dedicated top-level nav area per §31** (Learn/Knowledge/Projects/Academics/Archive as
+  separate rail destinations) — Lab 2.0 is still one screen with sub-screens, not six areas.
+- **Any of this reachable without going through the old app's "Çanta" menu first.**
+
+None of this is secretly done — it's the honest remainder of a 55-section spec against roughly
+one working session. What exists is real (compiles, is tested, is CI-verified, is not a mockup)
+for the slice it covers; the slice is a fraction of the full vision.
