@@ -23,10 +23,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.compose.runtime.rememberCoroutineScope
+import com.beril.kaomoji.ai.engine.AICapabilityGate
+import com.beril.kaomoji.ai.engine.AIResult
 import com.beril.kaomoji.lab.graph.EdgeBucket
 import com.beril.kaomoji.lab.graph.bucketRelationships
 import com.beril.kaomoji.lab.model.KnowledgeObjectEntity
 import com.beril.kaomoji.lab.repository.LabRepository
+import kotlinx.coroutines.launch
 import com.beril.kaomoji.ui.Btn
 import com.beril.kaomoji.ui.Display
 import com.beril.kaomoji.ui.Empty
@@ -53,13 +57,19 @@ fun ConceptGraphScreen(
 ) {
     val ctx = LocalContext.current
     val repo = remember { LabRepository(ctx) }
+    val gate = remember { AICapabilityGate.forContext(ctx) }
+    val scope = rememberCoroutineScope()
 
     var prerequisites by remember { mutableStateOf<List<Pair<KnowledgeObjectEntity, String?>>>(emptyList()) }
     var enables by remember { mutableStateOf<List<Pair<KnowledgeObjectEntity, String?>>>(emptyList()) }
     var related by remember { mutableStateOf<List<Pair<KnowledgeObjectEntity, String?>>>(emptyList()) }
     var loaded by remember { mutableStateOf(false) }
+    var conceptBody by remember { mutableStateOf<String?>(null) }
+    var explanation by remember { mutableStateOf<AIResult<String>?>(null) }
+    var explaining by remember { mutableStateOf(false) }
 
     LaunchedEffect(conceptId) {
+        conceptBody = repo.getById(conceptId)?.body
         val buckets = bucketRelationships(conceptId, repo.relationshipsOf(conceptId))
         val prereqs = mutableListOf<Pair<KnowledgeObjectEntity, String?>>()
         val enableList = mutableListOf<Pair<KnowledgeObjectEntity, String?>>()
@@ -90,6 +100,27 @@ fun ConceptGraphScreen(
             Text("🕸️ $conceptTitle", style = Display)
             Spacer(Modifier.height(8.dp))
             Btn("▶ Öğrenme Oturumu Başlat", { onStartSession(conceptId, conceptTitle) })
+        }
+
+        item {
+            SectionLabel("ai ile açıkla", "🤖")
+            Text(
+                "Kendi tahminin/denemen olmadan tam açıklama istemek önerilmez (§13) — ama " +
+                    "takıldıysan bir yön bulmak için kullanabilirsin.",
+                style = Small,
+            )
+            Spacer(Modifier.height(6.dp))
+            Btn(if (explaining) "İsteniyor…" else "Bu Kavramı Açıkla", {
+                if (!explaining) {
+                    explaining = true
+                    scope.launch {
+                        explanation = gate.explainConcept(conceptTitle, conceptBody)
+                        explaining = false
+                    }
+                }
+            }, enabled = !explaining, emoji = "🤖")
+            Spacer(Modifier.height(6.dp))
+            AiResultView(explanation) { text -> Text(text, style = Small) }
         }
 
         item { SectionLabel("önce bunları bilmen gerekiyor", "←") }

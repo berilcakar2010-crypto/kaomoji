@@ -51,7 +51,12 @@ import kotlinx.coroutines.launch
  * Laboratuvar ekranının (GardenScreen) yerini almıyor, onun yanında duruyor.
  */
 @Composable
-fun Lab2HomeScreen(onBack: () -> Unit, onOpenConcept: (id: String, title: String) -> Unit) {
+fun Lab2HomeScreen(
+    onBack: () -> Unit,
+    onOpenConcept: (id: String, title: String) -> Unit,
+    onOpenSearch: () -> Unit,
+    onOpenEvaluation: () -> Unit,
+) {
     val ctx = LocalContext.current
     val repo = remember { LabRepository(ctx) }
     val scope = rememberCoroutineScope()
@@ -83,7 +88,11 @@ fun Lab2HomeScreen(onBack: () -> Unit, onOpenConcept: (id: String, title: String
         verticalArrangement = Arrangement.spacedBy(10.dp),
     ) {
         item {
-            GhostBtn("Geri", onBack, emoji = "←")
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                GhostBtn("Geri", onBack, emoji = "←")
+                GhostBtn("Ara", onOpenSearch, emoji = "🔎")
+                GhostBtn("Değerlendir", onOpenEvaluation, emoji = "🪞")
+            }
             Spacer(Modifier.height(10.dp))
             Text("🧪 Lab 2.0 (Beta)", style = Display)
             Text(

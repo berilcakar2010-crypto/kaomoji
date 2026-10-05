@@ -18,25 +18,33 @@ private sealed class Lab2Screen {
     data object Home : Lab2Screen()
     data class Graph(val conceptId: String, val conceptTitle: String) : Lab2Screen()
     data class Session(val conceptId: String, val conceptTitle: String) : Lab2Screen()
+    data object Search : Lab2Screen()
+    data object Evaluation : Lab2Screen()
 }
 
 @Composable
 fun Lab2Root(onExit: () -> Unit) {
     var screen by remember { mutableStateOf<Lab2Screen>(Lab2Screen.Home) }
-    val detail = screen.let { it as? Lab2Screen.Graph ?: (it as? Lab2Screen.Session) }
+    val currentDetail = screen
 
     BoxWithConstraints(Modifier.fillMaxSize()) {
         val wide = breakpointFor(maxWidth.value.toInt()) == Lab2Breakpoint.TABLET_LANDSCAPE
+        val showSecondary = wide && currentDetail !is Lab2Screen.Home
 
         if (wide) {
-            // Genişlik yetiyorsa (§38) bir detay (graf/oturum) açmak ana listeyi GİZLEMEZ —
-            // ikisi yan yana durur, "nereden geldin" her zaman görünür kalır.
+            // Genişlik yetiyorsa (§38) bir detay (graf/oturum/arama/değerlendirme) açmak ana
+            // listeyi GİZLEMEZ — ikisi yan yana durur, "nereden geldin" her zaman görünür kalır.
             Lab2NavShell(
-                secondaryPanel = detail?.let { s ->
-                    { Lab2DetailScreen(s, onBack = { screen = Lab2Screen.Home }, onNavigate = { next -> screen = next }) }
-                },
+                secondaryPanel = if (showSecondary) {
+                    { Lab2DetailScreen(currentDetail, onBack = { screen = Lab2Screen.Home }, onNavigate = { next -> screen = next }) }
+                } else null,
             ) {
-                Lab2HomeScreen(onBack = onExit, onOpenConcept = { id, title -> screen = Lab2Screen.Graph(id, title) })
+                Lab2HomeScreen(
+                    onBack = onExit,
+                    onOpenConcept = { id, title -> screen = Lab2Screen.Graph(id, title) },
+                    onOpenSearch = { screen = Lab2Screen.Search },
+                    onOpenEvaluation = { screen = Lab2Screen.Evaluation },
+                )
             }
         } else {
             Lab2NavShell {
@@ -44,6 +52,8 @@ fun Lab2Root(onExit: () -> Unit) {
                     is Lab2Screen.Home -> Lab2HomeScreen(
                         onBack = onExit,
                         onOpenConcept = { id, title -> screen = Lab2Screen.Graph(id, title) },
+                        onOpenSearch = { screen = Lab2Screen.Search },
+                        onOpenEvaluation = { screen = Lab2Screen.Evaluation },
                     )
                     else -> Lab2DetailScreen(s, onBack = { screen = Lab2Screen.Home }, onNavigate = { next -> screen = next })
                 }
@@ -67,6 +77,11 @@ private fun Lab2DetailScreen(screen: Lab2Screen, onBack: () -> Unit, onNavigate:
             conceptTitle = screen.conceptTitle,
             onBack = onBack,
         )
+        is Lab2Screen.Search -> LabSearchScreen(
+            onBack = onBack,
+            onOpenConcept = { id, title -> onNavigate(Lab2Screen.Graph(id, title)) },
+        )
+        is Lab2Screen.Evaluation -> LabEvaluationScreen(onBack = onBack)
         is Lab2Screen.Home -> Unit
     }
 }
