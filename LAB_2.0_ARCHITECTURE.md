@@ -211,6 +211,11 @@ compiling or working at any point):
   status, date lives in the same `Schedule` the home screen's "upcoming" query already reads
   — creating an exam here makes it show up there with zero extra wiring). README.md now
   points to Lab 2.0 and this ledger; before this it was undiscoverable outside the app itself.
+- **Aşama 12** — the last two unused `AICapabilityGate` methods got callers: `improveWriting`
+  in `ProjectsScreen` (notes field — result shown separately, the user taps "Bu metni kullan"
+  to adopt it, it never overwrites silently, per §5) and `proposeStudyPlan` in
+  `LabEvaluationScreen` ("7 Günlük Plan Öner" — a suggestion only, nothing in this call path
+  can write to a Schedule). All five `AICapabilityGate` methods now have a real caller.
 
 ### Honestly still NOT built (not a short list — said plainly, not glossed over)
 
@@ -225,9 +230,6 @@ compiling or working at any point):
 - **A dedicated top-level nav area per §31** (Learn/Knowledge/Projects/Academics/Archive as
   separate rail destinations) — Lab 2.0 is one screen with many sub-screens reachable from it,
   not six permanent areas.
-- **Writing assistance and plan proposals** (`AICapabilityGate.improveWriting`/
-  `proposeStudyPlan`, built in Aşama 2) still have no UI caller — evaluation and concept
-  explanation do, writing/planning don't yet.
 - **Any of this reachable without going through the old app's "Çanta" menu first** — there is
   still exactly one door into Lab 2.0, not a redesigned app shell.
 

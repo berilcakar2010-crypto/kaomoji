@@ -23,6 +23,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import com.beril.kaomoji.ai.engine.AICapabilityGate
+import com.beril.kaomoji.ai.engine.AIResult
 import com.beril.kaomoji.lab.model.KnowledgeObjectEntity
 import com.beril.kaomoji.lab.model.ProjectPayload
 import com.beril.kaomoji.lab.repository.LabRepository
@@ -46,6 +48,7 @@ import kotlinx.coroutines.launch
 fun ProjectsScreen(onBack: () -> Unit) {
     val ctx = LocalContext.current
     val repo = remember { LabRepository(ctx) }
+    val gate = remember { AICapabilityGate.forContext(ctx) }
     val scope = rememberCoroutineScope()
 
     var projects by remember { mutableStateOf<List<KnowledgeObjectEntity>>(emptyList()) }
@@ -55,6 +58,8 @@ fun ProjectsScreen(onBack: () -> Unit) {
     var question by remember { mutableStateOf("") }
     var nextActionEdit by remember { mutableStateOf("") }
     var notesEdit by remember { mutableStateOf("") }
+    var improving by remember { mutableStateOf(false) }
+    var improved by remember { mutableStateOf<AIResult<String>?>(null) }
     var refreshTick by remember { mutableStateOf(0) }
 
     LaunchedEffect(refreshTick) { projects = repo.allProjects() }
@@ -124,10 +129,28 @@ fun ProjectsScreen(onBack: () -> Unit) {
                         Spacer(Modifier.height(6.dp))
                         Field(notesEdit, { notesEdit = it }, placeholder = "Notlar", minLines = 2)
                         Spacer(Modifier.height(6.dp))
+                        Btn(if (improving) "İsteniyor…" else "AI ile Yazımı İyileştir", {
+                            if (!improving && notesEdit.isNotBlank()) {
+                                improving = true
+                                scope.launch {
+                                    improved = gate.improveWriting(notesEdit, "netlik ve dilbilgisini düzelt, anlamı değiştirme")
+                                    improving = false
+                                }
+                            }
+                        }, enabled = !improving, emoji = "✏️")
+                        AiResultView(improved) { text ->
+                            Column {
+                                Text(text, style = Small)
+                                Spacer(Modifier.height(4.dp))
+                                GhostBtn("Bu metni kullan", { notesEdit = text; improved = null }, emoji = "↩")
+                            }
+                        }
+                        Spacer(Modifier.height(6.dp))
                         Btn("Kaydet", {
                             scope.launch {
                                 repo.updateProject(proj.id, notes = notesEdit, nextAction = nextActionEdit)
                                 openId = null
+                                improved = null
                                 refreshTick++
                             }
                         }, emoji = "✓")

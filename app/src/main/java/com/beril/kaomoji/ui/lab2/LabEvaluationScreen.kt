@@ -54,6 +54,8 @@ fun LabEvaluationScreen(onBack: () -> Unit) {
     var loaded by remember { mutableStateOf(false) }
     var evaluation by remember { mutableStateOf<AIResult<String>?>(null) }
     var evaluating by remember { mutableStateOf(false) }
+    var plan by remember { mutableStateOf<AIResult<String>?>(null) }
+    var planning by remember { mutableStateOf(false) }
 
     androidx.compose.runtime.LaunchedEffect(Unit) {
         val concepts = repo.getByKind(ObjectKind.CONCEPT)
@@ -115,6 +117,32 @@ fun LabEvaluationScreen(onBack: () -> Unit) {
             }, enabled = !evaluating && loaded, emoji = "🤖")
             Spacer(Modifier.height(6.dp))
             AiResultView(evaluation) { text -> Text(text, style = Mono) }
+        }
+
+        item {
+            SectionLabel("plan önerisi", "🗓️")
+            Text(
+                "Sadece ÖNERİ üretir — hiçbir zaman otomatik uygulanmaz (§4 Mod C). " +
+                    "Herhangi bir tarihi/hedefi değiştirmek için bunu kendin, elle yapman gerekir.",
+                style = Small,
+            )
+            Spacer(Modifier.height(6.dp))
+            Btn(if (planning) "İsteniyor…" else "7 Günlük Plan Öner", {
+                if (!planning && loaded) {
+                    planning = true
+                    scope.launch {
+                        val summary = buildString {
+                            append("Toplam kavram: $conceptCount. ")
+                            append("Başlatılan öğrenme oturumu: $sessionCount, tamamlanan: $completedCount. ")
+                            append("Hiç çalışılmamış kavram sayısı: $neglected.")
+                        }
+                        plan = gate.proposeStudyPlan(summary, horizonDays = 7)
+                        planning = false
+                    }
+                }
+            }, enabled = !planning && loaded, emoji = "🗓️")
+            Spacer(Modifier.height(6.dp))
+            AiResultView(plan) { text -> Text(text, style = Mono) }
         }
     }
 }
