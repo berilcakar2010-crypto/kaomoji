@@ -193,29 +193,44 @@ compiling or working at any point):
   dropped (full raw object kept in `payload`).
 - **Aşama 7** — the knowledge graph's first real UI: a navigable prerequisites/enables/related
   screen, not a decorative diagram.
-- **Final pass** — Turkish labels for discipline selection, a search filter on the concept list
-  (needed now that it can hold 123+ real items), this status ledger.
+- **Aşama 8** — `AICapabilityGate` (built in Aşama 2, unused until now) wired into
+  `ConceptGraphScreen` ("explain this concept") and a new `LabEvaluationScreen` (real counts
+  first, AI commentary as a separate, clearly-labeled block). `LabRepository.search()` (built
+  in Aşama 1, unused until now) got its first screen, `LabSearchScreen`.
+- **Aşama 9** — mistake journal and flashcards (SM-2) rebuilt on the new model.
+  `MistakePayload`/`FlashcardPayload` existed since Aşama 1 with no caller; now
+  `MistakeJournalScreen` (problem/attempt/what-went-wrong/why/correct-reasoning/category,
+  plus a non-judgmental recurring-category note) and `FlashcardReviewScreen` (a real SM-2
+  engine ported to the new payload shape, not reusing the old `data/SM2.kt` which the old
+  screens still depend on) both work end to end.
+- **Aşama 10** — data ownership (§34/§41): `LabDataScreen` exports every object/relationship/
+  context the user has produced in Lab 2.0 to one plain JSON file via SAF
+  (`CreateDocument`/`OpenDocument` — no new permission, no server), and restores from one.
+  This closing status ledger.
 
 ### Honestly still NOT built (not a short list — said plainly, not glossed over)
 
-- **Old data migration**: `Store.kt`'s JSON blob (curriculum progress, mistakes, flashcards,
-  explanations, stats) has not been migrated into the new model. The old screens and the new
-  Lab 2.0 screen currently read from two separate stores.
-- **Mistake journal, exams, projects, flashcards (SM-2) rebuilt on the new model** (§23/§24/
-  §20/§21) — they still only exist in the old `Store.kt` world.
-- **Global search UI** (§30) — `LabRepository.search()` exists and is tested, no screen calls it.
-- **Export/import UI** (§41) — the data layer can import a curriculum package; there is no
-  settings screen for backup/restore/export of the user's own Lab 2.0 data yet.
-- **AI actually wired into any Lab 2.0 screen** — `AICapabilityGate` (Aşama 2) has no caller yet;
-  self-evaluation, writing assistance, and "explain this concept" are not reachable from the UI.
+- **Old data migration**: `Store.kt`'s JSON blob (curriculum progress, explanations, stats,
+  and the OLD mistake/flashcard records specifically — Aşama 9 built NEW ones on the new
+  model, it did not migrate the old ones) has not been migrated. The old screens and the new
+  Lab 2.0 screen still read from two separate stores.
+- **Exams and projects rebuilt on the new model** (§20/§21) — `ObjectKind.EXAM`/`ASSIGNMENT`/
+  `PROJECT` exist and the curriculum importer (Aşama 6) can create `EXAM` rows from an
+  imported package's assessments, but there is no screen to create/browse/manage one by hand.
 - **Motion/micro-interactions** (§11/§38) — screens render instantly with no transition design;
   the spec's "small, satisfying animations" are not implemented.
 - **Widget/notifications rebuilt on the new model** (§43/§44) — the existing widget still reads
   the old `Store.kt`/legacy curriculum, unaware Lab 2.0 exists.
 - **A dedicated top-level nav area per §31** (Learn/Knowledge/Projects/Academics/Archive as
-  separate rail destinations) — Lab 2.0 is still one screen with sub-screens, not six areas.
-- **Any of this reachable without going through the old app's "Çanta" menu first.**
+  separate rail destinations) — Lab 2.0 is one screen with many sub-screens reachable from it,
+  not six permanent areas.
+- **Writing assistance and plan proposals** (`AICapabilityGate.improveWriting`/
+  `proposeStudyPlan`, built in Aşama 2) still have no UI caller — evaluation and concept
+  explanation do, writing/planning don't yet.
+- **Any of this reachable without going through the old app's "Çanta" menu first** — there is
+  still exactly one door into Lab 2.0, not a redesigned app shell.
 
-None of this is secretly done — it's the honest remainder of a 55-section spec against roughly
-one working session. What exists is real (compiles, is tested, is CI-verified, is not a mockup)
-for the slice it covers; the slice is a fraction of the full vision.
+None of this is secretly done — it's the honest remainder of a 55-section spec against ten
+phases in one session. What exists is real (compiles, is tested, is CI-verified, is not a
+mockup) for the slice it covers; the slice is a meaningful fraction, not the full vision, and
+claiming otherwise would be dishonest.

@@ -43,6 +43,9 @@ interface LabDao {
     @Query("SELECT * FROM knowledge_objects ORDER BY updatedAt DESC")
     fun observeAll(): Flow<List<KnowledgeObjectEntity>>
 
+    @Query("SELECT * FROM knowledge_objects")
+    suspend fun getAllOnce(): List<KnowledgeObjectEntity>
+
     @Query("SELECT * FROM knowledge_objects WHERE kind = :kind ORDER BY updatedAt DESC")
     fun observeByKind(kind: ObjectKind): Flow<List<KnowledgeObjectEntity>>
 
@@ -101,12 +104,18 @@ interface LabDao {
     @Query("SELECT * FROM relationships WHERE fromId = :objectId OR toId = :objectId")
     suspend fun relationshipsOf(objectId: String): List<RelationshipEntity>
 
+    @Query("SELECT * FROM relationships")
+    suspend fun getAllRelationshipsOnce(): List<RelationshipEntity>
+
     // ── Context ──
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun upsertContext(ctx: ContextEntity)
 
     @Query("SELECT * FROM contexts ORDER BY name ASC")
     fun observeContexts(): Flow<List<ContextEntity>>
+
+    @Query("SELECT * FROM contexts")
+    suspend fun getAllContextsOnce(): List<ContextEntity>
 
     @Transaction
     suspend fun importPackage(

@@ -6,6 +6,7 @@ import com.beril.kaomoji.lab.curriculum.ExternalCurriculumAdapter
 import com.beril.kaomoji.lab.curriculum.LegacyCurriculumAdapter
 import com.beril.kaomoji.lab.db.LabDao
 import com.beril.kaomoji.lab.db.LabDatabase
+import com.beril.kaomoji.lab.export.LabDataExport
 import com.beril.kaomoji.lab.learning.LearningDiscipline
 import com.beril.kaomoji.lab.learning.LearningSessionState
 import com.beril.kaomoji.lab.model.FlashcardPayload
@@ -182,6 +183,24 @@ class LabRepository(private val dao: LabDao) {
         val payload = runCatching { FlashcardPayload.fromJson(obj.payload) }.getOrDefault(FlashcardPayload(obj.title, ""))
         val updated = SM2Engine.review(payload, quality, today.toEpochDay())
         dao.update(obj.copy(payload = updated.toJson(), updatedAt = Instant.now()))
+    }
+
+    // ── Veri sahipliği: dışa/içe aktarma (§34/§41) ──
+    /** Kullanıcının ürettiği HER şeyi (bir müfredat paketi değil — kendi verisi) tek bir
+     *  JSON string olarak döner. Çağıran taraf bunu SAF ile bir dosyaya yazar. */
+    suspend fun exportAll(): String = LabDataExport.export(
+        dao.getAllOnce(), dao.getAllRelationshipsOnce(), dao.getAllContextsOnce(),
+    )
+
+    /** Dışa aktarılmış bir JSON'u geri yükler. Var olan bir id'yi EZER (REPLACE) — mevcut
+     *  verinin üzerine bilerek yazdığını bilerek kabul etmiş olman gerekir; bu metot sessizce
+     *  birleştirmez ya da silmez, sadece verilenleri yazar. */
+    suspend fun importAll(raw: String): LabDataExport.ImportResult {
+        val result = LabDataExport.import(raw)
+        dao.upsertAll(result.objects)
+        dao.upsertRelationships(result.relationships)
+        result.contexts.forEach { dao.upsertContext(it) }
+        return result
     }
 
     companion object {

@@ -58,6 +58,7 @@ fun Lab2HomeScreen(
     onOpenEvaluation: () -> Unit,
     onOpenMistakes: () -> Unit,
     onOpenFlashcards: () -> Unit,
+    onOpenData: () -> Unit,
 ) {
     val ctx = LocalContext.current
     val repo = remember { LabRepository(ctx) }
@@ -99,6 +100,7 @@ fun Lab2HomeScreen(
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 GhostBtn("Hata Defteri", onOpenMistakes, emoji = "⚠️")
                 GhostBtn("Tekrar Kartları", onOpenFlashcards, emoji = "🃏")
+                GhostBtn("Verim", onOpenData, emoji = "📁")
             }
             Spacer(Modifier.height(10.dp))
             Text("🧪 Lab 2.0 (Beta)", style = Display)

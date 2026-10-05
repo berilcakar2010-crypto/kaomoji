@@ -23,6 +23,7 @@ class FakeLabDao : LabDao {
     override suspend fun deleteById(id: String) { objects.remove(id); publish() }
     override suspend fun getById(id: String): KnowledgeObjectEntity? = objects[id]
     override fun observeAll() = allFlow
+    override suspend fun getAllOnce(): List<KnowledgeObjectEntity> = objects.values.toList()
     override fun observeByKind(kind: ObjectKind) = MutableStateFlow(objects.values.filter { it.kind == kind })
     override suspend fun getByKind(kind: ObjectKind): List<KnowledgeObjectEntity> = objects.values.filter { it.kind == kind }
     override suspend fun search(q: String): List<KnowledgeObjectEntity> =
@@ -47,7 +48,9 @@ class FakeLabDao : LabDao {
     override suspend fun relationshipsFrom(objectId: String) = relationships.values.filter { it.fromId == objectId }
     override suspend fun relationshipsTo(objectId: String) = relationships.values.filter { it.toId == objectId }
     override suspend fun relationshipsOf(objectId: String) = relationships.values.filter { it.fromId == objectId || it.toId == objectId }
+    override suspend fun getAllRelationshipsOnce(): List<RelationshipEntity> = relationships.values.toList()
 
     override suspend fun upsertContext(ctx: ContextEntity) { contexts[ctx.id] = ctx }
     override fun observeContexts() = MutableStateFlow(contexts.values.sortedBy { it.name })
+    override suspend fun getAllContextsOnce(): List<ContextEntity> = contexts.values.toList()
 }
