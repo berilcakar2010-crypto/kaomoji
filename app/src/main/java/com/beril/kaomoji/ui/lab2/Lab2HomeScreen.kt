@@ -1,5 +1,6 @@
 package com.beril.kaomoji.ui.lab2
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -22,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.beril.kaomoji.lab.model.KnowledgeObjectEntity
+import com.beril.kaomoji.lab.model.ObjectKind
 import com.beril.kaomoji.lab.model.ScheduleStatus
 import com.beril.kaomoji.lab.repository.LabRepository
 import com.beril.kaomoji.ui.Btn
@@ -33,6 +35,8 @@ import com.beril.kaomoji.ui.J
 import com.beril.kaomoji.ui.SectionLabel
 import com.beril.kaomoji.ui.Small
 import com.beril.kaomoji.ui.TitleM
+import com.beril.kaomoji.ui.nav.dpadFocusable
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import kotlinx.coroutines.launch
 
@@ -47,7 +51,7 @@ import kotlinx.coroutines.launch
  * Laboratuvar ekranının (GardenScreen) yerini almıyor, onun yanında duruyor.
  */
 @Composable
-fun Lab2HomeScreen(onBack: () -> Unit) {
+fun Lab2HomeScreen(onBack: () -> Unit, onOpenConcept: (id: String, title: String) -> Unit) {
     val ctx = LocalContext.current
     val repo = remember { LabRepository(ctx) }
     val scope = rememberCoroutineScope()
@@ -55,12 +59,15 @@ fun Lab2HomeScreen(onBack: () -> Unit) {
     var recent by remember { mutableStateOf<List<KnowledgeObjectEntity>>(emptyList()) }
     var upcoming by remember { mutableStateOf<List<KnowledgeObjectEntity>>(emptyList()) }
     var pastTarget by remember { mutableStateOf<List<KnowledgeObjectEntity>>(emptyList()) }
+    var concepts by remember { mutableStateOf<List<KnowledgeObjectEntity>>(emptyList()) }
     var capture by remember { mutableStateOf("") }
+    var newConcept by remember { mutableStateOf("") }
     var refreshTick by remember { mutableStateOf(0) }
 
     LaunchedEffect(refreshTick) {
         upcoming = repo.upcoming(days = 14)
         pastTarget = repo.pastTargetDate()
+        concepts = repo.getByKind(ObjectKind.CONCEPT)
     }
     LaunchedEffect(Unit) {
         repo.observeAll().collect { recent = it.take(10) }
@@ -106,6 +113,42 @@ fun Lab2HomeScreen(onBack: () -> Unit) {
         } else {
             items(pastTarget, key = { "past-${it.id}" }) { obj -> KnowledgeRow(obj, label = "HEDEF TARİHİ GEÇTİ — seçenek, hata değil") }
             items(upcoming, key = { "up-${it.id}" }) { obj -> KnowledgeRow(obj, label = statusLabel(obj)) }
+        }
+
+        item {
+            SectionLabel("kavramlar · öğrenme oturumu", "🧠")
+            Text(
+                "Bir kavram seç, önce kendi tahminini/denemeni yaz, sonra sadece gereken " +
+                    "kadarını açığa çıkar (§13 — soru-önce öğrenme).",
+                style = Small,
+            )
+            Spacer(Modifier.height(6.dp))
+            Field(newConcept, { newConcept = it }, placeholder = "Yeni bir kavram adı (örn. \"Faraday Yasası\")")
+            Spacer(Modifier.height(6.dp))
+            Btn("Kavram Ekle", {
+                val t = newConcept.trim()
+                if (t.isNotEmpty()) {
+                    scope.launch { repo.createConcept(t); newConcept = ""; refreshTick++ }
+                }
+            }, emoji = "🧠")
+        }
+        if (concepts.isEmpty()) {
+            item { Empty("🧠", "Henüz bir kavram yok", "Yukarıdan bir kavram ekle, öğrenme oturumu ona bağlanacak.") }
+        } else {
+            items(concepts, key = { "concept-${it.id}" }) { c ->
+                Row(
+                    Modifier
+                        .fillMaxWidth()
+                        .background(J.card, RoundedCornerShape(14.dp))
+                        .dpadFocusable(onClick = { onOpenConcept(c.id, c.title) }, shape = RoundedCornerShape(14.dp))
+                        .padding(13.dp),
+                ) {
+                    Column(Modifier.fillMaxWidth()) {
+                        Text(c.title, style = TitleM)
+                        Text("Öğrenme oturumu başlat →", style = Small.copy(color = J.inkFaint))
+                    }
+                }
+            }
         }
 
         item { SectionLabel("son eklenenler", "🕓") }

@@ -1,5 +1,7 @@
 package com.beril.kaomoji.lab.model
 
+import com.beril.kaomoji.lab.learning.LearningDiscipline
+import com.beril.kaomoji.lab.learning.LearningStage
 import org.json.JSONObject
 
 /**
@@ -104,3 +106,34 @@ data class ExplanationPayload(
         }
     }
 }
+
+/** Bir [com.beril.kaomoji.lab.learning.LearningSessionState]'in kalıcı hali. Kullanıcının
+ *  denemesi (attemptText) her zaman saklanır — tamamlanmamış bir oturumda bile (§13). */
+data class LearningSessionPayload(
+    val discipline: LearningDiscipline,
+    val stageIndex: Int,
+    val attemptText: String,
+    val completed: Boolean,
+) {
+    fun toJson(): String = JSONObject().apply {
+        put("discipline", discipline.name)
+        put("stageIndex", stageIndex)
+        put("attemptText", attemptText)
+        put("completed", completed)
+    }.toString()
+
+    companion object {
+        fun fromJson(raw: String): LearningSessionPayload {
+            val j = JSONObject(raw)
+            return LearningSessionPayload(
+                discipline = LearningDiscipline.valueOf(j.optString("discipline", LearningDiscipline.GENERAL.name)),
+                stageIndex = j.optInt("stageIndex", 0),
+                attemptText = j.optString("attemptText"),
+                completed = j.optBoolean("completed", false),
+            )
+        }
+    }
+}
+
+fun LearningSessionPayload.currentStage(): LearningStage =
+    com.beril.kaomoji.lab.learning.LearningSessionEngine.stagesFor(discipline)[stageIndex]

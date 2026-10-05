@@ -5,9 +5,13 @@ import com.beril.kaomoji.lab.curriculum.CurriculumImporter
 import com.beril.kaomoji.lab.curriculum.LegacyCurriculumAdapter
 import com.beril.kaomoji.lab.db.LabDao
 import com.beril.kaomoji.lab.db.LabDatabase
+import com.beril.kaomoji.lab.learning.LearningDiscipline
+import com.beril.kaomoji.lab.learning.LearningSessionState
 import com.beril.kaomoji.lab.model.KnowledgeObjectEntity
+import com.beril.kaomoji.lab.model.LearningSessionPayload
 import com.beril.kaomoji.lab.model.ObjectKind
 import com.beril.kaomoji.lab.model.RelationshipEntity
+import com.beril.kaomoji.lab.model.RelationshipType
 import kotlinx.coroutines.flow.Flow
 import java.time.Instant
 import java.time.LocalDate
@@ -48,6 +52,51 @@ class LabRepository(private val dao: LabDao) {
         )
         dao.upsert(obj)
         return obj.id
+    }
+
+    /** Elle, müfredat beklemeden bir kavram oluşturur — müfredat içe aktarma akışının
+     *  dışında da öğrenme oturumu çalıştırılabilsin diye (§15 — kavramlar müfredata bağımlı
+     *  değil, müfredat sadece onları toplu üretmenin bir yolu). */
+    suspend fun createConcept(title: String, body: String? = null): String {
+        val obj = KnowledgeObjectEntity(
+            kind = ObjectKind.CONCEPT, title = title, body = body,
+            createdAt = Instant.now(), updatedAt = Instant.now(),
+        )
+        dao.upsert(obj)
+        return obj.id
+    }
+
+    /** Bir LEARNING_SESSION nesnesi oluşturur ve ilgili kavrama REINFORCES ile bağlar.
+     *  Boş bir deneme metniyle başlar — kullanıcı hiç yazmasa bile oturum kalıcıdır. */
+    suspend fun startLearningSession(conceptId: String, discipline: LearningDiscipline): String {
+        val state = LearningSessionState(discipline)
+        val obj = KnowledgeObjectEntity(
+            kind = ObjectKind.LEARNING_SESSION,
+            title = "Öğrenme oturumu",
+            payload = LearningSessionPayload(discipline, state.stageIndex, state.attemptText, state.completed).toJson(),
+            createdAt = Instant.now(), updatedAt = Instant.now(),
+        )
+        dao.upsert(obj)
+        dao.upsertRelationship(RelationshipEntity(fromId = obj.id, toId = conceptId, type = RelationshipType.REINFORCES))
+        return obj.id
+    }
+
+    suspend fun getLearningSessionState(sessionId: String): LearningSessionState? {
+        val obj = dao.getById(sessionId) ?: return null
+        val p = LearningSessionPayload.fromJson(obj.payload)
+        return LearningSessionState(p.discipline, stageIndex = p.stageIndex, attemptText = p.attemptText, completed = p.completed)
+    }
+
+    /** Oturumun güncel durumunu olduğu gibi kalıcı hale getirir — her `advance()` sonrası
+     *  çağrılmalı ki kullanıcının denemesi ve ilerlediği aşama hiçbir zaman kaybolmasın. */
+    suspend fun saveLearningSessionState(sessionId: String, state: LearningSessionState) {
+        val obj = dao.getById(sessionId) ?: return
+        dao.update(
+            obj.copy(
+                payload = LearningSessionPayload(state.discipline, state.stageIndex, state.attemptText, state.completed).toJson(),
+                updatedAt = Instant.now(),
+            )
+        )
     }
 
     /** Eski `assets/curriculum.json`'u (henüz contract v1 şeklinde değilse) adapte edip
