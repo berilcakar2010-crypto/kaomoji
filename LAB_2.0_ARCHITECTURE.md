@@ -220,13 +220,29 @@ compiling or working at any point):
   `lab2_widget_info.xml`): due flashcard count + nearest upcoming exam/assignment. The old
   `MissionWidget` (bound to `Store.kt`) was not touched or reused — this is a parallel widget,
   same non-destructive pattern as everything else in Lab 2.0.
+- **Aşama 14** — old data migration (§34): a new `LegacyDataMigrator` object (pure mapping
+  functions, no I/O) converts every `Store.kt` collection — mistakes, flashcards, recordings
+  (anlatım/transcript+analysis), Brain Inbox notes, practice-problem logs, weekly reviews,
+  project states, assessment states — into the new knowledge graph, namespaced with a
+  `legacy-*` id prefix and `sourcePackageId = "legacy-migration"` so re-running it is safe
+  (REPLACE, not duplicate). `LabRepository.migrateLegacyData(context)` instantiates a
+  read-only `Store(context)`, does the mapping, and writes through the existing
+  `dao.importPackage(...)` transaction. `LabDataScreen` got a new "Eski Verimi Kopyala"
+  button with an explanatory note and a per-category count summary. `Store.kt` itself was
+  never written to, modified, or put at risk — this is a one-way read, exactly like every
+  other non-destructive step in this project. 8 unit tests cover the mapping logic
+  (`LegacyDataMigratorTest`).
 
 ### Honestly still NOT built (not a short list — said plainly, not glossed over)
 
-- **Old data migration**: `Store.kt`'s JSON blob (curriculum progress, explanations, stats,
-  and the OLD mistake/flashcard records specifically — Aşama 9 built NEW ones on the new
-  model, it did not migrate the old ones) has not been migrated. The old screens and the new
-  Lab 2.0 screen still read from two separate stores.
+- **Old data migration is now one-way and partial, not full parity**: `Store.kt`'s
+  fine-grained curriculum-progress fields — `done`/`dailyLogs`/`problems`-level per-task
+  completion stats tied to the OLD curriculum's own task ids — are deliberately NOT migrated
+  (Aşama 14). Those old task ids don't map to anything in the new knowledge graph, and a fake
+  mapping would be worse than an honest gap. What IS migrated: mistakes, flashcards,
+  recordings, Brain Inbox notes, practice logs, weekly reviews, project/assessment state. The
+  old screens and the new Lab 2.0 screen still read from two separate stores going forward —
+  this is a one-time copy, not a live sync.
 - **Motion/micro-interactions** (§11/§38) — screens render instantly with no transition design;
   the spec's "small, satisfying animations" are not implemented.
 - **Notifications on the new model** (§44) — Lab 2.0 got its own widget (Aşama 13) but no

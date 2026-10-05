@@ -7,6 +7,8 @@ import com.beril.kaomoji.lab.curriculum.LegacyCurriculumAdapter
 import com.beril.kaomoji.lab.db.LabDao
 import com.beril.kaomoji.lab.db.LabDatabase
 import com.beril.kaomoji.lab.export.LabDataExport
+import com.beril.kaomoji.lab.migration.LegacyDataMigrator
+import com.beril.kaomoji.lab.migration.MigrationSummary
 import com.beril.kaomoji.lab.learning.LearningDiscipline
 import com.beril.kaomoji.lab.learning.LearningSessionState
 import com.beril.kaomoji.lab.model.ExamPayload
@@ -245,6 +247,43 @@ class LabRepository(private val dao: LabDao) {
         dao.relationshipsOf(examId)
             .filter { it.type == RelationshipType.ASSESSES && it.fromId == examId }
             .mapNotNull { dao.getById(it.toId) }
+
+    /** Eski `Store.kt` verisini (hatalar, tekrar kartları, anlatımlar, Brain Inbox, projeler,
+     *  sınavlar, pratik günlükleri, haftalık değerlendirmeler) Lab 2.0'ın grafiğine kopyalar.
+     *  Store.kt'ye hiçbir yazma yapılmaz — salt okunur bir geçiş. Yeniden çağırmak güvenli
+     *  (sourcePackageId ile silinip yeniden yazılır, çoğalmaz). `done`/`dailyLogs`/`problems`
+     *  gibi eski müfredata özgü ince taneli kayıtlar taşınmıyor — bkz. LegacyDataMigrator'ın
+     *  dosya başındaki not. */
+    suspend fun migrateLegacyData(context: Context): MigrationSummary {
+        val store = com.beril.kaomoji.data.Store(context)
+        val objects = mutableListOf<KnowledgeObjectEntity>()
+
+        objects += store.mistakes.map { LegacyDataMigrator.mapMistake(it) }
+        objects += store.flashcards.map { LegacyDataMigrator.mapFlashcard(it) }
+        objects += store.recordings.map { LegacyDataMigrator.mapRecording(it) }
+        objects += store.inbox.map { LegacyDataMigrator.mapInboxNote(it) }
+        objects += store.problems.map { LegacyDataMigrator.mapProblemLog(it) }
+        objects += store.reviews.map { LegacyDataMigrator.mapWeeklyReview(it) }
+        objects += store.curriculum.projects.mapNotNull { def ->
+            store.projectStates[def.id]?.let { LegacyDataMigrator.mapProject(def, it) }
+        }
+        objects += store.curriculum.assessments.mapNotNull { def ->
+            store.assessmentStates[def.id]?.let { LegacyDataMigrator.mapAssessment(def, it) }
+        }
+
+        dao.importPackage(objects, emptyList(), LegacyDataMigrator.SOURCE_ID)
+
+        return MigrationSummary(
+            mistakes = store.mistakes.size,
+            flashcards = store.flashcards.size,
+            recordings = store.recordings.size,
+            inboxNotes = store.inbox.size,
+            problems = store.problems.size,
+            reviews = store.reviews.size,
+            projects = store.curriculum.projects.count { store.projectStates[it.id] != null },
+            assessments = store.curriculum.assessments.count { store.assessmentStates[it.id] != null },
+        )
+    }
 
     // ── Veri sahipliği: dışa/içe aktarma (§34/§41) ──
     /** Kullanıcının ürettiği HER şeyi (bir müfredat paketi değil — kendi verisi) tek bir

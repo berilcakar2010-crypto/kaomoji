@@ -109,6 +109,29 @@ fun LabDataScreen(onBack: () -> Unit) {
             }, enabled = !working, emoji = "⬆️")
         }
 
+        item {
+            SectionLabel("eski uygulamadan taşı", "📦")
+            Text(
+                "Eski uygulamada (Laboratuvar/Çanta) biriken hatalar, tekrar kartları, " +
+                    "anlatımlar, Brain Inbox notları, proje/sınav durumları buraya kopyalanır. " +
+                    "Eski uygulamadan hiçbir şey silinmez ya da değiştirilmez — orası aynen çalışmayı sürdürür.",
+                style = Small,
+            )
+            Spacer(Modifier.height(6.dp))
+            Btn(if (working) "Çalışıyor…" else "Eski Verimi Kopyala", {
+                if (!working) {
+                    working = true
+                    scope.launch {
+                        val s = repo.migrateLegacyData(ctx)
+                        status = "Taşındı: ${s.mistakes} hata, ${s.flashcards} kart, ${s.recordings} anlatım, " +
+                            "${s.inboxNotes} inbox notu, ${s.problems} pratik günlüğü, ${s.reviews} haftalık değerlendirme, " +
+                            "${s.projects} proje, ${s.assessments} sınav/ödev (toplam ${s.total})."
+                        working = false
+                    }
+                }
+            }, enabled = !working, emoji = "📦")
+        }
+
         status?.let { s ->
             item {
                 Column { Text(s, style = Small) }
