@@ -56,5 +56,18 @@
             android:name=".widget.CompleteMissionReceiver"
             android:exported="false" />
 
+        <!-- Lab 2.0'ın kendi widget'ı — eski widget'ın yanında, ayrı -->
+        <receiver
+            android:name=".lab.widget.Lab2WidgetReceiver"
+            android:exported="false"
+            android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/lab2_widget_info" />
+        </receiver>
+
     </application>
 </manifest>

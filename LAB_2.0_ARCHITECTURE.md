@@ -216,6 +216,10 @@ compiling or working at any point):
   to adopt it, it never overwrites silently, per §5) and `proposeStudyPlan` in
   `LabEvaluationScreen` ("7 Günlük Plan Öner" — a suggestion only, nothing in this call path
   can write to a Schedule). All five `AICapabilityGate` methods now have a real caller.
+- **Aşama 13** — Lab 2.0's own home-screen widget (`Lab2Widget`/`Lab2WidgetReceiver`, new
+  `lab2_widget_info.xml`): due flashcard count + nearest upcoming exam/assignment. The old
+  `MissionWidget` (bound to `Store.kt`) was not touched or reused — this is a parallel widget,
+  same non-destructive pattern as everything else in Lab 2.0.
 
 ### Honestly still NOT built (not a short list — said plainly, not glossed over)
 
@@ -225,8 +229,9 @@ compiling or working at any point):
   Lab 2.0 screen still read from two separate stores.
 - **Motion/micro-interactions** (§11/§38) — screens render instantly with no transition design;
   the spec's "small, satisfying animations" are not implemented.
-- **Widget/notifications rebuilt on the new model** (§43/§44) — the existing widget still reads
-  the old `Store.kt`/legacy curriculum, unaware Lab 2.0 exists.
+- **Notifications on the new model** (§44) — Lab 2.0 got its own widget (Aşama 13) but no
+  lock-screen notification yet; the old notification (`MissionNotifier`) still only knows
+  about the old `Store.kt`/legacy curriculum.
 - **A dedicated top-level nav area per §31** (Learn/Knowledge/Projects/Academics/Archive as
   separate rail destinations) — Lab 2.0 is one screen with many sub-screens reachable from it,
   not six permanent areas.
