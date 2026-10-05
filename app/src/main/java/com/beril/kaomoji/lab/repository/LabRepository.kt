@@ -8,11 +8,14 @@ import com.beril.kaomoji.lab.db.LabDao
 import com.beril.kaomoji.lab.db.LabDatabase
 import com.beril.kaomoji.lab.learning.LearningDiscipline
 import com.beril.kaomoji.lab.learning.LearningSessionState
+import com.beril.kaomoji.lab.model.FlashcardPayload
 import com.beril.kaomoji.lab.model.KnowledgeObjectEntity
 import com.beril.kaomoji.lab.model.LearningSessionPayload
+import com.beril.kaomoji.lab.model.MistakePayload
 import com.beril.kaomoji.lab.model.ObjectKind
 import com.beril.kaomoji.lab.model.RelationshipEntity
 import com.beril.kaomoji.lab.model.RelationshipType
+import com.beril.kaomoji.lab.srs.SM2Engine
 import kotlinx.coroutines.flow.Flow
 import java.time.Instant
 import java.time.LocalDate
@@ -120,6 +123,66 @@ class LabRepository(private val dao: LabDao) {
     /** Bu paketten gelen nesne sayısı — içe aktarma gerçekten olmuş mu, kaç nesne var,
      *  bir "İçe Aktarıldı (123)" göstergesi için. */
     suspend fun countFromPackage(packageId: String): Int = dao.getBySourcePackage(packageId).size
+
+    // ── Hata Defteri (§24) ──
+    /** Her hata: soru/deneme/ne-yanlış-gitti/neden/doğru-akıl-yürütme/kategori. Veri — suçlama
+     *  değil. `conceptId` verilirse CAUSED_BY ile o kavrama bağlanır (hangi kavramdaki boşluk
+     *  bu hataya yol açtı). */
+    suspend fun logMistake(payload: MistakePayload, conceptId: String? = null): String {
+        val obj = KnowledgeObjectEntity(
+            kind = ObjectKind.MISTAKE,
+            title = payload.problem,
+            payload = payload.toJson(),
+            createdAt = Instant.now(), updatedAt = Instant.now(),
+        )
+        dao.upsert(obj)
+        if (conceptId != null) {
+            dao.upsertRelationship(RelationshipEntity(fromId = conceptId, toId = obj.id, type = RelationshipType.CAUSED_BY))
+        }
+        return obj.id
+    }
+
+    suspend fun recentMistakes(limit: Int = 50): List<KnowledgeObjectEntity> =
+        dao.getByKind(ObjectKind.MISTAKE).sortedByDescending { it.createdAt }.take(limit)
+
+    /** Tekrarlayan kategori — "3 hata X kategorisinde" tespiti için. Suçlamadan, sadece sayar. */
+    suspend fun mistakeCategoryCounts(): Map<String, Int> =
+        dao.getByKind(ObjectKind.MISTAKE)
+            .mapNotNull { runCatching { MistakePayload.fromJson(it.payload) }.getOrNull()?.category }
+            .groupingBy { it }.eachCount()
+
+    // ── Tekrar Kartları / SM-2 (§23) ──
+    suspend fun createFlashcard(front: String, back: String, conceptId: String? = null): String {
+        val obj = KnowledgeObjectEntity(
+            kind = ObjectKind.FLASHCARD,
+            title = front,
+            payload = FlashcardPayload(front, back).toJson(),
+            createdAt = Instant.now(), updatedAt = Instant.now(),
+        )
+        dao.upsert(obj)
+        if (conceptId != null) {
+            dao.upsertRelationship(RelationshipEntity(fromId = obj.id, toId = conceptId, type = RelationshipType.REINFORCES))
+        }
+        return obj.id
+    }
+
+    suspend fun allFlashcards(): List<KnowledgeObjectEntity> = dao.getByKind(ObjectKind.FLASHCARD)
+
+    suspend fun dueFlashcards(today: LocalDate = LocalDate.now()): List<KnowledgeObjectEntity> =
+        allFlashcards().filter { card ->
+            val p = runCatching { FlashcardPayload.fromJson(card.payload) }.getOrNull()
+            p == null || p.nextReviewEpochDay <= today.toEpochDay()
+        }
+
+    /** Bir kartı inceler, SM-2 ile yeni durumu hesaplar ve kalıcı hale getirir. Kartın "neden
+     *  tekrar edildiğini" kullanıcı her zaman anlasın diye — bu metot kartı asla tekrarın
+     *  tamamını tanımlayan tek şey yapmaz, sadece bir bileşendir (§23). */
+    suspend fun reviewFlashcard(cardId: String, quality: Int, today: LocalDate = LocalDate.now()) {
+        val obj = dao.getById(cardId) ?: return
+        val payload = runCatching { FlashcardPayload.fromJson(obj.payload) }.getOrDefault(FlashcardPayload(obj.title, ""))
+        val updated = SM2Engine.review(payload, quality, today.toEpochDay())
+        dao.update(obj.copy(payload = updated.toJson(), updatedAt = Instant.now()))
+    }
 
     companion object {
         fun forDao(dao: LabDao) = LabRepository(dao)

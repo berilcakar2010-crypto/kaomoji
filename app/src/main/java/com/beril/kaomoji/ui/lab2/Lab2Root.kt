@@ -20,6 +20,8 @@ private sealed class Lab2Screen {
     data class Session(val conceptId: String, val conceptTitle: String) : Lab2Screen()
     data object Search : Lab2Screen()
     data object Evaluation : Lab2Screen()
+    data object Mistakes : Lab2Screen()
+    data object Flashcards : Lab2Screen()
 }
 
 @Composable
@@ -44,6 +46,8 @@ fun Lab2Root(onExit: () -> Unit) {
                     onOpenConcept = { id, title -> screen = Lab2Screen.Graph(id, title) },
                     onOpenSearch = { screen = Lab2Screen.Search },
                     onOpenEvaluation = { screen = Lab2Screen.Evaluation },
+                    onOpenMistakes = { screen = Lab2Screen.Mistakes },
+                    onOpenFlashcards = { screen = Lab2Screen.Flashcards },
                 )
             }
         } else {
@@ -54,6 +58,8 @@ fun Lab2Root(onExit: () -> Unit) {
                         onOpenConcept = { id, title -> screen = Lab2Screen.Graph(id, title) },
                         onOpenSearch = { screen = Lab2Screen.Search },
                         onOpenEvaluation = { screen = Lab2Screen.Evaluation },
+                        onOpenMistakes = { screen = Lab2Screen.Mistakes },
+                        onOpenFlashcards = { screen = Lab2Screen.Flashcards },
                     )
                     else -> Lab2DetailScreen(s, onBack = { screen = Lab2Screen.Home }, onNavigate = { next -> screen = next })
                 }
@@ -82,6 +88,8 @@ private fun Lab2DetailScreen(screen: Lab2Screen, onBack: () -> Unit, onNavigate:
             onOpenConcept = { id, title -> onNavigate(Lab2Screen.Graph(id, title)) },
         )
         is Lab2Screen.Evaluation -> LabEvaluationScreen(onBack = onBack)
+        is Lab2Screen.Mistakes -> MistakeJournalScreen(onBack = onBack)
+        is Lab2Screen.Flashcards -> FlashcardReviewScreen(onBack = onBack)
         is Lab2Screen.Home -> Unit
     }
 }

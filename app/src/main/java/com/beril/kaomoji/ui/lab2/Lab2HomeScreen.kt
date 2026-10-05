@@ -56,6 +56,8 @@ fun Lab2HomeScreen(
     onOpenConcept: (id: String, title: String) -> Unit,
     onOpenSearch: () -> Unit,
     onOpenEvaluation: () -> Unit,
+    onOpenMistakes: () -> Unit,
+    onOpenFlashcards: () -> Unit,
 ) {
     val ctx = LocalContext.current
     val repo = remember { LabRepository(ctx) }
@@ -92,6 +94,11 @@ fun Lab2HomeScreen(
                 GhostBtn("Geri", onBack, emoji = "←")
                 GhostBtn("Ara", onOpenSearch, emoji = "🔎")
                 GhostBtn("Değerlendir", onOpenEvaluation, emoji = "🪞")
+            }
+            Spacer(Modifier.height(6.dp))
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                GhostBtn("Hata Defteri", onOpenMistakes, emoji = "⚠️")
+                GhostBtn("Tekrar Kartları", onOpenFlashcards, emoji = "🃏")
             }
             Spacer(Modifier.height(10.dp))
             Text("🧪 Lab 2.0 (Beta)", style = Display)
