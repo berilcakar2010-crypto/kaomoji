@@ -16,41 +16,57 @@ import androidx.compose.ui.Modifier
  */
 private sealed class Lab2Screen {
     data object Home : Lab2Screen()
+    data class Graph(val conceptId: String, val conceptTitle: String) : Lab2Screen()
     data class Session(val conceptId: String, val conceptTitle: String) : Lab2Screen()
 }
 
 @Composable
 fun Lab2Root(onExit: () -> Unit) {
     var screen by remember { mutableStateOf<Lab2Screen>(Lab2Screen.Home) }
-    val session = screen as? Lab2Screen.Session
+    val detail = screen.let { it as? Lab2Screen.Graph ?: (it as? Lab2Screen.Session) }
 
     BoxWithConstraints(Modifier.fillMaxSize()) {
         val wide = breakpointFor(maxWidth.value.toInt()) == Lab2Breakpoint.TABLET_LANDSCAPE
 
         if (wide) {
-            // Genişlik yetiyorsa (§38) bir oturum açmak ana listeyi GİZLEMEZ — ikisi yan
-            // yana durur, "nereden geldin" her zaman görünür kalır.
+            // Genişlik yetiyorsa (§38) bir detay (graf/oturum) açmak ana listeyi GİZLEMEZ —
+            // ikisi yan yana durur, "nereden geldin" her zaman görünür kalır.
             Lab2NavShell(
-                secondaryPanel = session?.let { s ->
-                    { LearningSessionScreen(s.conceptId, s.conceptTitle, onBack = { screen = Lab2Screen.Home }) }
+                secondaryPanel = detail?.let { s ->
+                    { Lab2DetailScreen(s, onBack = { screen = Lab2Screen.Home }, onNavigate = { next -> screen = next }) }
                 },
             ) {
-                Lab2HomeScreen(onBack = onExit, onOpenConcept = { id, title -> screen = Lab2Screen.Session(id, title) })
+                Lab2HomeScreen(onBack = onExit, onOpenConcept = { id, title -> screen = Lab2Screen.Graph(id, title) })
             }
         } else {
             Lab2NavShell {
                 when (val s = screen) {
                     is Lab2Screen.Home -> Lab2HomeScreen(
                         onBack = onExit,
-                        onOpenConcept = { id, title -> screen = Lab2Screen.Session(id, title) },
+                        onOpenConcept = { id, title -> screen = Lab2Screen.Graph(id, title) },
                     )
-                    is Lab2Screen.Session -> LearningSessionScreen(
-                        conceptId = s.conceptId,
-                        conceptTitle = s.conceptTitle,
-                        onBack = { screen = Lab2Screen.Home },
-                    )
+                    else -> Lab2DetailScreen(s, onBack = { screen = Lab2Screen.Home }, onNavigate = { next -> screen = next })
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun Lab2DetailScreen(screen: Lab2Screen, onBack: () -> Unit, onNavigate: (Lab2Screen) -> Unit) {
+    when (screen) {
+        is Lab2Screen.Graph -> ConceptGraphScreen(
+            conceptId = screen.conceptId,
+            conceptTitle = screen.conceptTitle,
+            onBack = onBack,
+            onOpenConcept = { id, title -> onNavigate(Lab2Screen.Graph(id, title)) },
+            onStartSession = { id, title -> onNavigate(Lab2Screen.Session(id, title)) },
+        )
+        is Lab2Screen.Session -> LearningSessionScreen(
+            conceptId = screen.conceptId,
+            conceptTitle = screen.conceptTitle,
+            onBack = onBack,
+        )
+        is Lab2Screen.Home -> Unit
     }
 }
