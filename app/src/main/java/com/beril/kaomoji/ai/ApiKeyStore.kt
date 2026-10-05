@@ -2,18 +2,33 @@ package com.beril.kaomoji.ai
 
 import android.content.Context
 import android.content.SharedPreferences
+import androidx.security.crypto.EncryptedSharedPreferences
+import androidx.security.crypto.MasterKey
 
-/** API anahtarları — FocusLock'takinden farklı olarak burada şifrelenmemiş SharedPreferences
- *  kullanılıyor (basitlik için). Cihaz paylaşılıyorsa bunu unutma.
- *  Her sağlayıcının (Groq/Gemini) anahtarı ayrı saklanır, seçili sağlayıcı da burada tutulur. */
+/** API anahtarları Android Keystore destekli [EncryptedSharedPreferences] ile saklanır (§35
+ *  — "secure API-key storage"). Her sağlayıcının (Groq/Gemini) anahtarı ayrı saklanır, seçili
+ *  sağlayıcı da burada tutulur. Şifreleme anahtarı cihazın donanım destekli keystore'unda
+ *  kalır, uygulama verisiyle birlikte dışa aktarılmaz. */
 object ApiKeyStore {
-    private const val PREFS = "kaomoji_ai_prefs"
+    private const val PREFS = "kaomoji_ai_prefs_v2"
     private const val KEY_PROVIDER = "ai_provider"
     private const val KEY_GROQ = "groq_api_key"
     private const val KEY_GEMINI = "gemini_api_key"
 
-    private fun prefs(ctx: Context): SharedPreferences =
-        ctx.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
+    @Volatile private var cached: SharedPreferences? = null
+
+    private fun prefs(ctx: Context): SharedPreferences = cached ?: synchronized(this) {
+        cached ?: run {
+            val masterKey = MasterKey.Builder(ctx).setKeyScheme(MasterKey.KeyScheme.AES256_GCM).build()
+            EncryptedSharedPreferences.create(
+                ctx,
+                PREFS,
+                masterKey,
+                EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+                EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM,
+            ).also { cached = it }
+        }
+    }
 
     private fun prefKeyFor(provider: AiProvider) =
         if (provider == AiProvider.GEMINI) KEY_GEMINI else KEY_GROQ

@@ -68,6 +68,9 @@ dependencies {
     // Yüklenen .pdf belgelerinden metin çıkarmak için (müfredat üretici)
     implementation("com.tom-roush:pdfbox-android:2.0.27.0")
 
+    // Lab 2.0 — API anahtarları şifreli saklanır (§35), düz SharedPreferences değil
+    implementation("androidx.security:security-crypto:1.1.0-alpha06")
+
     // Lab 2.0 — bilgi nesnesi/ilişki grafiği + arama için yapılandırılmış yerel depolama
     val roomVersion = "2.6.1"
     implementation("androidx.room:room-runtime:$roomVersion")

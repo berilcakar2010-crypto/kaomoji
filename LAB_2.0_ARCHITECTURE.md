@@ -108,8 +108,12 @@ is the `AICapabilityGate` layer so no call site can silently do more than its na
 (§5), and a uniform `AIResult.Offline` so every screen has one code path for "no AI" (§7/§48)
 instead of ad-hoc try/catch per screen as today.
 
-API keys stay in `ApiKeyStore.kt`'s `EncryptedSharedPreferences` approach (KEEP — already
-correct per §35).
+**Correction from the original assessment**: `ApiKeyStore.kt` actually used plain
+`SharedPreferences` (its own comment admitted this — "unencrypted, for simplicity"), not
+`EncryptedSharedPreferences` as this document first claimed. That was a real gap against §35
+("secure API-key storage"), fixed in Aşama 2: it now uses Android Keystore-backed
+`EncryptedSharedPreferences`. Previously stored keys (if any) are orphaned by the prefs-file
+rename and need re-entering once — a one-time, low-stakes cost for a single API key field.
 
 ## 5. Curriculum Contract v1 (§17/§52)
 
