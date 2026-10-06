@@ -130,6 +130,16 @@ class LabRepository(private val dao: LabDao) {
      *  bir "İçe Aktarıldı (123)" göstergesi için. */
     suspend fun countFromPackage(packageId: String): Int = dao.getBySourcePackage(packageId).size
 
+    /** Lab artık tek uygulama — kişisel müfredat paketi bir buton beklemeden, uygulama ilk
+     *  açıldığında kendiliğinden hazır olmalı. Paket zaten içe aktarılmışsa (sayı > 0) hiçbir
+     *  şey yapmaz; `importExternalCurriculum` zaten idempotent (sourcePackageId'ye göre
+     *  REPLACE), bu yüzden burada tekrar tekrar çağırmak da güvenli. */
+    suspend fun ensureDefaultCurriculumImported(context: Context) {
+        if (countFromPackage("lab2-personal-curriculum") == 0) {
+            importExternalCurriculum(context)
+        }
+    }
+
     // ── Hata Defteri (§24) ──
     /** Her hata: soru/deneme/ne-yanlış-gitti/neden/doğru-akıl-yürütme/kategori. Veri — suçlama
      *  değil. `conceptId` verilirse CAUSED_BY ile o kavrama bağlanır (hangi kavramdaki boşluk

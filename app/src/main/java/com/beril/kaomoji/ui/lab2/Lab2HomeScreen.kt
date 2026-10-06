@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import com.beril.kaomoji.lab.model.KnowledgeObjectEntity
 import com.beril.kaomoji.lab.model.ObjectKind
 import com.beril.kaomoji.lab.model.ScheduleStatus
+import com.beril.kaomoji.lab.notification.LabNotifier
 import com.beril.kaomoji.lab.repository.LabRepository
 import com.beril.kaomoji.ui.Btn
 import com.beril.kaomoji.ui.Display
@@ -75,9 +76,16 @@ fun Lab2HomeScreen(
         pastTarget = repo.pastTargetDate()
         concepts = repo.getByKind(ObjectKind.CONCEPT)
         importedCount = repo.countFromPackage("lab2-personal-curriculum")
+        LabNotifier.refresh(ctx)
     }
     LaunchedEffect(Unit) {
         repo.observeAll().collect { recent = it.take(10) }
+    }
+    // Lab artık tek uygulama — kişisel müfredat ilk açılışta kendiliğinden hazır olur,
+    // bir buton beklemez. Zaten içe aktarılmışsa bu no-op (bkz. ensureDefaultCurriculumImported).
+    LaunchedEffect(Unit) {
+        repo.ensureDefaultCurriculumImported(ctx)
+        refreshTick++
     }
 
     LazyColumn(
@@ -140,13 +148,13 @@ fun Lab2HomeScreen(
             Row(Modifier.fillMaxWidth()) {
                 Column(Modifier.fillMaxWidth()) {
                     Text(
-                        if (importedCount > 0) "İçe aktarıldı: $importedCount nesne (önkoşul grafiği + bağlantılar)"
-                        else "Henüz içe aktarılmadı",
+                        if (importedCount > 0) "Yüklü: $importedCount nesne (önkoşul grafiği + disiplinlerarası bağlantılar)"
+                        else "Yükleniyor…",
                         style = Small,
                     )
                     Spacer(Modifier.height(6.dp))
-                    Btn(
-                        if (importing) "İçe aktarılıyor…" else "📚 Kişisel Müfredatı İçe Aktar",
+                    GhostBtn(
+                        if (importing) "Yenileniyor…" else "Müfredatı Yenile",
                         {
                             if (!importing) {
                                 importing = true
@@ -157,7 +165,7 @@ fun Lab2HomeScreen(
                                 }
                             }
                         },
-                        enabled = !importing,
+                        emoji = "📚",
                     )
                 }
             }

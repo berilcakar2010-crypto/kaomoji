@@ -283,6 +283,28 @@ compiling or working at any point):
   - `README.md` rewritten to describe Lab as it actually is today, not the old curriculum app.
     `GUNCELLEME_NOTLARI.md` and `UYGULAMA_TANITIMI.md` (both purely about the deleted system)
     were deleted rather than left stale.
+- **Aşama 16** — curriculum auto-import + lock-screen notification (§44), in response to the
+  user's "attığım müfredatı entegre et" (integrate the curriculum I sent).
+  - `LabRepository.ensureDefaultCurriculumImported(context)`: if the personal curriculum
+    package (`lab2-personal-curriculum`, 123 objects, real prerequisite graph, cross-discipline
+    connections, context mappings) hasn't been imported yet, imports it — called once from
+    `Lab2HomeScreen`'s existing `LaunchedEffect(Unit)`. Before this, the only on-ramp was a
+    button on the home screen the person had to find and tap; now Lab's own content is simply
+    there on first open, matching what "Lab is the whole app" (Aşama 15) actually implies. The
+    manual button stays, relabeled "Müfredatı Yenile" — useful if a future app update ships a
+    revised `lab2_curriculum.json` and the on-device copy needs to be refreshed (the import is
+    idempotent either way — REPLACE by `sourcePackageId`, never duplicates).
+  - **Lock-screen notification** (closes the §44 gap listed below as of Aşama 15): a new
+    `LabNotifier` object (same non-destructive, additive pattern as everything else here)
+    shows a persistent, PUBLIC-visibility notification with the same content `Lab2Widget`
+    already computes — nearest overdue/upcoming target, else due-flashcard count — so no new
+    query was written, just a second consumer of `pastTargetDate`/`upcoming`/`dueFlashcards`.
+    Refreshed once in `MainActivity.onCreate` and again whenever `Lab2HomeScreen` bumps its own
+    `refreshTick` (capture, concept creation, curriculum import, etc. already trigger that).
+    `POST_NOTIFICATIONS` permission and the `ic_notification` drawable (both removed in
+    Aşama 15 along with the rest of the old `MissionNotifier`) came back — this is genuinely
+    new functionality built on the new model, not a port of old code; the old
+    `widget/MissionNotifier.kt` file itself stays deleted.
 
 ### Honestly still NOT built (not a short list — said plainly, not glossed over)
 
@@ -296,9 +318,6 @@ compiling or working at any point):
   anymore after Aşama 15.
 - **Motion/micro-interactions** (§11/§38) — screens render instantly with no transition design;
   the spec's "small, satisfying animations" are not implemented.
-- **Notifications** (§44) — Lab has a home-screen widget (Aşama 13) but no lock-screen
-  notification on the new model; the old notification system was deleted with the rest of the
-  old app (Aşama 15), not ported.
 - **A dedicated top-level nav area per §31** (Learn/Knowledge/Projects/Academics/Archive as
   separate rail destinations) — Lab is one screen with many sub-screens reachable from it,
   not six permanent areas. This is now a single-system gap, not a parallel-system one: there
@@ -308,7 +327,7 @@ compiling or working at any point):
   still carries the "2" from when this coexisted with an "old Lab" — purely cosmetic, listed
   here for honesty rather than silently left unmentioned.
 
-None of this is secretly done — it's the honest remainder of a 55-section spec against fifteen
+None of this is secretly done — it's the honest remainder of a 55-section spec against sixteen
 phases in one session. What exists is real (compiles, is tested, is CI-verified, is not a
 mockup) for the slice it covers; the slice is a meaningful fraction, not the full vision, and
 claiming otherwise would be dishonest.
