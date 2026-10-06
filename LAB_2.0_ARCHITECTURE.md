@@ -326,6 +326,18 @@ compiling or working at any point):
   (`indication = LocalIndication.current`) — this is additive feedback, not a replacement.
   Because every button in Lab already goes through this one modifier, the fix is one file,
   not forty.
+- **Aşama 19 — a real regression found and fixed: AI settings had no UI at all.** When Aşama
+  15 deleted the old screens (`CurriculumGenScreen`, `EvaluationScreen`, `AudioScreens`, etc.),
+  it deleted the only places that ever wrote to `ApiKeyStore` along with them.
+  `AICapabilityGate.forContext` kept reading from `ApiKeyStore` exactly as before, so nothing
+  failed to compile and nothing crashed — every AI call just silently returned
+  `AIResult.Offline` forever, because no screen could ever set a key again. This was caught
+  while responding to the user's "AI ayarlarını ekle" request, not caught by CI (a missing
+  screen isn't a compile error). New `AiSettingsScreen` (`ui/lab2/AiSettingsScreen.kt`): pick
+  Groq or Gemini, enter/save/clear the key, see whether one is currently configured — reads
+  and writes the same `ApiKeyStore` the gate already used. Reachable from `Lab2HomeScreen`'s
+  button row ("🤖 AI Ayarları"). No new storage, no new AI-call path — the missing piece was
+  purely the UI to configure what already existed underneath.
 
 ### Honestly still NOT built (not a short list — said plainly, not glossed over)
 
@@ -352,6 +364,6 @@ compiling or working at any point):
   here for honesty rather than silently left unmentioned.
 
 None of this is secretly done — it's the honest remainder of a 55-section spec against
-eighteen phases in one session. What exists is real (compiles, is tested, is CI-verified, is not a
+nineteen phases in one session. What exists is real (compiles, is tested, is CI-verified, is not a
 mockup) for the slice it covers; the slice is a meaningful fraction, not the full vision, and
 claiming otherwise would be dishonest.

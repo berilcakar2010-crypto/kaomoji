@@ -30,6 +30,7 @@ private sealed class Lab2Screen {
     data object Data : Lab2Screen()
     data object Projects : Lab2Screen()
     data object Exams : Lab2Screen()
+    data object Settings : Lab2Screen()
 }
 
 @Composable
@@ -68,6 +69,7 @@ fun Lab2Root() {
                     onOpenData = { screen = Lab2Screen.Data },
                     onOpenProjects = { screen = Lab2Screen.Projects },
                     onOpenExams = { screen = Lab2Screen.Exams },
+                    onOpenSettings = { screen = Lab2Screen.Settings },
                 )
             }
         } else {
@@ -98,6 +100,7 @@ fun Lab2Root() {
                             onOpenData = { screen = Lab2Screen.Data },
                             onOpenProjects = { screen = Lab2Screen.Projects },
                             onOpenExams = { screen = Lab2Screen.Exams },
+                            onOpenSettings = { screen = Lab2Screen.Settings },
                         )
                         else -> Lab2DetailScreen(s, onBack = { screen = Lab2Screen.Home }, onNavigate = { next -> screen = next })
                     }
@@ -132,6 +135,7 @@ private fun Lab2DetailScreen(screen: Lab2Screen, onBack: () -> Unit, onNavigate:
         is Lab2Screen.Data -> LabDataScreen(onBack = onBack)
         is Lab2Screen.Projects -> ProjectsScreen(onBack = onBack)
         is Lab2Screen.Exams -> ExamsScreen(onBack = onBack)
+        is Lab2Screen.Settings -> AiSettingsScreen(onBack = onBack)
         is Lab2Screen.Home -> Unit
     }
 }

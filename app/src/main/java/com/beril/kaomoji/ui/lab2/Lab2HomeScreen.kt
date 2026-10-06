@@ -55,6 +55,7 @@ fun Lab2HomeScreen(
     onOpenData: () -> Unit,
     onOpenProjects: () -> Unit,
     onOpenExams: () -> Unit,
+    onOpenSettings: () -> Unit,
 ) {
     val ctx = LocalContext.current
     val repo = remember { LabRepository(ctx) }
@@ -108,6 +109,7 @@ fun Lab2HomeScreen(
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 GhostBtn("Projeler", onOpenProjects, emoji = "⚗️")
                 GhostBtn("Sınavlar", onOpenExams, emoji = "📋")
+                GhostBtn("AI Ayarları", onOpenSettings, emoji = "🤖")
             }
             Spacer(Modifier.height(10.dp))
             Text("🧪 Lab", style = Display)
