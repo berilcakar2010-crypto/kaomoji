@@ -91,6 +91,7 @@ fun ConceptGraphScreen(
     var isRecording by remember { mutableStateOf(false) }
     var explanations by remember { mutableStateOf<List<KnowledgeObjectEntity>>(emptyList()) }
     var playingId by remember { mutableStateOf<String?>(null) }
+    var busyExplanationId by remember { mutableStateOf<String?>(null) }
     var explanationsTick by remember { mutableStateOf(0) }
 
     LaunchedEffect(conceptId, explanationsTick) {
@@ -187,29 +188,76 @@ fun ConceptGraphScreen(
         } else {
             items(explanations, key = { it.id }) { exp ->
                 val payload = runCatching { ExplanationPayload.fromJson(exp.payload) }.getOrNull()
-                Row(
+                val isBusy = busyExplanationId == exp.id
+                Column(
                     Modifier
                         .fillMaxWidth()
                         .background(J.card, RoundedCornerShape(14.dp))
                         .padding(13.dp),
                 ) {
-                    Column(Modifier.weight(1f)) {
-                        Text(exp.title, style = TitleM)
-                        Text("Kayıt", style = Small.copy(color = J.inkFaint))
+                    Row(Modifier.fillMaxWidth()) {
+                        Column(Modifier.weight(1f)) {
+                            Text(exp.title, style = TitleM)
+                            Text("Kayıt", style = Small.copy(color = J.inkFaint))
+                        }
+                        GhostBtn(
+                            if (playingId == exp.id) "Durdur" else "▶ Dinle",
+                            {
+                                val path = payload?.audioFilePath
+                                if (playingId == exp.id) {
+                                    player.stop()
+                                    playingId = null
+                                } else if (path != null) {
+                                    player.play(path) { playingId = null }
+                                    playingId = exp.id
+                                }
+                            },
+                        )
                     }
-                    GhostBtn(
-                        if (playingId == exp.id) "Durdur" else "▶ Dinle",
-                        {
-                            val path = payload?.audioFilePath
-                            if (playingId == exp.id) {
-                                player.stop()
-                                playingId = null
-                            } else if (path != null) {
-                                player.play(path) { playingId = null }
-                                playingId = exp.id
-                            }
-                        },
-                    )
+                    if (exp.body != null) {
+                        Spacer(Modifier.height(8.dp))
+                        Text("Transkript", style = Small.copy(color = J.inkFaint))
+                        Text(exp.body, style = Small)
+                    }
+                    if (payload?.aiEvaluation != null) {
+                        Spacer(Modifier.height(8.dp))
+                        Text("AI değerlendirmesi", style = Small.copy(color = J.inkFaint))
+                        Text(payload.aiEvaluation, style = Small)
+                    }
+                    Spacer(Modifier.height(8.dp))
+                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        if (exp.body == null) {
+                            GhostBtn(if (isBusy) "…" else "🤖 Transkribe Et", {
+                                val path = payload?.audioFilePath
+                                if (!isBusy && path != null) {
+                                    busyExplanationId = exp.id
+                                    scope.launch {
+                                        val result = gate.transcribeAudio(java.io.File(path))
+                                        if (result is AIResult.Success) {
+                                            repo.attachTranscript(exp.id, result.value)
+                                            explanationsTick++
+                                        }
+                                        busyExplanationId = null
+                                    }
+                                }
+                            })
+                        } else if (payload?.aiEvaluation == null) {
+                            val transcript = exp.body
+                            GhostBtn(if (isBusy) "…" else "🤖 Analiz Et", {
+                                if (!isBusy) {
+                                    busyExplanationId = exp.id
+                                    scope.launch {
+                                        val result = gate.analyzeTranscript(transcript, conceptTitle)
+                                        if (result is AIResult.Success) {
+                                            repo.attachEvaluation(exp.id, result.value)
+                                            explanationsTick++
+                                        }
+                                        busyExplanationId = null
+                                    }
+                                }
+                            })
+                        }
+                    }
                 }
             }
         }

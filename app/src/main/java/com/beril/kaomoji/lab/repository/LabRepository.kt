@@ -281,6 +281,23 @@ class LabRepository(private val dao: LabDao) {
             .mapNotNull { dao.getById(it.fromId) }
             .sortedByDescending { it.createdAt }
 
+    /** AI'nin bir kaydı transkribe etmesinin sonucunu kalıcı hale getirir — transkript metni
+     *  kendi söylediğin şeyin mekanik bir yazıya dökümü (dilbilgisi/netlik yardımındaki gibi
+     *  bir "anlamı değiştirme" riski yok), bu yüzden diğer yazım yardımlarından farklı olarak
+     *  doğrudan kaydedilir; AiResultView yine de sonucu ayrı gösterir, şeffaflık için. */
+    suspend fun attachTranscript(explanationId: String, transcript: String) {
+        val obj = dao.getById(explanationId) ?: return
+        dao.update(obj.copy(body = transcript, updatedAt = Instant.now()))
+    }
+
+    /** AI'nin bir transkript üzerindeki değerlendirmesini [ExplanationPayload.aiEvaluation]'a
+     *  kaydeder. */
+    suspend fun attachEvaluation(explanationId: String, evaluation: String) {
+        val obj = dao.getById(explanationId) ?: return
+        val payload = runCatching { ExplanationPayload.fromJson(obj.payload) }.getOrNull() ?: return
+        dao.update(obj.copy(payload = payload.copy(aiEvaluation = evaluation).toJson(), updatedAt = Instant.now()))
+    }
+
     /** Eski `Store.kt` verisini (hatalar, tekrar kartları, anlatımlar, Brain Inbox, projeler,
      *  sınavlar, pratik günlükleri, haftalık değerlendirmeler) Lab 2.0'ın grafiğine kopyalar.
      *  Store.kt'ye hiçbir yazma yapılmaz — salt okunur bir geçiş. Yeniden çağırmak güvenli

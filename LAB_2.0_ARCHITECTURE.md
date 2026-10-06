@@ -413,6 +413,17 @@ compiling or working at any point):
   15 along with the rest of the old audio code) came back — this time for a feature Lab
   actually has, not a port of anything. 2 unit tests cover the repository methods
   (`LabRepositoryTest`).
+- **Aşama 24 — `analyzeTranscript`/`transcribeAudio` wired, closing the last of the two gaps
+  Aşama 22's audit found.** Each recording in `ConceptGraphScreen`'s explanation list now
+  gets a "🤖 Transkribe Et" button (once: `transcribeAudio` on the audio file, result saved
+  straight to `KnowledgeObjectEntity.body` via new `LabRepository.attachTranscript` — a
+  mechanical transcription of your own recorded speech carries none of the "AI changes your
+  meaning" risk that writing assistance does, so unlike `improveWriting`'s "Bu metni kullan"
+  step, this one saves automatically; the transcript is still shown inline for transparency).
+  Once a transcript exists, "🤖 Analiz Et" becomes available (`analyzeTranscript`, saved to
+  `ExplanationPayload.aiEvaluation` via new `attachEvaluation`). No new AI-call path — both
+  methods already existed; the fix is the same shape as Aşama 21/22's: a missing front door.
+  2 more unit tests cover `attachTranscript`/`attachEvaluation`.
 
 ### Honestly still NOT built (not a short list — said plainly, not glossed over)
 
@@ -437,11 +448,6 @@ compiling or working at any point):
 - **Hover preview is one list, not the whole app**: `ConceptGraphScreen`'s own graph nodes,
   `LabSearchScreen`'s results, and every other list besides `Lab2HomeScreen`'s concept rows
   (Aşama 20) still have no hover state — a mouse or S Pen hovering them does nothing yet.
-- **Recording exists now (Aşama 23), but transcription/AI-analysis on top of it still
-  doesn't**: `analyzeTranscript` and `transcribeAudio` still have no caller — recording a
-  concept explanation does not transcribe it or evaluate it, it only saves the audio and
-  lets you play it back. Wiring those two in is now a realistic next phase (the recording
-  they need finally exists), not blocked on a missing feature anymore.
 - **Recording is concept-only, no general archive screen**: `ConceptGraphScreen` is the only
   place to record or play back an explanation. There is no standalone "all my recordings"
   list independent of a concept (the old app's `AudioLibraryScreen` had one; this doesn't,
@@ -452,6 +458,6 @@ compiling or working at any point):
   here for honesty rather than silently left unmentioned.
 
 None of this is secretly done — it's the honest remainder of a 55-section spec against
-twenty-three phases in one session. What exists is real (compiles, is tested, is CI-verified, is not a
+twenty-four phases in one session. What exists is real (compiles, is tested, is CI-verified, is not a
 mockup) for the slice it covers; the slice is a meaningful fraction, not the full vision, and
 claiming otherwise would be dishonest.

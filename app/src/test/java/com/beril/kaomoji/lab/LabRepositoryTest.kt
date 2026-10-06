@@ -48,6 +48,32 @@ class LabRepositoryTest {
     }
 
     @Test
+    fun `attachTranscript saves the transcript as the explanation's body, leaves payload intact`() = runTest {
+        val dao = FakeLabDao()
+        val repo = LabRepository(dao)
+        val id = repo.createExplanation("concept-1", "Kablo Teorisi", "/a.m4a")
+
+        repo.attachTranscript(id, "Bugün kablo teorisini anlattım...")
+
+        val saved = dao.objects[id]
+        assertEquals("Bugün kablo teorisini anlattım...", saved?.body)
+        assertEquals("/a.m4a", saved?.let { ExplanationPayload.fromJson(it.payload).audioFilePath })
+    }
+
+    @Test
+    fun `attachEvaluation saves into the payload's aiEvaluation, leaves audioFilePath intact`() = runTest {
+        val dao = FakeLabDao()
+        val repo = LabRepository(dao)
+        val id = repo.createExplanation("concept-1", "Kablo Teorisi", "/a.m4a")
+
+        repo.attachEvaluation(id, "Temel kavramı doğru anlatmışsın, sınır koşullarını eksik bıraktın.")
+
+        val payload = dao.objects[id]?.let { ExplanationPayload.fromJson(it.payload) }
+        assertEquals("Temel kavramı doğru anlatmışsın, sınır koşullarını eksik bıraktın.", payload?.aiEvaluation)
+        assertEquals("/a.m4a", payload?.audioFilePath)
+    }
+
+    @Test
     fun `quickCapture writes an IDEA object with no schedule, no forced classification`() = runTest {
         val dao = FakeLabDao()
         val repo = LabRepository(dao)
