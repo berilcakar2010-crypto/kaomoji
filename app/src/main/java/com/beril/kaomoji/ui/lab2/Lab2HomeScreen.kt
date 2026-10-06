@@ -1,6 +1,9 @@
 package com.beril.kaomoji.ui.lab2
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.hoverable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsHoveredAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -206,17 +209,26 @@ fun Lab2HomeScreen(
             item { Empty("🧠", "Eşleşen kavram yok", "\"$conceptFilter\" için bir sonuç bulunamadı.") }
         } else {
             items(filteredConcepts, key = { "concept-${it.id}" }) { c ->
+                // Dokunmadan üzerine gelince (fare ya da S Pen havada tutma) bir ön izleme —
+                // S Pen'in dokunmadan da bir şey söyleyebilmesi (§38'in "nereye gideceğini
+                // önceden hissettir" ilkesiyle aynı çizgide).
+                val hoverSource = remember { MutableInteractionSource() }
+                val hovered by hoverSource.collectIsHoveredAsState()
                 Row(
                     Modifier
                         .animateItem()
                         .fillMaxWidth()
-                        .background(J.card, RoundedCornerShape(14.dp))
+                        .hoverable(hoverSource)
+                        .background(if (hovered) J.lime.copy(alpha = 0.3f) else J.card, RoundedCornerShape(14.dp))
                         .dpadFocusable(onClick = { onOpenConcept(c.id, c.title) }, shape = RoundedCornerShape(14.dp))
                         .padding(13.dp),
                 ) {
                     Column(Modifier.fillMaxWidth()) {
                         Text(c.title, style = TitleM)
-                        Text("Öğrenme oturumu başlat →", style = Small.copy(color = J.inkFaint))
+                        Text(
+                            if (hovered) "Dokun → öğrenme oturumunu aç" else "Öğrenme oturumu başlat →",
+                            style = Small.copy(color = J.inkFaint),
+                        )
                     }
                 }
             }

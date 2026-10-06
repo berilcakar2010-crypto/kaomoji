@@ -338,6 +338,23 @@ compiling or working at any point):
   and writes the same `ApiKeyStore` the gate already used. Reachable from `Lab2HomeScreen`'s
   button row ("🤖 AI Ayarları"). No new storage, no new AI-call path — the missing piece was
   purely the UI to configure what already existed underneath.
+- **Aşama 20 — S Pen.** The user asked for S Pen usability; this splits into three genuinely
+  different things, so each gets its own honest answer rather than one blanket "done":
+  - **Touch/tap** (buttons, scrolling, text field focus): already works, zero code needed.
+    Android and Compose treat a stylus as a standard pointer input — `clickable`,
+    `dpadFocusable`, scrolling, everything already built in this app responds to an S Pen
+    exactly like a finger. Nothing to build here; said so rather than writing a no-op "fix".
+  - **Handwriting-to-text in text fields** (`Field`, used by quick capture, concept names,
+    API key entry, etc.): also already works without app code, on devices where Samsung's/
+    Android's system-level direct-writing IME is enabled — it intercepts stylus input on any
+    standard editable text view with a real `InputConnection`, which `BasicTextField`
+    (`Field`'s implementation) already provides. This app doesn't need to implement
+    handwriting recognition itself; it would be redundant with, and worse than, the OS's own.
+  - **Hover preview** (genuinely new — not something that "already worked"): `Lab2HomeScreen`'s
+    concept rows now use `Modifier.hoverable()` — holding a mouse pointer or an S Pen just
+    above a concept (no touch) tints the row and swaps its hint text, before committing to
+    opening it. Scoped to the one list most people will hover over first; the concept graph's
+    own nodes and other lists don't have this yet (see below).
 
 ### Honestly still NOT built (not a short list — said plainly, not glossed over)
 
@@ -359,11 +376,14 @@ compiling or working at any point):
   not six permanent areas. This is now a single-system gap, not a parallel-system one: there
   is exactly one app, and this is about its internal nav shape, not about a second app to
   reach it through (Aşama 15 removed that door entirely — Lab is the whole app now).
+- **Hover preview is one list, not the whole app**: `ConceptGraphScreen`'s own graph nodes,
+  `LabSearchScreen`'s results, and every other list besides `Lab2HomeScreen`'s concept rows
+  (Aşama 20) still have no hover state — a mouse or S Pen hovering them does nothing yet.
 - **Internal `Lab2*` naming** (`Lab2Root`, `Lab2Widget`, `Lab2Breakpoint`, package `ui.lab2`)
   still carries the "2" from when this coexisted with an "old Lab" — purely cosmetic, listed
   here for honesty rather than silently left unmentioned.
 
 None of this is secretly done — it's the honest remainder of a 55-section spec against
-nineteen phases in one session. What exists is real (compiles, is tested, is CI-verified, is not a
+twenty phases in one session. What exists is real (compiles, is tested, is CI-verified, is not a
 mockup) for the slice it covers; the slice is a meaningful fraction, not the full vision, and
 claiming otherwise would be dishonest.
