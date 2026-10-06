@@ -19,8 +19,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.beril.kaomoji.data.Curriculum
-import com.beril.kaomoji.data.Task
 import com.beril.kaomoji.ui.nav.dpadFocusable
 
 @Composable
@@ -138,83 +136,6 @@ fun Selector(
 }
 
 @Composable
-fun Checkbox(checked: Boolean, onToggle: () -> Unit, color: Color = J.forest) {
-    Box(
-        Modifier
-            .size(22.dp)
-            .background(if (checked) color else Color.Transparent, RoundedCornerShape(7.dp))
-            .border(1.5.dp, if (checked) color else J.line, RoundedCornerShape(7.dp))
-            .dpadFocusable(onClick = onToggle, shape = RoundedCornerShape(7.dp)),
-        contentAlignment = Alignment.Center
-    ) {
-        if (checked) Text("✓", style = TextStyle(fontSize = 12.sp, color = Color.White, fontWeight = FontWeight.Bold))
-    }
-}
-
-@Composable
-fun TaskRow(
-    task: Task,
-    c: Curriculum,
-    done: Boolean,
-    skipped: Boolean,
-    enabled: Boolean,
-    onToggle: () -> Unit,
-    onSkip: (() -> Unit)? = null,
-    onExplain: (() -> Unit)? = null
-) {
-    val sd = c.subject(task.subject)
-    val kd = c.kind(task.kind)
-    val col = subjectColor(sd?.color ?: "#9D5CFF")
-
-    Row(
-        Modifier
-            .fillMaxWidth()
-            .background(
-                if (done) J.paperDeep.copy(alpha = 0.5f) else J.card,
-                RoundedCornerShape(14.dp)
-            )
-            .border(
-                1.dp,
-                if (done) J.lineSoft else col.copy(alpha = 0.30f),
-                RoundedCornerShape(14.dp)
-            )
-            .padding(11.dp),
-        verticalAlignment = Alignment.Top
-    ) {
-        Checkbox(done, { if (enabled) onToggle() }, col)
-        Spacer(Modifier.width(11.dp))
-        Column(Modifier.weight(1f)) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Chip("${sd?.emoji ?: ""} ${sd?.name ?: task.subject}", col)
-                Spacer(Modifier.width(5.dp))
-                Chip("${kd?.emoji ?: ""} ${kd?.name ?: ""}", J.inkSoft, J.paperDeep)
-                Spacer(Modifier.width(5.dp))
-                Text("${task.minutes}′", style = Tiny)
-            }
-            Spacer(Modifier.height(5.dp))
-            Text(
-                task.text,
-                style = if (done)
-                    Body.copy(color = J.inkFaint, textDecoration = androidx.compose.ui.text.style.TextDecoration.LineThrough)
-                else Body
-            )
-            if (skipped && !done) {
-                Spacer(Modifier.height(4.dp))
-                Text("atlandı", style = Tiny.copy(color = J.butter))
-            }
-            if (enabled && !done && (onSkip != null || onExplain != null)) {
-                Spacer(Modifier.height(8.dp))
-                Row(horizontalArrangement = Arrangement.spacedBy(7.dp)) {
-                    if (onExplain != null && task.kind == "explain")
-                        GhostBtn("Kaydet", onExplain, emoji = "🎙️")
-                    if (onSkip != null) GhostBtn("Atla", onSkip, color = J.inkFaint)
-                }
-            }
-        }
-    }
-}
-
-@Composable
 fun StatTile(value: String, label: String, emoji: String, color: Color = J.forest) {
     Column(
         Modifier
@@ -236,26 +157,3 @@ fun StatTile(value: String, label: String, emoji: String, color: Color = J.fores
     }
 }
 
-@Composable
-fun Sheet(title: String, onClose: () -> Unit, content: @Composable ColumnScope.() -> Unit) {
-    Column(
-        Modifier
-            .fillMaxWidth()
-            .background(J.paper, RoundedCornerShape(topStart = 22.dp, topEnd = 22.dp))
-            .padding(16.dp)
-    ) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Text(title, style = TitleL, modifier = Modifier.weight(1f))
-            Text(
-                "✕",
-                style = TextStyle(fontSize = 18.sp, color = J.inkSoft),
-                modifier = Modifier
-                    .clickable { onClose() }
-                    .padding(6.dp)
-            )
-        }
-        Spacer(Modifier.height(12.dp))
-        content()
-        Spacer(Modifier.height(10.dp))
-    }
-}

@@ -7,9 +7,11 @@ import androidx.compose.ui.unit.sp
 import androidx.glance.GlanceId
 import androidx.glance.GlanceModifier
 import androidx.glance.GlanceTheme
+import androidx.glance.action.ActionParameters
 import androidx.glance.action.clickable
 import androidx.glance.appwidget.GlanceAppWidget
 import androidx.glance.appwidget.GlanceAppWidgetReceiver
+import androidx.glance.appwidget.action.ActionCallback
 import androidx.glance.appwidget.appWidgetBackground
 import androidx.glance.appwidget.provideContent
 import androidx.glance.background
@@ -23,14 +25,11 @@ import androidx.glance.text.TextStyle
 import androidx.glance.unit.ColorProvider
 import androidx.compose.ui.unit.dp
 import com.beril.kaomoji.lab.repository.LabRepository
-import com.beril.kaomoji.widget.OpenAppAction
-import java.time.LocalDate
 
 /**
- * Lab 2.0'ın kendi widget'ı — eski `MissionWidget`'a (Store.kt'ye bağlı) dokunulmadı, eski
- * uygulama onu kullanmayı sürdürüyor. Bu, Lab 2.0 verisine (vadesi gelen kart sayısı +
- * en yakın sınav/ödev) bakan, paralel ve ayrı bir widget — §43'ün "widget da görev yöneticisine
- * indirgenmesin, ama yararlı olsun" ilkesiyle, tek bir sayı/satır gösterir.
+ * Uygulamanın ana ekran widget'ı — vadesi gelen kart sayısı + en yakın sınav/ödev. §43'ün
+ * "widget da görev yöneticisine indirgenmesin, ama yararlı olsun" ilkesiyle, tek bir sayı/
+ * satır gösterir.
  */
 class Lab2Widget : GlanceAppWidget() {
     override suspend fun provideGlance(context: Context, id: GlanceId) {
@@ -67,7 +66,7 @@ private fun Lab2WidgetContent(dueCount: Int, nextExam: String?) {
         verticalAlignment = Alignment.Vertical.CenterVertically,
     ) {
         Text(
-            "🧪 Lab 2.0",
+            "🧪 Lab",
             style = TextStyle(fontSize = 12.sp, fontWeight = FontWeight.Bold, color = ColorProvider(Lab2Accent)),
         )
         Text(
@@ -81,5 +80,17 @@ private fun Lab2WidgetContent(dueCount: Int, nextExam: String?) {
                 maxLines = 1,
             )
         }
+    }
+}
+
+class OpenAppAction : ActionCallback {
+    override suspend fun onAction(
+        context: Context,
+        glanceId: GlanceId,
+        parameters: ActionParameters
+    ) {
+        val intent = context.packageManager.getLaunchIntentForPackage(context.packageName)
+        intent?.addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK)
+        intent?.let { context.startActivity(it) }
     }
 }

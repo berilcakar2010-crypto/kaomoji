@@ -1,12 +1,13 @@
-# (≧▽≦)
+# Lab
 
-Kişisel akademik işletim sistemi.
+Kişisel akademik işletim sistemi — bir bilgi grafiği üzerine kurulu.
 
 > **"Daha çok çalışma. Sırada ne olduğunu bil."**
-> *Küçük ölçümler, kesin sonuçlar.*
 
-Bu bir üretkenlik uygulaması değil. Pomodoro yok, seri (streak) yok, puan yok, geri sayım yok.
-Tek bir soruya cevap verir: **şimdi ne yapmalıyım?**
+Bir üretkenlik uygulaması değil. Pomodoro yok, seri (streak) yok, puan yok, geri sayım yok.
+Müfredat bir takvim değil — kavramların önkoşul/bağlantı ilişkileriyle birbirine bağlı olduğu
+bir **bilgi grafiği**. Öğrenme "soru-önce" ilkesiyle ilerir: önce kendi tahminini/denemeni
+yazarsın, sonra sadece ihtiyacın olan kadarı açığa çıkar.
 
 ---
 
@@ -14,22 +15,9 @@ Tek bir soruya cevap verir: **şimdi ne yapmalıyım?**
 
 ### Yol 1 — GitHub Actions (önerilen, bilgisayara hiçbir şey kurmadan)
 
-1. Bu klasörü GitHub'da yeni bir repoya yükle:
-
-```bash
-cd kaomoji
-git init
-git add .
-git commit -m "(≧▽≦) ilk sürüm"
-git branch -M main
-git remote add origin https://github.com/KULLANICI_ADIN/kaomoji.git
-git push -u origin main
-```
-
-2. GitHub'da repona git → **Actions** sekmesi → **APK Derle** iş akışı otomatik başlar
+1. Repoya git → **Actions** sekmesi → **APK Derle** iş akışı otomatik başlar
    (başlamazsa **Run workflow** butonuna bas).
-
-3. 3–6 dakika sonra iş biter. İşe tıkla → sayfanın altındaki **Artifacts** bölümünden
+2. 3–6 dakika sonra iş biter. İşe tıkla → sayfanın altındaki **Artifacts** bölümünden
    **`kaomoji-debug-apk`** dosyasını indir → zip'ten çıkar → telefona at → kur.
 
 > Telefonda "bilinmeyen kaynaklardan yükleme" iznini vermen gerekebilir.
@@ -41,274 +29,117 @@ git tag v1.0
 git push origin v1.0
 ```
 
-APK otomatik olarak repo'nun **Releases** sayfasına yüklenir — telefondan doğrudan indirilebilir.
+APK otomatik olarak repo'nun **Releases** sayfasına yüklenir.
 
 ### Yol 3 — Kendi bilgisayarında
 
 Android Studio ile klasörü aç, Gradle senkronizasyonunu bekle, `Run` bas.
-Komut satırından: `gradle assembleDebug` (Gradle 8.9+, JDK 17).
+Komut satırından: `gradle :app:assembleDebug` (Gradle 8.9+, JDK 17).
 
 ---
 
-## 🌍 Uygulama Yapısı
+## 🧠 Ana Komut Yüzeyi
 
-Beş alan. Onlarca sekme yok — tek bir küçük dünya.
+Açılışta tek bir ekran: "şu an önemli olan" — yaklaşan veya hedef tarihi geçmiş her şey,
+hızlı yakalama kutusu, kavram listesi, son eklenenler. Dashboard değil, bir soruya cevap:
+**şimdi ne yapmalıyım?**
 
-| | Alan | Ne yapar |
+| | Bölüm | Ne yapar |
 |---|---|---|
-| 🔬 | **Laboratuvar** | Ana ekran. Bugünün küçük görevi, deney aşaması, devam et, son anlatım, projeler, köprüler |
-| 📚 | **Müfredat** | 10 faz, 38 birim (haftalık), 566 görev (20 Eylül 2026–20 Haziran 2027). Her mikro modülün başında gerçek takvim tarihi |
-| 📥 | **Brain Inbox** | Hızlı yakalama. Düzenleme sonra |
-| ⚗️ | **Projeler** | Beş üretim projesi. En önemli alan: SIRADAKİ EYLEM |
-| 🎒 | **Çanta** | Anlatımlar, sınavlar, hata defteri, değerlendirme, depolama, kaynaklar |
-
----
-
-## 🧪 Lab 2.0 (Beta)
-
-Uygulamanın yanında, Çanta → **🧪 Lab 2.0** üzerinden ayrı bir giriş noktası olarak büyüyen,
-yeni bir bilgi grafiği mimarisi. Yukarıdaki beş alanın yerini almıyor — eski uygulama hiç
-dokunulmadan çalışmayı sürdürüyor, Lab 2.0 onun yanında.
-
-Fark: müfredat burada bir takvim değil, bir **bilgi grafiği** — kavramlar önkoşul/bağlantı
-ilişkileriyle birbirine bağlı, öğrenme "soru-önce" (önce kendi tahminini yaz, sonra sadece
-gereken kadarını aç) ilkesiyle ilerliyor. Şu an çalışan: gerçek bir 123-kavramlık müfredat
-paketinin içe aktarılması, önkoşul grafiğinde gezinme, disiplin-uyarlanabilir öğrenme
-oturumları, hata defteri, tekrar kartları (SM-2), projeler, sınavlar, AI destekli açıklama/
-değerlendirme (opsiyonel, kendi API anahtarınla), genel arama, kendi verini dışa/içe aktarma.
+| 🧠 | **Kavramlar** | Önkoşul/bağlantı ilişkileriyle birbirine bağlı bilgi grafiği; her kavram bir öğrenme oturumuna açılır |
+| 🪞 | **Değerlendir** | Gerçek sayılar önce, AI yorumu ayrı ve etiketli bir blokta sonra |
+| ⚠️ | **Hata Defteri** | Soru / neden yanlış yaptım / doğru yaklaşım — tekrarlayan örüntüleri fark eder, suçlamaz |
+| 🃏 | **Tekrar Kartları** | SM-2 aralıklı tekrar algoritması |
+| ⚗️ | **Projeler** | En önemli alan: SIRADAKİ EYLEM, görev listesi değil |
+| 📋 | **Sınavlar** | Kapsam + hazırlık durumu; tarihli bir sınav otomatik olarak ana ekranın "önemli olan" listesine girer |
+| 🔎 | **Ara** | Tüm bilgi grafiğinde genel arama |
+| 📁 | **Verim** | Tüm verinin dışa/içe aktarımı (SAF, düz JSON — sunucu yok, hesap yok) |
 
 Tam teknik durum, neyin gerçekten bittiği ve neyin hâlâ eksik olduğunun dürüst listesi:
 [`LAB_2.0_ARCHITECTURE.md`](./LAB_2.0_ARCHITECTURE.md).
 
 ---
 
-## ⏳ Zamansız Müfredat, Tarihli Görevler
+## 📚 Müfredat İçe Aktarma
 
-Fazlar arası sıra hâlâ zamansız — bir birimin görevleri bitince sıradaki açılır,
-geç kalmak ya da bir günü kaçırmak diye bir şey yok. Ama artık **tüm yıl boyunca**
-(sadece Eylül-Aralık değil) her günlük mikro modülün metni gerçek takvim
-tarihiyle başlıyor (ör. **"21 Eylül · Cable theory teorik özeti..."**,
-**"9 Şubat · Hopfield network kodlamasına devam..."**) — gerçek 2026-2027 okul
-yılı programından (20 Eylül 2026 – 20 Haziran 2027) elle çıkarıldı.
-
-```
-Eylül · Kurulum ve Keşif                    3 birim   ~30 saat
-Ekim · Derinleşme                            4 birim   ~58 saat
-Kasım · Tamamlama ve Sıkılaştırma            4 birim   ~54 saat
-Aralık · Bitirme, Toparlama, Dinlenme        5 birim   ~44 saat
-Ocak · Dönem 1 Kapanışı + AP Biyoloji Girişi 3 birim   ~34 saat
-Şubat                                        3 birim   ~42 saat
-Mart                                         4 birim   ~55 saat
-Nisan · AP Sınavlarına Geri Sayım            4 birim   ~52 saat
-Mayıs · AP Sınavları ve Kapanış              5 birim   ~46 saat
-Haziran · Yıl Sonu Kapanışı                  3 birim   ~19 saat
-```
-
-Her birim bir hafta (Hafta 0 – Hafta 37). Şubat başı ile Ocak sonu arasında
-kaynağın kendi yarıyıl tatili boşluğu var (~25 Ocak – 8 Şubat) — haftalar
-numara olarak ardışık ama takvimde değil, uygulama bunu doğru hesaplıyor.
-AP sınav haftası (Hafta 31, 3-7 Mayıs) gibi bazı bloklarda hangi günün hangi
-derse denk geleceği College Board takviminden geldiği için kaynağın kendisi
-de "değişken" diyor — o tek görev tarih aralığı olarak yazılıyor, uydurma tek
-gün değil.
-
-Laboratuvar metaforu XP değil, gerçek durum: 🧊 ham numune → ⚗️ tepkimede → 🧪 stabilize → 🔬 analiz → 💠 sonuçlandı
+Uygulama kendi müfredatını yazmaz — bir dış **Curriculum Contract**'a uyan JSON paketini
+içe aktarır (kavramlar, önkoşullar, bağlantılar, bağlamlar). Hem bu sözleşmeye tam uyan
+paketler hem de daha zengin dış şemalar (özel bir adaptörle) desteklenir.
 
 ---
 
-## 🎯 Bugünün Küçük Görevi
+## 🤖 Yapay Zeka — Sınırlı Yetkiler
 
-Rastgele değil. Şunlara bakıp **tek bir anlamlı eylem** seçer ve **neden seçtiğini söyler**:
+AI hiçbir zaman merkezde değil ve hiçbir zaman sessizce bir şeyi değiştirmez:
 
-1. Mevcut birim ve sıradaki bitmemiş görev
-2. Borçlu kalan Feynman kaydı (birim bitti ama anlatım yok)
-3. Hata Defteri'nde biriken çözülmemiş sorular
-4. Aynı derste tekrar eden hata örüntüleri
-5. Bu birime bağlı, girilmemiş sınav
-6. Sessizleşen projeler
-7. Taşan Brain Inbox
-8. Gecikmiş haftalık değerlendirme
+- **Açıkla** — bir kavramı, varsa kendi tahminini önce değerlendirerek açıklar
+- **Değerlendir** — ilerleme özeti üretir, sayıların yerine geçmez
+- **Not düzenle** — ham notları düzenler/özetler, kaynak uydurmaz
+- **Yazım yardımı** — sonuç ayrı gösterilir, "bu metni kullan" demeden hiçbir alana yazılmaz
+- **Plan öner** — sadece öneri; bu çağrı zincirinde bir zamanlamaya yazma yetkisi olan hiçbir kod yok
 
-Öğrenme "X dakika çalışmak" değildir. Uygulama şunları eşit görür:
-**çözmek · anlatmak · okumak · yazmak · kodlamak · tekrar etmek · üretmek · bağlantı kurmak**
-
-Görev bir emir değil — "Başka" butonu her zaman alternatif sunar.
+Tamamen opsiyonel — kendi Groq veya Gemini API anahtarını girersen çalışır, girmezsen
+uygulama hiçbir zaman internete çıkmaz. Anahtarlar Android Keystore destekli
+`EncryptedSharedPreferences` ile saklanır.
 
 ---
 
-## 🎙️ Anlatım Arşivi
+## 📁 Veri Sahipliği
 
-Sıradan bir ses kaydedici değil. Kendi sesinle kurduğun sözlü bilgi arşivi.
-
-- **Kayıt anında başlar.** Önce form doldurtmaz.
-- Durdurduktan sonra sorar: ne anlattın, hangi ders, hangi birim, hangi proje, hangi dil
-- "Sonra düzenle" ile metadata tamamen atlanabilir
-- Feynman kuralı doğrudan gömülü: birim biterse uygulama İngilizce anlatmanı ister
-- Kayıt kalıcı olarak o birime bağlanır — eski ve yeni anlatımlarını karşılaştırabilirsin
-- Kaset etiketi estetiği, Spotify değil
+Ürettiğin her şey (kavram, oturum, hata, kart, not, proje, sınav) tek bir düz JSON dosyasına
+aktarılır/geri yüklenir (SAF — yeni izin yok, sunucu yok, hesap yok, vendor lock-in yok).
 
 ---
 
-## ⚠️ Hata Defteri
+## 🎨 Görsel Kimlik
 
-Müfredatın en yüksek getirili aracı. Her hata üç sütun:
+"Genç araştırmacı" estetiği — Glow-Up kardeş uygulamasıyla aynı palet: kirli bordo-kızıl
+(ana vurgu) + soluk mor-eflatun (ikincil vurgu) + kirli haki (zemin) + kırık beyaz (kart
+yüzeyi). Serif başlıklar + sans gövde metni + istatistiklerde monospace. Süsleme bilgiyi
+dekore eder, ezmez. D-pad / 2 tuşlu cihazlarda da kullanılabilir.
 
-1. **Soru**
-2. **Neden yanlış yaptım** ← asıl değer burada
-3. **Doğru yaklaşım**
-
-Kategoriler: kavram eksiği · teknik hata · dikkatsizlik · cebir · hesap · soruyu yanlış anladım · yetersiz pratik
-
-Uygulama örüntü arar ama suçlamaz:
-> *"Dönme dinamiğinde 4 açık hata var — burada kapanmamış bir kavram olabilir."*
+Kaçınılanlar: anime/karakter referansları, pastel SaaS, kurumsal dashboard, aşırı
+glassmorphism, jenerik Notion görünümü, steril Material.
 
 ---
 
-## ⚗️ Üretim Projeleri
+## 📱 Katlanabilir / Tablet Desteği
 
-Müfredat açıkça söylüyor: **dersler projelere hizmet eder, tersi değil.**
-
-| | Proje | Ne |
-|---|---|---|
-| 🧠 | **P1 — Destek Eğitim Odası: Çok Bölmeli HH Nöron Modeli** | Gerçek morfoloji (NeuroMorpho.org) + gerçek elektrofizyoloji (Allen Brain Atlas) verisiyle kablo-teorisi tabanlı, stokastik iyon kanalı gürültülü, iki sinaptik bağlı nöron simülasyonu. Aralık'ta teslim, Ocak'ta arşivleniyor. |
-| 🕸️ | **P2 — Hopfield Ağı ile İlişkisel Bellek Modellemesi** | Ocak'ta başlıyor (P1'in yerini alıyor), Mart'ta teslim: klasik Hopfield ağı (Hebbian öğrenme, kapasite/gürültü testleri, enerji manzarası), biyolojik bellek fenomenleriyle karşılaştırma, opsiyonel Transformer-attention bağlantısı. |
-| 🍀 | **P3 — UWC Başvurusu & Felsefe Kulübü** | UWC başvurusu birincil öncelik (Kasım'da gönderim); felsefe kulübü (analitik felsefe + bilim felsefesi) tüm yıl boyunca topluluk katkısı kanıtı olarak sürdürülüyor. |
-| ☀️ | **Yaz Projesi (olası P3-2)** | P2 bitince (Mart'tan itibaren) planlanmaya başlayan, Mayıs-Haziran'da yürütülen üçüncü üretim projesi — kapsamı henüz netleşmedi. |
-
-Her proje kartında en önemli alan: **SIRADAKİ EYLEM**.
-"P1 üzerinde çalış" değil — *"NeuroMorpho.org'dan bir piramidal nöron morfolojisi seç ve kablo denkleminin sayısal iskeletini kur."*
-
----
-
-## 🔗 Disiplinlerarası Köprüler
-
-Birinci sınıf ilişkiler, süs değil:
-
-```
-Kablo Teorisi Köprüsü                 PDE + devre teorisi + gerçek nöron morfolojisi (P1)
-Stokastik Süreçler ↔ Kanal Gürültüsü  Markov modeli = iyon kanalı açılıp kapanması
-Dinamik Sistemler ↔ Senkronizasyon    salınım + diferansiyel denklem + iki nöron senkronu
-Hopfield Ağı ↔ Transformer Attention  attractor network ↔ güncel yapay zeka mimarileri (P2)
-```
-
-Bunlar hem birim sayfalarında görünür hem görev seçimini etkiler.
-
----
-
-## 📱 Katlanabilir Cihaz (ALT Mive Style Folder 2)
-
-**Kapalı ekran (< 380dp)** — tek bir soru:
-
-> (≧▽≦) — *ne yapıyoruz?*
-> Devam et · Anlat · Yakala · Lab
-
-Bugünün görevi tek satır olarak görünür. Dashboard yok, utandırma yok.
-Asla *"X dakika boşa harcadın"* demez.
-
-**Açık ekran (≥ 640dp)** — kalıcı yan menü + ikinci panel.
-Hangi ekranda olursan ol, bugünün görevi sağda durur.
-
-**Arada (380–640dp)** — klasik alt sekme çubuğu.
-
----
-
-## 📁 Depolama
-
-Uygulama verisi ile kullanıcı dosyaları **mimari olarak ayrı**.
-
-| Uygulama verisi (dahili) | Kullanıcı dosyaları (senin klasörün) |
-|---|---|
-| İlerleme, notlar, hatalar, metadata | Ses kayıtları, dışa aktarmalar, yedekler |
-
-Klasörü sen seçersin (Android SAF). Uygulama şu yapıyı otomatik kurar:
-
-```
-(≧▽≦)/
-├── Audio/
-├── Transcripts/
-├── Exports/
-├── Backups/
-├── Generated/
-└── Projects/
-```
-
-Uygulamayı silip yeniden kursan bile aynı klasörü seçerek dosyalarına dönersin.
-Klasör seçilmezse uygulama kendi harici klasörüne yazar — kayıt her zaman çalışır.
-
----
-
-## 🎨 VOIDLAB
-
-Void siyahı · elektrik moru · derin mor · sinyal kırmızısı · nixie kehribarı · kireç beyazı · loş lavanta
-
-Karanlık laboratuvar defteri hissi: neredeyse siyah zemin, ince mor devre çizgileri (osiloskop ızgarası),
-kesik çizgili sinyal çerçeveleri, monospace başlıklar, sade sans gövde metni.
-Vurgular kırmızı (uyarı/hata) ve kehribar (nixie tüp parıltısı) — mor birincil, kırmızı ikincil.
-Widget ve kilit ekranı bildirimi gerçek bir **nixie tüp göstergesi** gibi: cam koyu, çerçeve ince mor,
-sinyal noktası kırmızı, metin kehribar parıltısında.
-
-Süsleme bilgiyi **dekore eder**, ezmez. Hiyerarşi her zaman net kalır.
-
-Kaçınılanlar: pastel SaaS, kurumsal dashboard, aşırı glassmorphism, jenerik Notion görünümü,
-steril Material, çocuksu anaokulu estetiği, aşırı animasyon.
+Portre-tablet-öncelikli, üç kırılma noktası (`Lab2Breakpoint`): dar ekranlarda klasik akış,
+geniş ekranlarda bir detay ekranı (graf/oturum/arama/değerlendirme) ana listeyi gizlemez —
+ikisi yan yana durur, "nereden geldin" her zaman görünür kalır.
 
 ---
 
 ## 🗂️ Teknik
 
 - **Kotlin + Jetpack Compose + Material 3**
-- **Bağımlılık yok denecek kadar az** — Room yok, Hilt yok, Navigation kütüphanesi yok
-- Durum tek bir JSON dosyasında (`filesDir/state.json`) — hızlı, taşınabilir, yedeklenebilir
-- Müfredat `assets/curriculum.json` içinde. Aktif olan, `tools/gen_curriculum_2026_2027.py`
-  ile üretilen tam 2026-2027 okul yılı müfredatı — **20 Eylül 2026'dan 20 Haziran 2027'ye
-  kadar 38 hafta, hepsi gün bazlı gerçek takvim tarihli** (Şubat-Haziran artık iskelet değil,
-  kaynağın kendisi de tüm yıl için gün bazlı program veriyor). Gerçek okul programından elle
-  yapılandırılmış — AI üretimi değil. Script takvim aritmetiğini (ay geçişleri, ~25 Ocak-8
-  Şubat yarıyıl tatili boşluğu) `datetime` ile hesaplıyor ve her haftanın gün kodunu
-  (Pzt/Sal/…) gerçek haftanın günüyle çapraz doğruluyor (`assert`). Eski
-  `gen_curriculum_2026_2027_donem1_v1.py` (yalnızca Dönem 1 detaylı, Dönem 2 aylık iskelet),
-  `gen_curriculum_eylul_aralik_2026.py` (yalnızca Eylül-Aralık) ve daha önceki
-  `gen_curriculum.py`/`v2`/`v3` sürümleri referans için repoda duruyor.
-- Ses: `MediaRecorder` (AAC/MP4) + `MediaPlayer`, SAF üzerinden dosya tanımlayıcı
+- **Room** — bilgi nesnesi/ilişki/bağlam grafiği için yapılandırılmış yerel depolama
+  (tek bir base entity + `kind` ayracı, ayrı first-class ilişki tablosu)
+- **AI**: Groq veya Gemini, sağlayıcı-agnostik bir arayüz (`AIProvider`) arkasında;
+  `AICapabilityGate` yapısal olarak hiçbir depo referansı taşımaz — bu, AI'nin bir
+  zamanlamayı asla sessizce değiştiremeyeceğinin mimari garantisi
+- **SM-2** aralıklı tekrar, epoch-day tabanlı
+- Ana ekran widget'ı: Jetpack Glance — vadesi gelen kart sayısı + en yakın sınav/ödev
 - minSdk 26 · targetSdk 34 · JDK 17
-- **Temelde çevrimdışı.** Sunucu yok, hesap yok. AI özellikleri (transkripsiyon, analiz,
-  soru/müfredat üretimi) opsiyonel — kendi Groq/Gemini API anahtarını girersen çalışır,
-  girmezsen uygulama hiçbir zaman internete çıkmaz.
+- **Temelde çevrimdışı.** Sunucu yok, hesap yok.
 
-### Müfredatı değiştirmek
+### Eski veriden göç
 
-```bash
-python3 tools/gen_curriculum_2026_2027.py
-```
-
-`tools/gen_curriculum_2026_2027.py` içindeki `WEEKS` listesini düzenle (her hafta bir
-`(gün, konu_kodu, metin, dakika, tür)` listesi), scripti çalıştır,
-`app/src/main/assets/curriculum.json` yeniden üretilir. Tarihler otomatik hesaplanır —
-elle tarih yazmana gerek yok. Sonra yeniden derle.
-
-Ya da hiç script'e dokunmadan: Çanta → **Müfredat Oluştur** ekranından bir `.md`/`.pdf`
-belge yükleyip (Groq veya Gemini) API anahtarını girince, uygulama o belgeye uygun,
-sıfırdan bir müfredat kurup mevcut varsayılanın yerine koyar.
+Bu uygulama daha önce sabit, takvime bağlı bir müfredat sistemiydi (`Store.kt`'ye bağlı
+ekranlar). O sistem tamamen kaldırıldı ve yerini bu bilgi-grafiği mimarisi aldı. Eğer
+cihazında o eski sürümden kalma veri varsa (hatalar, tekrar kartları, anlatımlar, Brain
+Inbox notları, proje/sınav durumları), **Verim → Eski Verimi Kopyala** bu veriyi yeni
+grafiğe bir kerelik, salt-okunur bir geçişle taşır. İnce taneli eski istatistikler
+(`done`/`dailyLogs`/`problems`) kasıtlı olarak taşınmaz — bkz. `LAB_2.0_ARCHITECTURE.md`.
 
 ---
 
-## 📋 MVP Kapsamı
+## 📋 Kapsam
 
-Hepsi çalışıyor:
+Çalışan: bilgi grafiği (kavram/ilişki/bağlam), soru-önce öğrenme oturumları, dış müfredat
+paketi içe aktarma, hata defteri, tekrar kartları (SM-2), projeler, sınavlar, AI destekli
+açıklama/değerlendirme/not-düzenleme/yazım-yardımı/plan-önerisi (opsiyonel), genel arama,
+veri dışa/içe aktarma, eski veri göçü, ana ekran widget'ı.
 
-Laboratuvar · Müfredat · Bugünün Küçük Görevi · Brain Inbox · Projeler · Ses kaydı ·
-Ses kütüphanesi · Oynatma · Müfredat↔Ses ilişkileri · Hata Defteri · Sınavlar ·
-Haftalık değerlendirme (video günlüğü dahil) · Kullanıcı seçimli klasör · Depolama yönetimi
-ve başka bir yere yedekleme · Katlanabilir arayüz · Problem takibi · Kaynaklar · Kayda Anlat ·
-Köprü grafiği · Ana ekran widget'ı + kilit ekranı bildirimi · AI transkripsiyon ve anlatım
-analizi (Groq/Gemini) · Otomatik soru üretimi + Anki dışa aktarma · Belgeden (.md/.pdf)
-özel müfredat üretme
-
-### Sonraya bırakılanlar
-
-Otomatik köprü çıkarımı (şu an elle tanımlı) · çoklu cihaz senkronizasyonu
-
-Yapay zekâ hiçbir zaman merkeze konmayacak — **senin kendi düşüncen merkezde.**
-Temel kayıt ve oynatma yapay zekâsız çalışır, hep öyle kalacak. AI özellikleri
-(transkripsiyon, analiz, soru/müfredat üretimi) tamamen opsiyonel — kendi API
-anahtarını girmezsen uygulama hiçbir zaman dışarı istek atmaz.
+Sonraya bırakılanlar ve dürüst eksik listesi: [`LAB_2.0_ARCHITECTURE.md`](./LAB_2.0_ARCHITECTURE.md).

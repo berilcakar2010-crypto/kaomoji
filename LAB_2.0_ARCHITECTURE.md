@@ -232,29 +232,77 @@ compiling or working at any point):
   never written to, modified, or put at risk — this is a one-way read, exactly like every
   other non-destructive step in this project. 8 unit tests cover the mapping logic
   (`LegacyDataMigratorTest`).
+- **Aşama 15 — full cutover: Lab is now the whole app.** The user explicitly asked to stop
+  running two systems side by side and make the knowledge-graph app ("Lab") the only app,
+  with its own identity. This phase is the one genuinely destructive step in the whole
+  project, done deliberately and only on explicit instruction:
+  - **Deleted entirely** (old curriculum-bound UI, now unreachable from anywhere): `ui/Root.kt`,
+    `ui/GardenScreen.kt`, `ui/OtherScreens.kt` (Inbox/Projects/Mistakes/Assessments/Review/
+    Storage/StudyBag/Resources/ExplainIt), `ui/AudioScreens.kt`, `ui/CurriculumScreen.kt`,
+    `ui/CurriculumEditScreen.kt`, `ui/CurriculumGenScreen.kt`, `ui/EvaluationScreen.kt`,
+    `ui/FlashcardsScreen.kt`, `ui/BridgeGraphScreen.kt`, `ui/StatsScreen.kt`,
+    `audio/Audio.kt` (Recorder/Player), `storage/FileVault.kt`, `storage/DocumentTextExtractor.kt`,
+    `widget/MissionWidget.kt`, `widget/MissionNotifier.kt`, `data/Mission.kt`, `data/SM2.kt`
+    (old, millisecond-based), `ai/AiClient.kt` (superseded by `ai/engine/AIProvider`).
+    Dead decorative helpers only those screens used (`TaskRow`, `Checkbox`, `Sheet`, `Chip`,
+    `Sticker`, `Card`, `subjectColor`, `BodySoft`, `gingham`, `dashed`) were removed from
+    `Widgets.kt`/`Theme.kt` too. `RECORD_AUDIO` and `POST_NOTIFICATIONS` permissions, the
+    `FileProvider` manifest entry, and the unused `pdfbox-android`/`documentfile` dependencies
+    were removed since nothing left uses them.
+  - **Deliberately kept, unmodified**: `data/Store.kt`, `data/Models.kt`, `data/CurriculumLoader.kt`,
+    `data/CurriculumSerializer.kt` — not because they're still reachable from any screen (they
+    aren't), but because `LegacyDataMigrator` (Aşama 14) needs a working `Store(context)` to
+    read old on-device data from. This is the one remaining purpose of the entire old data
+    layer: a one-time, read-only migration source for people upgrading from the pre-cutover
+    app. `ai/AiProvider.kt` (enum), `ai/GeminiClient.kt`, `ai/GroqClient.kt`, `ai/ApiKeyStore.kt`,
+    `ai/CurriculumPrompt.kt` were kept because `ai/engine/*` (the new, capability-gated AI
+    layer) wraps them directly — these were never old-UI-only code.
+  - **`MainActivity`** rewritten from scratch: no more `Store`/`Recorder`/`Player`/permission
+    dance — it does nothing but `setContent { LabTheme { Lab2Root() } }`. `Lab2Root()` lost its
+    `onExit` parameter (there is no other app to exit to); `Lab2HomeScreen` lost its "Geri"
+    button and its "(Beta)"/"ayrı giriş noktası" framing — it's described as what it now is,
+    the app's home screen, not a parallel experiment.
+  - **App identity**: `app_name` → **"Lab"**; `applicationId` → **`com.beril.lab`** (was
+    `com.beril.kaomoji` — this makes it, from Android's and the Play Store's point of view, a
+    different app; an existing `com.beril.kaomoji` install cannot be updated in place by this
+    APK, it installs side by side). The Kotlin package namespace (`com.beril.kaomoji`) was
+    **not** renamed — renaming every file's package for a cosmetic-only change across ~50
+    files was assessed as pure risk with no functional benefit, so `namespace` and
+    `applicationId` now intentionally differ (a normal, fully-supported Android/AGP pattern).
+    `Theme.Kaomoji` → `Theme.Lab`, `KaomojiTheme` → `LabTheme`. The `Lab2*` prefix on internal
+    classes (`Lab2Root`, `Lab2Widget`, `Lab2Breakpoint`, package `ui.lab2`) was **not** renamed
+    to drop the "2" — purely cosmetic internal naming, same reasoning.
+  - The old widget (`MissionWidget`) is gone; `Lab2Widget` is now the app's only widget, and
+    absorbed `MissionWidget`'s `OpenAppAction` (the only piece of it that had a second caller).
+  - `README.md` rewritten to describe Lab as it actually is today, not the old curriculum app.
+    `GUNCELLEME_NOTLARI.md` and `UYGULAMA_TANITIMI.md` (both purely about the deleted system)
+    were deleted rather than left stale.
 
 ### Honestly still NOT built (not a short list — said plainly, not glossed over)
 
-- **Old data migration is now one-way and partial, not full parity**: `Store.kt`'s
-  fine-grained curriculum-progress fields — `done`/`dailyLogs`/`problems`-level per-task
-  completion stats tied to the OLD curriculum's own task ids — are deliberately NOT migrated
-  (Aşama 14). Those old task ids don't map to anything in the new knowledge graph, and a fake
-  mapping would be worse than an honest gap. What IS migrated: mistakes, flashcards,
-  recordings, Brain Inbox notes, practice logs, weekly reviews, project/assessment state. The
-  old screens and the new Lab 2.0 screen still read from two separate stores going forward —
-  this is a one-time copy, not a live sync.
+- **Old data migration is partial, not full parity**: `Store.kt`'s fine-grained
+  curriculum-progress fields — `done`/`dailyLogs`/`problems`-level per-task completion stats
+  tied to the OLD curriculum's own task ids — are deliberately NOT migrated (Aşama 14). Those
+  old task ids don't map to anything in the new knowledge graph, and a fake mapping would be
+  worse than an honest gap. What IS migrated: mistakes, flashcards, recordings, Brain Inbox
+  notes, practice logs, weekly reviews, project/assessment state. This is a one-time copy a
+  person triggers once from "Verim", not a live sync — there is no second system to sync with
+  anymore after Aşama 15.
 - **Motion/micro-interactions** (§11/§38) — screens render instantly with no transition design;
   the spec's "small, satisfying animations" are not implemented.
-- **Notifications on the new model** (§44) — Lab 2.0 got its own widget (Aşama 13) but no
-  lock-screen notification yet; the old notification (`MissionNotifier`) still only knows
-  about the old `Store.kt`/legacy curriculum.
+- **Notifications** (§44) — Lab has a home-screen widget (Aşama 13) but no lock-screen
+  notification on the new model; the old notification system was deleted with the rest of the
+  old app (Aşama 15), not ported.
 - **A dedicated top-level nav area per §31** (Learn/Knowledge/Projects/Academics/Archive as
-  separate rail destinations) — Lab 2.0 is one screen with many sub-screens reachable from it,
-  not six permanent areas.
-- **Any of this reachable without going through the old app's "Çanta" menu first** — there is
-  still exactly one door into Lab 2.0, not a redesigned app shell.
+  separate rail destinations) — Lab is one screen with many sub-screens reachable from it,
+  not six permanent areas. This is now a single-system gap, not a parallel-system one: there
+  is exactly one app, and this is about its internal nav shape, not about a second app to
+  reach it through (Aşama 15 removed that door entirely — Lab is the whole app now).
+- **Internal `Lab2*` naming** (`Lab2Root`, `Lab2Widget`, `Lab2Breakpoint`, package `ui.lab2`)
+  still carries the "2" from when this coexisted with an "old Lab" — purely cosmetic, listed
+  here for honesty rather than silently left unmentioned.
 
-None of this is secretly done — it's the honest remainder of a 55-section spec against ten
+None of this is secretly done — it's the honest remainder of a 55-section spec against fifteen
 phases in one session. What exists is real (compiles, is tested, is CI-verified, is not a
 mockup) for the slice it covers; the slice is a meaningful fraction, not the full vision, and
 claiming otherwise would be dishonest.

@@ -10,9 +10,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 
 /**
- * Lab 2.0'ın kendi iç navigasyonu — ana `Screen` sealed class'ına (Root.kt) yeni bir dal
- * eklemek yerine burada izole tutuluyor. Bu kademeli yaklaşımın bir parçası: Lab 2.0 kendi
- * büyüdükçe ana uygulamanın navigasyon dosyasını her seferinde değiştirmek zorunda kalmıyoruz.
+ * Uygulamanın tek giriş noktası ve kendi iç navigasyonu — `MainActivity` doğrudan bunu açar.
  */
 private sealed class Lab2Screen {
     data object Home : Lab2Screen()
@@ -28,7 +26,7 @@ private sealed class Lab2Screen {
 }
 
 @Composable
-fun Lab2Root(onExit: () -> Unit) {
+fun Lab2Root() {
     var screen by remember { mutableStateOf<Lab2Screen>(Lab2Screen.Home) }
     val currentDetail = screen
 
@@ -45,7 +43,6 @@ fun Lab2Root(onExit: () -> Unit) {
                 } else null,
             ) {
                 Lab2HomeScreen(
-                    onBack = onExit,
                     onOpenConcept = { id, title -> screen = Lab2Screen.Graph(id, title) },
                     onOpenSearch = { screen = Lab2Screen.Search },
                     onOpenEvaluation = { screen = Lab2Screen.Evaluation },
@@ -60,7 +57,6 @@ fun Lab2Root(onExit: () -> Unit) {
             Lab2NavShell {
                 when (val s = screen) {
                     is Lab2Screen.Home -> Lab2HomeScreen(
-                        onBack = onExit,
                         onOpenConcept = { id, title -> screen = Lab2Screen.Graph(id, title) },
                         onOpenSearch = { screen = Lab2Screen.Search },
                         onOpenEvaluation = { screen = Lab2Screen.Evaluation },

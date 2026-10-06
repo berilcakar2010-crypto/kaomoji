@@ -4,10 +4,8 @@ import com.beril.kaomoji.lab.model.FlashcardPayload
 import kotlin.math.roundToInt
 
 /**
- * SM-2 aralıklı tekrar — aynı formül `data/SM2.kt`'deki (eski, `Flashcard` veri sınıfına
- * bağlı) sürümle, ama [FlashcardPayload] üzerinde çalışır ve tarih birimi gün (epoch day,
- * `LocalDate.toEpochDay()`), milisaniye değil. Eski SM2.kt'ye kasıtlı olarak dokunulmadı —
- * eski uygulama ona bağımlı, bu Lab 2.0'ın kendi kopyası.
+ * SM-2 aralıklı tekrar — [FlashcardPayload] üzerinde çalışır, tarih birimi gün
+ * (epoch day, `LocalDate.toEpochDay()`), milisaniye değil.
  */
 object SM2Engine {
     fun review(payload: FlashcardPayload, quality: Int, todayEpochDay: Long): FlashcardPayload {

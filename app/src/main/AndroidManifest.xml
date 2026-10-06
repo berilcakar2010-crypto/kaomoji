@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <uses-permission android:name="android.permission.RECORD_AUDIO" />
-    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
@@ -12,7 +10,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:label="@string/app_name"
         android:supportsRtl="false"
-        android:theme="@style/Theme.Kaomoji">
+        android:theme="@style/Theme.Lab">
 
         <activity
             android:name=".MainActivity"
@@ -20,43 +18,14 @@
             android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize|keyboardHidden|density"
             android:resizeableActivity="true"
             android:label="@string/app_name"
-            android:theme="@style/Theme.Kaomoji">
+            android:theme="@style/Theme.Lab">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-        <!-- Video günlüğü: kamera uygulamasının cache dosyasına yazabilmesi için -->
-        <provider
-            android:name="androidx.core.content.FileProvider"
-            android:authorities="${applicationId}.fileprovider"
-            android:exported="false"
-            android:grantUriPermissions="true">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths" />
-        </provider>
-
         <!-- Ana ekran widget'ı -->
-        <receiver
-            android:name=".widget.MissionWidgetReceiver"
-            android:exported="false"
-            android:label="@string/app_name">
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-            </intent-filter>
-            <meta-data
-                android:name="android.appwidget.provider"
-                android:resource="@xml/mission_widget_info" />
-        </receiver>
-
-        <!-- Kilit ekranı bildirimindeki "Tamamla" aksiyonu -->
-        <receiver
-            android:name=".widget.CompleteMissionReceiver"
-            android:exported="false" />
-
-        <!-- Lab 2.0'ın kendi widget'ı — eski widget'ın yanında, ayrı -->
         <receiver
             android:name=".lab.widget.Lab2WidgetReceiver"
             android:exported="false"

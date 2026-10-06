@@ -10,7 +10,7 @@ android {
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.beril.kaomoji"
+        applicationId = "com.beril.lab"
         minSdk = 26
         targetSdk = 34
         versionCode = 1
@@ -54,9 +54,8 @@ dependencies {
     implementation("androidx.core:core-ktx:1.13.1")
     implementation("androidx.activity:activity-compose:1.9.3")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.7")
-    implementation("androidx.documentfile:documentfile:1.0.1")
 
-    // Ana ekran widget'ı ve kilit ekranı bildirimi
+    // Ana ekran widget'ı
     implementation("androidx.glance:glance-appwidget:1.1.1")
     implementation("androidx.glance:glance-material3:1.1.1")
     implementation("androidx.work:work-runtime-ktx:2.9.1")
@@ -64,9 +63,6 @@ dependencies {
     // Groq/Gemini API (transkripsiyon, anlatım analizi, otomatik soru + müfredat üretimi)
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.7")
-
-    // Yüklenen .pdf belgelerinden metin çıkarmak için (müfredat üretici)
-    implementation("com.tom-roush:pdfbox-android:2.0.27.0")
 
     // Lab 2.0 — API anahtarları şifreli saklanır (§35), düz SharedPreferences değil
     implementation("androidx.security:security-crypto:1.1.0-alpha06")

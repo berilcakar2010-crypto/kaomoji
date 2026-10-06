@@ -3,15 +3,11 @@ package com.beril.kaomoji.ai.engine
 import java.io.File
 
 /**
- * Sağlayıcıdan bağımsız AI katmanı (§6). Uygulamanın geri kalanı — ve bir sonraki aşamada
- * yazılacak [AICapabilityGate] — doğrudan Gemini'ye ya da Groq'a değil, bu arayüze konuşur.
- * Yeni bir sağlayıcı eklemek (örn. yerel bir model) yeni bir `AIProvider` implementasyonu
- * yazmak demektir, çağıran taraflardan hiçbirini değiştirmeden.
- *
- * Metodlar [AiClient]'ın (eski, hâlâ mevcut ekranlarca kullanılan) metodlarıyla bilerek
- * aynı isimlere sahip — GeminiClient/GroqClient'ın zaten doğru kapsamlı prompt'ları burada
- * yeniden yazılmıyor, sadece tek bir arayüz altında birleştiriliyor. Mevcut ekranlar bu
- * aşamada hâlâ eski `AiClient`'ı çağırıyor; ekranların bu katmana taşınması ayrı bir aşama.
+ * Sağlayıcıdan bağımsız AI katmanı (§6). Uygulamanın geri kalanı — [AICapabilityGate] dahil —
+ * doğrudan Gemini'ye ya da Groq'a değil, bu arayüze konuşur. Yeni bir sağlayıcı eklemek
+ * (örn. yerel bir model) yeni bir `AIProvider` implementasyonu yazmak demektir, çağıran
+ * taraflardan hiçbirini değiştirmeden. GeminiClient/GroqClient'ın zaten doğru kapsamlı
+ * prompt'ları burada yeniden yazılmıyor, sadece tek bir arayüz altında birleştiriliyor.
  */
 interface AIProvider {
     suspend fun transcribeAudio(apiKey: String?, audioFile: File): AIResult<String>

@@ -1,18 +1,12 @@
 package com.beril.kaomoji.ui
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.PathEffect
-import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -48,12 +42,6 @@ object J {
     val lineSoft = Color(0xFFC7BC98)     // daha soluk divider
 }
 
-fun subjectColor(hex: String): Color = try {
-    Color(android.graphics.Color.parseColor(hex))
-} catch (_: Exception) {
-    J.apple
-}
-
 // ── Typography — "tez klasörü / araştırmacı defteri" hissi: başlıklarda
 // ince akademik serif, gövdede sade sans-serif; monospace SADECE sayı/
 // istatistik alanlarında (Tiny, Mono) kullanılır — VOIDLAB'ın her yeri
@@ -74,7 +62,6 @@ val Body = TextStyle(
     fontFamily = FontFamily.SansSerif, fontWeight = FontWeight.Normal,
     fontSize = 14.sp, lineHeight = 21.sp, color = J.ink
 )
-val BodySoft = Body.copy(color = J.inkSoft)
 val Small = TextStyle(
     fontFamily = FontFamily.SansSerif, fontWeight = FontWeight.Normal,
     fontSize = 12.sp, lineHeight = 17.sp, color = J.inkSoft
@@ -104,7 +91,7 @@ private val AcademicScheme = lightColorScheme(
 )
 
 @Composable
-fun KaomojiTheme(content: @Composable () -> Unit) {
+fun LabTheme(content: @Composable () -> Unit) {
     MaterialTheme(
         colorScheme = AcademicScheme,
         typography = Typography(
@@ -116,83 +103,6 @@ fun KaomojiTheme(content: @Composable () -> Unit) {
 }
 
 // ── Decorative building blocks ──────────────────────────────────────
-
-/** Çok soluk kağıt dokusu — minimalist, dikkat dağıtmayan bir zemin ızgarası. */
-fun Modifier.gingham(
-    color: Color = J.line.copy(alpha = 0.06f),
-    cell: Float = 32f
-): Modifier = this.drawBehind {
-    var x = 0f
-    while (x < size.width) {
-        drawLine(color, Offset(x, 0f), Offset(x, size.height), strokeWidth = 1f)
-        x += cell
-    }
-    var y = 0f
-    while (y < size.height) {
-        drawLine(color, Offset(0f, y), Offset(size.width, y), strokeWidth = 1f)
-        y += cell
-    }
-}
-
-/** Dashed containment-panel border — hücre/sinyal çerçevesi. */
-fun Modifier.dashed(
-    color: Color = J.line,
-    width: Float = 1.4f,
-    radius: Float = 14f
-): Modifier = this.drawBehind {
-    drawRoundRect(
-        color = color,
-        style = Stroke(
-            width = width,
-            pathEffect = PathEffect.dashPathEffect(floatArrayOf(6f, 5f), 0f)
-        ),
-        cornerRadius = androidx.compose.ui.geometry.CornerRadius(radius, radius)
-    )
-}
-
-@Composable
-fun Card(
-    modifier: Modifier = Modifier,
-    bg: Color = J.card,
-    border: Color = J.line,
-    radius: Int = 18,
-    content: @Composable ColumnScope.() -> Unit
-) {
-    Column(
-        modifier
-            .fillMaxWidth()
-            .background(bg, RoundedCornerShape(radius.dp))
-            .border(1.dp, border, RoundedCornerShape(radius.dp))
-            .padding(14.dp),
-        content = content
-    )
-}
-
-@Composable
-fun Chip(
-    text: String,
-    color: Color = J.forest,
-    bg: Color = color.copy(alpha = 0.12f),
-    modifier: Modifier = Modifier
-) {
-    Text(
-        text,
-        style = Tiny.copy(color = color, fontWeight = FontWeight.SemiBold),
-        modifier = modifier
-            .background(bg, RoundedCornerShape(50))
-            .padding(horizontal = 8.dp, vertical = 3.dp)
-    )
-}
-
-@Composable
-fun Sticker(emoji: String, size: Int = 34, bg: Color = J.lime.copy(alpha = 0.35f)) {
-    Box(
-        Modifier
-            .size(size.dp)
-            .background(bg, RoundedCornerShape(50)),
-        contentAlignment = androidx.compose.ui.Alignment.Center
-    ) { Text(emoji, style = TextStyle(fontSize = (size * 0.5).sp)) }
-}
 
 @Composable
 fun Bar(progress: Float, color: Color = J.apple, height: Int = 6, track: Color = J.paperDeep) {

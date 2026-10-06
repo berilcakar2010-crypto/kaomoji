@@ -28,9 +28,8 @@ import java.time.Instant
 import java.time.LocalDate
 
 /**
- * Lab 2.0'ın tek giriş noktası. Aşama 3'ten itibaren `ui/lab2/Lab2HomeScreen.kt` bunu
- * kullanıyor — eski ekranlar (GardenScreen, Store.kt vb.) hâlâ dokunulmadı, Lab 2.0 ekranı
- * mevcut uygulamanın yanında ayrı bir giriş noktası (Çanta → 🧪 Lab 2.0).
+ * Uygulamanın bilgi grafiğine tek giriş noktası — `ui/lab2/*` ekranları bunu kullanır.
+ * Eski `Store.kt` yalnızca `migrateLegacyData` için salt okunur bir göç kaynağı olarak kalır.
  */
 class LabRepository(private val dao: LabDao) {
 

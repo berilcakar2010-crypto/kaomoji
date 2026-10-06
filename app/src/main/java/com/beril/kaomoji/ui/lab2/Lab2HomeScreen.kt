@@ -41,18 +41,11 @@ import androidx.compose.material3.Text
 import kotlinx.coroutines.launch
 
 /**
- * Lab 2.0'ın ana komut yüzeyi (§28) — kart yığını bir dashboard değil, "şu an ne önemli"
- * sorusuna cevap. Henüz hiçbir eski veri buraya göç etmedi (bu aşamanın kapsamı dışında),
- * bu yüzden ekran şu an gerçekten boş durumları gösteriyor — bu bilerek böyle: §49'un
- * istediği "boş durum sistemi öğretsin" ilkesi, Room gerçekten boşken en dürüst haliyle
- * test ediliyor.
- *
- * Mevcut uygulamadan (Çanta → 🧪 Lab 2.0) ayrı bir giriş noktası olarak eklendi — eski
- * Laboratuvar ekranının (GardenScreen) yerini almıyor, onun yanında duruyor.
+ * Uygulamanın ana komut yüzeyi (§28) — kart yığını bir dashboard değil, "şu an ne önemli"
+ * sorusuna cevap.
  */
 @Composable
 fun Lab2HomeScreen(
-    onBack: () -> Unit,
     onOpenConcept: (id: String, title: String) -> Unit,
     onOpenSearch: () -> Unit,
     onOpenEvaluation: () -> Unit,
@@ -94,7 +87,6 @@ fun Lab2HomeScreen(
     ) {
         item {
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                GhostBtn("Geri", onBack, emoji = "←")
                 GhostBtn("Ara", onOpenSearch, emoji = "🔎")
                 GhostBtn("Değerlendir", onOpenEvaluation, emoji = "🪞")
             }
@@ -110,10 +102,9 @@ fun Lab2HomeScreen(
                 GhostBtn("Sınavlar", onOpenExams, emoji = "📋")
             }
             Spacer(Modifier.height(10.dp))
-            Text("🧪 Lab 2.0 (Beta)", style = Display)
+            Text("🧪 Lab", style = Display)
             Text(
-                "Yeni bilgi grafiği altyapısı üzerine kurulu ana komut yüzeyi. Henüz eski " +
-                    "verin göç etmedi — bu ekran gerçekten boş durumları gösteriyor.",
+                "Bilgi grafiği üzerine kurulu kişisel akademik işletim sistemi.",
                 style = Small,
             )
         }
