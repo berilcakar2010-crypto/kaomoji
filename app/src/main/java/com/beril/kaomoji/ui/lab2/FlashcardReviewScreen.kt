@@ -23,6 +23,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import com.beril.kaomoji.ai.engine.AICapabilityGate
+import com.beril.kaomoji.ai.engine.AIResult
 import com.beril.kaomoji.lab.model.FlashcardPayload
 import com.beril.kaomoji.lab.model.KnowledgeObjectEntity
 import com.beril.kaomoji.lab.repository.LabRepository
@@ -35,6 +37,7 @@ import com.beril.kaomoji.ui.J
 import com.beril.kaomoji.ui.SectionLabel
 import com.beril.kaomoji.ui.Small
 import com.beril.kaomoji.ui.TitleL
+import com.beril.kaomoji.ui.TitleM
 import kotlinx.coroutines.launch
 
 /**
@@ -46,6 +49,7 @@ import kotlinx.coroutines.launch
 fun FlashcardReviewScreen(onBack: () -> Unit) {
     val ctx = LocalContext.current
     val repo = remember { LabRepository(ctx) }
+    val gate = remember { AICapabilityGate.forContext(ctx) }
     val scope = rememberCoroutineScope()
 
     var due by remember { mutableStateOf<List<KnowledgeObjectEntity>>(emptyList()) }
@@ -56,6 +60,12 @@ fun FlashcardReviewScreen(onBack: () -> Unit) {
     var front by remember { mutableStateOf("") }
     var back by remember { mutableStateOf("") }
     var refreshTick by remember { mutableStateOf(0) }
+
+    var showGenForm by remember { mutableStateOf(false) }
+    var genSubject by remember { mutableStateOf("") }
+    var genSourceText by remember { mutableStateOf("") }
+    var generating by remember { mutableStateOf(false) }
+    var genResult by remember { mutableStateOf<AIResult<List<Pair<String, String>>>?>(null) }
 
     LaunchedEffect(refreshTick) {
         due = repo.dueFlashcards()
@@ -77,7 +87,10 @@ fun FlashcardReviewScreen(onBack: () -> Unit) {
         }
 
         item {
-            Btn(if (showForm) "Formu Kapat" else "+ Kart Ekle", { showForm = !showForm })
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                Btn(if (showForm) "Formu Kapat" else "+ Kart Ekle", { showForm = !showForm })
+                GhostBtn(if (showGenForm) "AI Formunu Kapat" else "AI'dan Kart Üret", { showGenForm = !showGenForm }, emoji = "🤖")
+            }
         }
         if (showForm) {
             item {
@@ -95,6 +108,56 @@ fun FlashcardReviewScreen(onBack: () -> Unit) {
                             }
                         }
                     }, emoji = "🃏")
+                }
+            }
+        }
+        if (showGenForm) {
+            item {
+                Column {
+                    Text(
+                        "Bir ders metni/notu yapıştır — AI soru-cevap kartı önerir, sen " +
+                            "onaylamadan hiçbiri eklenmez.",
+                        style = Small,
+                    )
+                    Spacer(Modifier.height(6.dp))
+                    Field(genSubject, { genSubject = it }, placeholder = "Konu/ders (örn. Hücre Biyolojisi)", single = true)
+                    Spacer(Modifier.height(6.dp))
+                    Field(genSourceText, { genSourceText = it }, placeholder = "Ders metni / notların", minLines = 5)
+                    Spacer(Modifier.height(8.dp))
+                    Btn(if (generating) "Üretiliyor…" else "Kart Önerileri Al", {
+                        if (!generating && genSourceText.isNotBlank()) {
+                            generating = true
+                            scope.launch {
+                                genResult = gate.generateFlashcards(genSourceText, genSubject.ifBlank { "Genel" })
+                                generating = false
+                            }
+                        }
+                    }, enabled = !generating, emoji = "🤖")
+                    Spacer(Modifier.height(8.dp))
+                    AiResultView(genResult) { pairs ->
+                        Column {
+                            SectionLabel("öneriler", "✨")
+                            pairs.forEach { (f, b) ->
+                                Spacer(Modifier.height(6.dp))
+                                Column(
+                                    Modifier.fillMaxWidth().background(J.paper, RoundedCornerShape(10.dp)).padding(10.dp),
+                                ) {
+                                    Text(f, style = TitleM)
+                                    Text(b, style = Small)
+                                }
+                            }
+                            Spacer(Modifier.height(8.dp))
+                            Btn("Tümünü Kart Olarak Ekle", {
+                                scope.launch {
+                                    pairs.forEach { (f, b) -> repo.createFlashcard(f, b) }
+                                    genResult = null
+                                    genSourceText = ""
+                                    showGenForm = false
+                                    refreshTick++
+                                }
+                            }, emoji = "✓")
+                        }
+                    }
                 }
             }
         }

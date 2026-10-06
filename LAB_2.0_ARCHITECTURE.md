@@ -380,6 +380,24 @@ compiling or working at any point):
   describes — see the gap list below, which is long. It makes the two AI capabilities the
   user named ("revise my writing," "give advice") actually reachable and actually working,
   which they were not, for two different reasons, until this phase.
+- **Aşama 22 — full audit of `AICapabilityGate`, not just the two methods from Aşama 21.**
+  It has **nine** methods, not five (another correction to the Aşama-12 record) —
+  `explainConcept`, `evaluateProgress`, `improveWriting`, `proposeStudyPlan`,
+  `organizeResearchNotes` (all reachable as of Aşama 21), plus `analyzeTranscript`,
+  `transcribeAudio`, `generateFlashcards`, `generateCurriculum`, which were never checked.
+  `generateFlashcards` was reachable and valuable — Lab already has a working flashcard
+  system — so it's wired now: `FlashcardReviewScreen` got a "🤖 AI'dan Kart Üret" form
+  (paste source text + subject, get suggested question/answer pairs, review them, "Tümünü
+  Kart Olarak Ekle" to actually add them — nothing is added without that explicit step).
+  `analyzeTranscript` and `transcribeAudio` are **not** wired, and won't be without a much
+  bigger piece of new work: both need an audio recording, and Aşama 15 deleted the only
+  recording feature this app ever had. Building that back (microphone capture, playback,
+  file storage) is a real, separate feature, not a wiring fix — left as a residual gap, not
+  silently ignored. `generateCurriculum` is **deliberately** left unwired, not a gap at all:
+  Lab's whole curriculum model is built on an external Curriculum Contract — "the app never
+  authors curriculum content" is a stated design principle (§ on curriculum authorship in
+  the original assessment), and a working "AI writes your curriculum" button would directly
+  contradict it.
 
 ### Honestly still NOT built (not a short list — said plainly, not glossed over)
 
@@ -404,11 +422,17 @@ compiling or working at any point):
 - **Hover preview is one list, not the whole app**: `ConceptGraphScreen`'s own graph nodes,
   `LabSearchScreen`'s results, and every other list besides `Lab2HomeScreen`'s concept rows
   (Aşama 20) still have no hover state — a mouse or S Pen hovering them does nothing yet.
+- **No audio recording on the new model** (Aşama 22 finding): `analyzeTranscript` and
+  `transcribeAudio` exist in `AICapabilityGate` with no caller and no realistic one until a
+  real recording feature is built in Lab — microphone capture, playback, file storage. The
+  old app had exactly this (`audio/Audio.kt`'s `Recorder`/`Player`), and Aşama 15 deleted it
+  along with everything else old; it was never rebuilt on the new model. This is a genuinely
+  missing feature, not a wiring gap like the others in this list.
 - **Internal `Lab2*` naming** (`Lab2Root`, `Lab2Widget`, `Lab2Breakpoint`, package `ui.lab2`)
   still carries the "2" from when this coexisted with an "old Lab" — purely cosmetic, listed
   here for honesty rather than silently left unmentioned.
 
 None of this is secretly done — it's the honest remainder of a 55-section spec against
-twenty-one phases in one session. What exists is real (compiles, is tested, is CI-verified, is not a
+twenty-two phases in one session. What exists is real (compiles, is tested, is CI-verified, is not a
 mockup) for the slice it covers; the slice is a meaningful fraction, not the full vision, and
 claiming otherwise would be dishonest.
