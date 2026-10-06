@@ -516,6 +516,45 @@ compiling or working at any point):
   - **Hover preview, two more lists**: `LabSearchScreen`'s results and `ConceptGraphScreen`'s
     `RelatedRow` (prerequisites/enables/related) now hover-tint and swap their hint text, same
     pattern as Aşama 20's concept rows. Still not everywhere (see below).
+- **Aşama 28 — a statistics section, a richer AI evaluation, universal hover (one fix, not
+  screen-by-screen), and a better connection graph, all at the user's explicit request**
+  ("istatistik bölümü ekle, mikro etkileşimleri ve ai kısmını geliştir, hover önizlemesini ve
+  görsel bağlantı grafiğini de geliştir").
+  - **Statistics section**: new `LabRepository.statsSnapshot()` / `StatsSnapshot` is the single
+    source for both what `LabEvaluationScreen` displays (now 6 `StatTile`s — concept/session/
+    completed, plus mistake count, due-flashcard count, and day streak — plus a top-3 mistake-
+    category breakdown and a flashcard-ease summary) and what gets sent to the AI
+    (`StatsSnapshot.toSummary()`). One calculation, not two: the number on screen and the
+    number the AI reasons about can never drift apart. Streak counts consecutive days (back
+    from today) with at least one object created or updated — `updatedAt`, not `createdAt`,
+    because reviewing a flashcard counts as "active today" too, not just creating something
+    new. 1 new unit test (`statsSnapshot aggregates…`, including a streak-boundary check).
+  - **AI improved, same methods, better input**: `evaluateProgress`/`proposeStudyPlan` were
+    already wired (Aşama 8) but only ever saw concept/session counts. They now see mistakes
+    (with the actual recurring categories, not just a count), flashcard retention (average SM-2
+    ease factor), and the real streak — a genuinely more informed evaluation, not a new AI call
+    path.
+  - **Universal hover, fixed at the root**: hover tinting moved INTO the shared
+    `dpadFocusable` modifier itself, instead of being hand-rolled per screen (as Aşama 20/27
+    did for `LabHomeScreen`/`LabSearchScreen`/`ConceptGraphScreen`). Every row/button using
+    `dpadFocusable` — which is nearly all of them, including `Btn`/`GhostBtn` and every list in
+    `MistakeJournalScreen`/`ProjectsScreen`/`ExamsScreen`/the three area-menu screens — now
+    hovers without any screen-specific code. Screens that want richer hover behavior (changing
+    hint text, not just a tint) can still layer their own `hoverable` on top, as before; the
+    two don't conflict, they just compose.
+  - **Connection graph improvements**: `ConnectionGraphCanvas` no longer caps related concepts
+    at 6 — it draws all of them and scrolls horizontally if the row is wider than the screen.
+    Edges are now colored by the prerequisite's actual relationship type (hard/soft/tool/
+    intuition/co-requisite), with a small color legend underneath, and node chips carry a
+    matching border tint — the graph now encodes real information, not just "these are
+    connected."
+  - **Micro-interactions, two shared components fixed at the root (not per-screen)**: `Field`
+    (used by every text input in the app) now animates its border color on focus and its own
+    height via `animateContentSize()` when a multi-line field grows; `AiResultView` (used by
+    every AI-capability screen) wraps its content in `animateContentSize()` so a result
+    appearing or changing (e.g. Offline → Success) grows smoothly instead of popping in. Both
+    fixes close the exact micro-interaction gap named after Aşama 18, in the two places that
+    actually mattered everywhere at once instead of one screen at a time.
 
 ### Honestly still NOT built (not a short list — said plainly, not glossed over)
 
@@ -528,28 +567,34 @@ compiling or working at any point):
   person triggers once from "Verim", not a live sync — there is no second system to sync with
   anymore after Aşama 15.
 - **Motion/micro-interactions, narrowed further (§11/§38)**: navigation, list changes
-  (Aşama 17), and press feedback on every `dpadFocusable` element (Aşama 18) all animate now.
-  What's still instant: `Field`'s text cursor/focus state has no transition, and nothing in
-  the app uses `animateContentSize()` for content that changes height (e.g. an expanding
-  error message) — minor, but real, residual gaps.
-- **Hover preview, still not everywhere**: `LabHomeScreen`'s concept rows (Aşama 20),
-  `LabSearchScreen`'s results, and `ConceptGraphScreen`'s prerequisite/enables/related rows
-  (both Aşama 27) hover now. The three new area-menu screens
-  (`LabKnowledgeHomeScreen`/`LabProjectsHomeScreen`/`LabAcademicsHomeScreen`) and
-  `MistakeJournalScreen`/`ProjectsScreen`/`ExamsScreen`'s lists still don't — same pattern,
-  just not yet applied everywhere.
-- **The visual connection graph's layout is fixed, not force-directed**: `ConnectionGraphCanvas`
-  places nodes in three fixed columns (prerequisites/center/enables) plus a capped row of up to
-  6 related concepts — correct and readable for this screen's real node counts, but it isn't a
-  general graph-layout algorithm and would not scale to a concept with dozens of connections.
+  (Aşama 17), press feedback on every `dpadFocusable` element (Aşama 18), `Field`'s focus
+  border + height, and `AiResultView`'s size change (both Aşama 28) all animate now. What's
+  still instant: individual screens' own ad-hoc layout changes outside those two shared
+  components (e.g. a screen revealing a new section with a plain `if`, not inside something
+  that already has `animateContentSize()`) — a residual, case-by-case gap, not a systemic one
+  anymore.
+- **Hover preview reaches everywhere `dpadFocusable` is used (Aşama 28), but a few lists
+  still build their own rows without it**: `MistakeJournalScreen`/`ProjectsScreen`/
+  `ExamsScreen` were checked at Aşama 27 time and found to already use `dpadFocusable` for
+  their focusable rows, so they inherited hover for free — if any screen is found later to use
+  a plain `clickable()` instead, it still won't hover until migrated to `dpadFocusable`.
+- **The visual connection graph's layout is still fixed, not force-directed**: `Aşama 28`
+  removed the related-concepts cap (now scrollable, not truncated) and added edge-type
+  coloring, but node POSITIONS are still three fixed columns, not a real graph-layout
+  algorithm — correct and readable for this screen's real node counts, but still wouldn't
+  auto-arrange a concept with a genuinely tangled web of dozens of connections.
 - **AI-generated curriculum preview is counts, not a rich diff**: `CurriculumGenScreen`
   shows "N birim, N kavram, N görev" before import, not a per-item list of what would be
   added — enough to sanity-check the AI didn't produce garbage, not enough to review each
   task individually before committing. Re-importing under the same `packageId` also silently
   replaces the previous AI draft (by design, same as the external-package re-import), with no
   extra "are you sure" beyond the existing "İçe Aktar" tap.
+- **Streak only counts object activity, not a dedicated "I studied today" check-in**:
+  `StatsSnapshot.streakDays` counts any object creation/update as "active" — quick-capturing
+  a stray idea keeps a streak alive just as much as a real study session would. This is an
+  honest proxy, not a deliberate study-time tracker.
 
 None of this is secretly done — it's the honest remainder of a 55-section spec against
-twenty-seven phases in one session. What exists is real (compiles, is tested, is CI-verified, is not a
+twenty-eight phases in one session. What exists is real (compiles, is tested, is CI-verified, is not a
 mockup) for the slice it covers; the slice is a meaningful fraction, not the full vision, and
 claiming otherwise would be dishonest.

@@ -3,9 +3,12 @@ package com.beril.kaomoji.ui.nav
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.LocalIndication
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.hoverable
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsHoveredAsState
 import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.getValue
@@ -33,6 +36,13 @@ import androidx.compose.ui.unit.dp
  * net, tutarlı bir çerçeve (mor — VOIDLAB vurgu rengiyle aynı) ve basılı tutulurken
  * ufak bir küçülme — tüm `Btn`/`GhostBtn` ve odaklanabilir satırlar bunu paylaştığı
  * için tek yerde eklenen bu geri bildirim tüm uygulamaya yayılıyor.
+ *
+ * Aynı paylaşım mantığıyla fare/S Pen hover de buraya taşındı (§ "hover her yerde değil"
+ * eksiğini tek bir yerden kapatmak için — önceden her ekranın kendi `hoverable`/
+ * `collectIsHoveredAsState` kodunu elle tekrar etmesi gerekiyordu, artık `dpadFocusable`
+ * kullanan HER satır/buton otomatik hover tonu alıyor). Zengin hover tepkisi isteyen
+ * ekranlar (örn. ipucu metnini değiştiren `LabHomeScreen`/`LabSearchScreen`) kendi
+ * `hoverable`'larını hâlâ ayrıca kurabilir — ikisi çakışmaz, sadece hafif üst üste biner.
  */
 fun Modifier.dpadFocusable(
     onClick: () -> Unit,
@@ -43,6 +53,7 @@ fun Modifier.dpadFocusable(
     var focused by remember { mutableStateOf(false) }
     val interactionSource = remember { MutableInteractionSource() }
     val pressed by interactionSource.collectIsPressedAsState()
+    val hovered by interactionSource.collectIsHoveredAsState()
     val scale by animateFloatAsState(
         targetValue = if (pressed) 0.96f else 1f,
         animationSpec = tween(100),
@@ -50,6 +61,8 @@ fun Modifier.dpadFocusable(
     )
     this
         .scale(scale)
+        .hoverable(interactionSource, enabled = enabled)
+        .then(if (hovered && !focused) Modifier.background(focusColor.copy(alpha = 0.10f), shape) else Modifier)
         .onFocusChanged { focused = it.isFocused }
         .then(if (focused) Modifier.border(2.dp, focusColor, shape) else Modifier)
         .clickable(

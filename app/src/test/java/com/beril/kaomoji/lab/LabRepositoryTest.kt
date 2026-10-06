@@ -2,6 +2,7 @@ package com.beril.kaomoji.lab
 
 import com.beril.kaomoji.lab.model.ExplanationPayload
 import com.beril.kaomoji.lab.model.KnowledgeObjectEntity
+import com.beril.kaomoji.lab.model.MistakePayload
 import com.beril.kaomoji.lab.model.ObjectKind
 import com.beril.kaomoji.lab.model.RelationshipType
 import com.beril.kaomoji.lab.model.Schedule
@@ -9,6 +10,7 @@ import com.beril.kaomoji.lab.model.ScheduleStatus
 import com.beril.kaomoji.lab.repository.LabRepository
 import java.time.Instant
 import java.time.LocalDate
+import java.time.ZoneId
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
@@ -82,6 +84,38 @@ class LabRepositoryTest {
         assertEquals("Başka Kavram", result[0].conceptTitle)
         assertEquals(concept2, result[0].conceptId)
         assertEquals("Kablo Teorisi", result[1].conceptTitle)
+    }
+
+    @Test
+    fun `statsSnapshot aggregates concepts, mistakes by category, flashcard ease, and streak`() = runTest {
+        val dao = FakeLabDao()
+        val repo = LabRepository(dao)
+
+        repo.createConcept("Faraday Yasası")
+        repo.createConcept("Lenz Yasası")
+        repo.logMistake(MistakePayload("p1", "a1", "w1", "y1", "c1", "sign-error"))
+        repo.logMistake(MistakePayload("p2", "a2", "w2", "y2", "c2", "sign-error"))
+        repo.logMistake(MistakePayload("p3", "a3", "w3", "y3", "c3", "units"))
+        val cardId = repo.createFlashcard("front", "back")
+
+        // Bugün ve dün aktivite var, üç gün önce yok — seri 2 olmalı, 3 değil.
+        val today = Instant.now()
+        val yesterday = today.minus(java.time.Duration.ofDays(1))
+        val threeDaysAgo = today.minus(java.time.Duration.ofDays(3))
+        dao.objects[cardId] = dao.objects[cardId]!!.copy(updatedAt = yesterday)
+        dao.objects.values.first { it.kind == ObjectKind.CONCEPT }.let {
+            dao.objects[it.id] = it.copy(updatedAt = threeDaysAgo)
+        }
+
+        val stats = repo.statsSnapshot()
+
+        assertEquals(2, stats.conceptCount)
+        assertEquals(3, stats.mistakeCount)
+        assertEquals("sign-error" to 2, stats.topMistakeCategories.first())
+        assertEquals(1, stats.flashcardCount)
+        assertEquals(2.5, stats.avgEaseFactor)
+        assertEquals(2, stats.streakDays)
+        assertTrue(stats.toSummary().contains("sign-error"))
     }
 
     @Test

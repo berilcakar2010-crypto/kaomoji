@@ -7,6 +7,8 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.hoverable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsHoveredAsState
@@ -24,6 +26,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -36,6 +39,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
@@ -386,13 +390,27 @@ private fun noteLabel(note: String?): String? = when (note) {
     else -> note
 }
 
+/** Önkoşul kenarının türüne göre renk (bkz. [noteLabel]) — graf artık sadece "bağlı" demiyor,
+ *  NE TÜR bağlı olduğunu renkle de söylüyor (zorunlu/yumuşak/araç/sezgi/birlikte-çalışılmalı). */
+private fun edgeColor(note: String?): Color = when (note) {
+    "hard" -> J.cherry
+    "soft" -> J.blush
+    "tool" -> J.butter
+    "intuition" -> J.bark
+    "co-requisite" -> J.forest
+    else -> J.inkFaint
+}
+
 /**
  * Kullanıcının isteği üzerine eklenen gerçek bir node-link çizimi (§16'nın orijinal "süs bir
  * diyagram değil" kararını bilerek tersine çeviriyor — Aşama 25'in `generateCurriculum` kararını
  * tersine çevirmesiyle aynı mantık: kullanıcı açıkça istedi). Konum hesaplaması basit ve sabit —
  * önkoşullar solda, merkez ortada, "bunu açıyor" sağda, ilişkili kavramlar altta bir sırada.
  * Gerçek bir graf-yerleşim algoritması (force-directed vb.) değil; küçük sayıda düğüm için
- * (bu ekranın gerçek kullanımı) yeterli ve öngörülebilir.
+ * (bu ekranın gerçek kullanımı) yeterli ve öngörülebilir — ama artık (Aşama 28) hiçbir düğüm
+ * gizlenmiyor: tüm ilişkili kavramlar gösteriliyor, genişlik ekranı aşarsa yatay kaydırılıyor
+ * (önceden en fazla 6 ilişkili kavramla sınırlıydı). Kenarlar artık önkoşul TÜRÜNE göre
+ * renkli (zorunlu/yumuşak/araç/sezgi) — alttaki bir renk lejandıyla açıklanıyor.
  */
 @Composable
 private fun ConnectionGraphCanvas(
@@ -406,75 +424,89 @@ private fun ConnectionGraphCanvas(
     val nodeH = 46.dp
     val rowGap = 10.dp
     val colGap = 56.dp
-    val shownRelated = related.take(6)
 
     val sideCount = maxOf(prerequisites.size, enables.size, 1)
     val sideBlockHeight = nodeH * sideCount + rowGap * (sideCount - 1).coerceAtLeast(0)
-    val hasRelated = shownRelated.isNotEmpty()
+    val hasRelated = related.isNotEmpty()
     val topPad = 4.dp
     val centerY = topPad + sideBlockHeight / 2
     val relatedY = topPad + sideBlockHeight + rowGap * 2
     val totalHeight = relatedY + (if (hasRelated) nodeH else 0.dp) + 8.dp
     val centerX = nodeW + colGap + nodeW / 2
-    val relatedRowWidth = nodeW * shownRelated.size + rowGap * (shownRelated.size - 1).coerceAtLeast(0)
+    val relatedRowWidth = nodeW * related.size + rowGap * (related.size - 1).coerceAtLeast(0)
     val sideWidth = nodeW * 3 + colGap * 2
     val totalWidth = if (relatedRowWidth > sideWidth) relatedRowWidth else sideWidth
 
-    Box(Modifier.width(totalWidth).height(totalHeight)) {
-        Canvas(Modifier.matchParentSize()) {
-            val cx = centerX.toPx()
-            val cy = centerY.toPx()
-            val halfNodeW = nodeW.toPx() / 2
-            prerequisites.forEachIndexed { i, _ ->
-                val y = (topPad + nodeH / 2 + (nodeH + rowGap) * i).toPx()
-                drawLine(J.inkFaint, Offset(nodeW.toPx(), y), Offset(cx - halfNodeW, cy), strokeWidth = 2.5f)
-            }
-            enables.forEachIndexed { i, _ ->
-                val y = (topPad + nodeH / 2 + (nodeH + rowGap) * i).toPx()
-                drawLine(J.inkFaint, Offset(cx + halfNodeW, cy), Offset(nodeW.toPx() * 2 + colGap.toPx(), y), strokeWidth = 2.5f)
-            }
-            if (hasRelated) {
-                val y = (relatedY + nodeH / 2).toPx()
-                shownRelated.forEachIndexed { i, _ ->
-                    val x = ((nodeW + rowGap) * i + nodeW / 2).toPx()
-                    drawLine(J.lilac, Offset(cx, cy + nodeH.toPx() / 2), Offset(x, y), strokeWidth = 2f)
+    Row(Modifier.horizontalScroll(rememberScrollState())) {
+        Box(Modifier.width(totalWidth).height(totalHeight)) {
+            Canvas(Modifier.matchParentSize()) {
+                val cx = centerX.toPx()
+                val cy = centerY.toPx()
+                val halfNodeW = nodeW.toPx() / 2
+                prerequisites.forEachIndexed { i, (_, note) ->
+                    val y = (topPad + nodeH / 2 + (nodeH + rowGap) * i).toPx()
+                    drawLine(edgeColor(note), Offset(nodeW.toPx(), y), Offset(cx - halfNodeW, cy), strokeWidth = 2.5f)
+                }
+                enables.forEachIndexed { i, (_, note) ->
+                    val y = (topPad + nodeH / 2 + (nodeH + rowGap) * i).toPx()
+                    drawLine(edgeColor(note), Offset(cx + halfNodeW, cy), Offset(nodeW.toPx() * 2 + colGap.toPx(), y), strokeWidth = 2.5f)
+                }
+                if (hasRelated) {
+                    val y = (relatedY + nodeH / 2).toPx()
+                    related.forEachIndexed { i, _ ->
+                        val x = ((nodeW + rowGap) * i + nodeW / 2).toPx()
+                        drawLine(J.lime, Offset(cx, cy + nodeH.toPx() / 2), Offset(x, y), strokeWidth = 2f)
+                    }
                 }
             }
-        }
 
-        prerequisites.forEachIndexed { i, (obj, _) ->
+            prerequisites.forEachIndexed { i, (obj, note) ->
+                GraphNodeChip(
+                    obj.title,
+                    Modifier.offset(x = 0.dp, y = topPad + (nodeH + rowGap) * i),
+                    onClick = { onOpenConcept(obj.id, obj.title) },
+                    width = nodeW, height = nodeH, accentColor = edgeColor(note),
+                )
+            }
             GraphNodeChip(
-                obj.title,
-                Modifier.offset(x = 0.dp, y = topPad + (nodeH + rowGap) * i),
-                onClick = { onOpenConcept(obj.id, obj.title) },
-                width = nodeW, height = nodeH,
+                centerTitle,
+                Modifier.offset(x = nodeW + colGap, y = centerY - nodeH / 2),
+                onClick = {}, width = nodeW, height = nodeH, highlighted = true,
             )
-        }
-        GraphNodeChip(
-            centerTitle,
-            Modifier.offset(x = nodeW + colGap, y = centerY - nodeH / 2),
-            onClick = {}, width = nodeW, height = nodeH, highlighted = true,
-        )
-        enables.forEachIndexed { i, (obj, _) ->
-            GraphNodeChip(
-                obj.title,
-                Modifier.offset(x = nodeW * 2 + colGap * 2, y = topPad + (nodeH + rowGap) * i),
-                onClick = { onOpenConcept(obj.id, obj.title) },
-                width = nodeW, height = nodeH,
-            )
-        }
-        shownRelated.forEachIndexed { i, (obj, _) ->
-            GraphNodeChip(
-                obj.title,
-                Modifier.offset(x = (nodeW + rowGap) * i, y = relatedY),
-                onClick = { onOpenConcept(obj.id, obj.title) },
-                width = nodeW, height = nodeH,
-            )
+            enables.forEachIndexed { i, (obj, note) ->
+                GraphNodeChip(
+                    obj.title,
+                    Modifier.offset(x = nodeW * 2 + colGap * 2, y = topPad + (nodeH + rowGap) * i),
+                    onClick = { onOpenConcept(obj.id, obj.title) },
+                    width = nodeW, height = nodeH, accentColor = edgeColor(note),
+                )
+            }
+            related.forEachIndexed { i, (obj, _) ->
+                GraphNodeChip(
+                    obj.title,
+                    Modifier.offset(x = (nodeW + rowGap) * i, y = relatedY),
+                    onClick = { onOpenConcept(obj.id, obj.title) },
+                    width = nodeW, height = nodeH, accentColor = J.lime,
+                )
+            }
         }
     }
-    if (related.size > shownRelated.size) {
-        Spacer(Modifier.height(4.dp))
-        Text("+ ${related.size - shownRelated.size} ilişkili kavram daha (aşağıdaki listede)", style = Small.copy(color = J.inkFaint))
+    if (prerequisites.any { it.second != null } || enables.any { it.second != null }) {
+        Spacer(Modifier.height(6.dp))
+        Row(Modifier.horizontalScroll(rememberScrollState()), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+            listOf("hard", "soft", "tool", "intuition", "co-requisite").forEach { key ->
+                LegendDot(edgeColor(key), noteLabel(key)?.substringBefore(" —") ?: key)
+            }
+        }
+    }
+}
+
+@Composable
+private fun LegendDot(color: Color, label: String) {
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        Box(Modifier.width(8.dp).height(8.dp).background(color, RoundedCornerShape(4.dp)))
+        Spacer(Modifier.width(4.dp))
+        Text(label, style = Small.copy(color = J.inkFaint))
     }
 }
 
@@ -486,12 +518,18 @@ private fun GraphNodeChip(
     width: Dp,
     height: Dp,
     highlighted: Boolean = false,
+    accentColor: Color? = null,
 ) {
     Box(
         modifier
             .width(width)
             .height(height)
             .background(if (highlighted) J.forest else J.card, RoundedCornerShape(10.dp))
+            .then(
+                if (accentColor != null && !highlighted) {
+                    Modifier.border(1.5.dp, accentColor, RoundedCornerShape(10.dp))
+                } else Modifier,
+            )
             .then(if (highlighted) Modifier else Modifier.dpadFocusable(onClick = onClick, shape = RoundedCornerShape(10.dp)))
             .padding(6.dp),
         contentAlignment = Alignment.Center,

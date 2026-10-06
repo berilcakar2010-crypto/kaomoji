@@ -27,6 +27,7 @@ import com.beril.kaomoji.lab.srs.SM2Engine
 import kotlinx.coroutines.flow.Flow
 import java.time.Instant
 import java.time.LocalDate
+import java.time.ZoneId
 
 /** [LabRepository.allExplanations]'ın tek bir satırı — bir kayıt, ve (varsa) bağlı olduğu
  *  kavramın id/başlığı, genel kayıt arşivinden o kavrama geri dönebilmek için. */
@@ -35,6 +36,39 @@ data class ExplanationWithConcept(
     val conceptId: String?,
     val conceptTitle: String?,
 )
+
+/** [LabRepository.statsSnapshot]'ın tek seferlik anlık görüntüsü — bir İstatistik bölümünün
+ *  (§ "istatistik bölümü ekle") hem gösterdiği gerçek sayılar, hem de AI'a değerlendirme
+ *  isteğinde özet olarak verdiği aynı sayılar. İkisi için tek bir hesaplama, iki ayrı yer
+ *  değil — ekrandaki sayı ile AI'ın gördüğü sayı asla birbirinden sapamaz. */
+data class StatsSnapshot(
+    val conceptCount: Int,
+    val sessionCount: Int,
+    val completedSessionCount: Int,
+    val neglectedConceptCount: Int,
+    val mistakeCount: Int,
+    val topMistakeCategories: List<Pair<String, Int>>,
+    val flashcardCount: Int,
+    val dueFlashcardCount: Int,
+    val avgEaseFactor: Double?,
+    val streakDays: Int,
+) {
+    /** AI'a gönderilecek düz metin özet — ekranda gösterilen sayılarla birebir aynı kaynaktan. */
+    fun toSummary(): String = buildString {
+        append("Toplam kavram: $conceptCount. ")
+        append("Başlatılan öğrenme oturumu: $sessionCount, tamamlanan: $completedSessionCount. ")
+        append("Hiç çalışılmamış kavram sayısı: $neglectedConceptCount. ")
+        append("Toplam hata kaydı: $mistakeCount")
+        if (topMistakeCategories.isNotEmpty()) {
+            append(" (en sık kategoriler: ${topMistakeCategories.joinToString(", ") { "${it.first} (${it.second})" }})")
+        }
+        append(". ")
+        append("Tekrar kartı sayısı: $flashcardCount, vadesi gelen: $dueFlashcardCount")
+        if (avgEaseFactor != null) append(", ortalama kolaylık katsayısı: ${"%.2f".format(avgEaseFactor)}")
+        append(". ")
+        append("Güncel seri (ardışık aktif gün): $streakDays.")
+    }
+}
 
 /**
  * Uygulamanın bilgi grafiğine tek giriş noktası — `ui.lab` paketindeki ekranlar bunu kullanır.
@@ -210,6 +244,56 @@ class LabRepository(private val dao: LabDao) {
             val p = runCatching { FlashcardPayload.fromJson(card.payload) }.getOrNull()
             p == null || p.nextReviewEpochDay <= today.toEpochDay()
         }
+
+    /** Gerçek, hesaplanmış istatistikler — hem bir İstatistik bölümünün göstereceği sayılar,
+     *  hem de AI'ın değerlendirmesine giden özetin TEK kaynağı (bkz. [StatsSnapshot.toSummary]).
+     *  "Güncel seri", bugünden geriye, her gün en az bir nesnenin oluşturulduğu/güncellendiği
+     *  ardışık gün sayısı — `updatedAt`'a bakar, çünkü bir nesneyi güncellemek de (örn. bir
+     *  tekrar kartını gözden geçirmek) "o gün aktiftim" demektir, sadece yeni nesne yaratmak değil. */
+    suspend fun statsSnapshot(): StatsSnapshot {
+        val concepts = dao.getByKind(ObjectKind.CONCEPT)
+        val sessions = dao.getByKind(ObjectKind.LEARNING_SESSION)
+        val completedStates = sessions.map { runCatching { LearningSessionPayload.fromJson(it.payload) }.getOrNull() }
+        val completedCount = completedStates.count { it?.completed == true }
+        val touchedConceptIds = sessions.flatMap { dao.relationshipsOf(it.id) }.map { it.toId }.toSet()
+        val neglected = concepts.count { it.id !in touchedConceptIds }
+
+        val mistakes = dao.getByKind(ObjectKind.MISTAKE)
+        val categories = mistakes.mapNotNull { runCatching { MistakePayload.fromJson(it.payload) }.getOrNull()?.category }
+            .filter { it.isNotBlank() }
+        val topCategories = categories.groupingBy { it }.eachCount().entries
+            .sortedByDescending { it.value }
+            .take(3)
+            .map { it.key to it.value }
+
+        val flashcards = allFlashcards()
+        val flashcardPayloads = flashcards.mapNotNull { runCatching { FlashcardPayload.fromJson(it.payload) }.getOrNull() }
+        val avgEase = if (flashcardPayloads.isEmpty()) null else flashcardPayloads.map { it.easeFactor }.average()
+        val dueCount = dueFlashcards().size
+
+        val activeDates = dao.getAllOnce()
+            .map { it.updatedAt.atZone(ZoneId.systemDefault()).toLocalDate() }
+            .toSet()
+        var streak = 0
+        var day = LocalDate.now()
+        while (activeDates.contains(day)) {
+            streak++
+            day = day.minusDays(1)
+        }
+
+        return StatsSnapshot(
+            conceptCount = concepts.size,
+            sessionCount = sessions.size,
+            completedSessionCount = completedCount,
+            neglectedConceptCount = neglected,
+            mistakeCount = mistakes.size,
+            topMistakeCategories = topCategories,
+            flashcardCount = flashcards.size,
+            dueFlashcardCount = dueCount,
+            avgEaseFactor = avgEase,
+            streakDays = streak,
+        )
+    }
 
     /** Bir kartı inceler, SM-2 ile yeni durumu hesaplar ve kalıcı hale getirir. Kartın "neden
      *  tekrar edildiğini" kullanıcı her zaman anlasın diye — bu metot kartı asla tekrarın
