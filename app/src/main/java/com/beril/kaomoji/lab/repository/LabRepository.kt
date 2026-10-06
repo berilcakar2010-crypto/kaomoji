@@ -28,7 +28,7 @@ import java.time.Instant
 import java.time.LocalDate
 
 /**
- * Uygulamanın bilgi grafiğine tek giriş noktası — `ui/lab2/*` ekranları bunu kullanır.
+ * Uygulamanın bilgi grafiğine tek giriş noktası — `ui.lab2` paketindeki ekranlar bunu kullanır.
  * Eski `Store.kt` yalnızca `migrateLegacyData` için salt okunur bir göç kaynağı olarak kalır.
  */
 class LabRepository(private val dao: LabDao) {
