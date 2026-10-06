@@ -84,12 +84,14 @@ data class FlashcardPayload(
 data class ExplanationPayload(
     val language: String,
     val audioFilePath: String? = null,
+    val videoFilePath: String? = null,
     val confidence: Int? = null,
     val aiEvaluation: String? = null,
 ) {
     fun toJson(): String = JSONObject().apply {
         put("language", language)
         audioFilePath?.let { put("audioFilePath", it) }
+        videoFilePath?.let { put("videoFilePath", it) }
         confidence?.let { put("confidence", it) }
         aiEvaluation?.let { put("aiEvaluation", it) }
     }.toString()
@@ -100,6 +102,7 @@ data class ExplanationPayload(
             return ExplanationPayload(
                 language = j.optString("language"),
                 audioFilePath = if (j.has("audioFilePath")) j.optString("audioFilePath") else null,
+                videoFilePath = if (j.has("videoFilePath")) j.optString("videoFilePath") else null,
                 confidence = if (j.has("confidence")) j.optInt("confidence") else null,
                 aiEvaluation = if (j.has("aiEvaluation")) j.optString("aiEvaluation") else null,
             )

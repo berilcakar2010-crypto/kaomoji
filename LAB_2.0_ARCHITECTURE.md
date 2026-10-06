@@ -478,6 +478,44 @@ compiling or working at any point):
     dinle/transkribe/analiz actions Aşama 23/24 built, plus a "Kavrama Git" link back to its
     concept. Closes the exact gap named after Aşama 23: recording is no longer concept-only.
   - 1 new unit test (`allExplanations lists recordings across every concept…`).
+- **Aşama 27 — a real connection graph, video self-evaluation, the per-area back-stack, and
+  hover preview on two more lists, all at the user's explicit request** ("bağlantı grafiği,
+  videolu değerlendirme ve kalan her şey").
+  - **Visual connection graph**: `ConceptGraphScreen` gets a real node-link drawing
+    (`ConnectionGraphCanvas`, Compose `Canvas` + positioned chips) — prerequisites left, the
+    current concept centered, "this enables" right, related concepts in a row below, with
+    lines drawn between them. This deliberately reverses §16's original "not a decorative
+    diagram" framing, the same way Aşama 25 reversed Aşama 22's `generateCurriculum` decision:
+    at the user's explicit request, not a silent regression. The existing navigable list stays
+    — it's still the accessible/dpad interaction path; the canvas is additive, a "see the big
+    picture" view on top of it. Related nodes cap at 6 in the canvas (the full list is still
+    below) to keep the fixed layout from overflowing.
+  - **Video self-evaluation**: next to the existing audio "Anlat (Feynman tekniği)", a "Video
+    ile Anlat" button launches the system camera app (`ActivityResultContracts.CaptureVideo`,
+    a `FileProvider`-granted Uri into the same `filesDir/recordings`) — this app does not write
+    its own camera UI. Playback hands off to the system video viewer (`ACTION_VIEW`) rather
+    than building an in-app video player. `ExplanationPayload` gained `videoFilePath` (sibling
+    to `audioFilePath`, both optional, existing JSON unaffected); new
+    `LabRepository.createVideoExplanation`. Deliberately NOT wired to AI transcription/analysis:
+    `transcribeAudio`'s Gemini request hardcodes `mime_type: audio/mp4` — sending a real video
+    file through that same path could silently misparse, so video recordings are watch-only.
+    This is a stated scope boundary, not an oversight. `LabArchiveScreen` got the same
+    video-aware treatma — "İzle (Video)" instead of inline playback, transcribe/analyze hidden
+    for video rows. Manifest additions: a `FileProvider` (`res/xml/file_paths.xml`, scoped to
+    `recordings/` only, not all of `filesDir`) and a `<queries>` entry for
+    `ACTION_VIEW`+`video/*` (required on targetSdk 30+ package-visibility rules for the
+    playback hand-off to resolve; capture needs no such entry — `ACTION_VIDEO_CAPTURE` is on
+    Android's automatic-visibility allowlist). 1 new unit test (`createVideoExplanation`).
+  - **Per-area back-stack**: closes the exact gap Aşama 26 named. `LabRoot` now holds
+    `stacks: Map<LabArea, List<LabScreen>>` instead of one shared nullable screen — leaving an
+    area mid-task and coming back restores exactly where you were, not that area's home.
+    Push/pop are parameterized by area explicitly (`pushTo`/`popFrom`) rather than closing over
+    the live `area` var, because the narrow-layout `AnimatedContent` can still be rendering the
+    outgoing area's content for a frame after `area` has already changed — without this, a tap
+    during that frame could write into the wrong area's stack.
+  - **Hover preview, two more lists**: `LabSearchScreen`'s results and `ConceptGraphScreen`'s
+    `RelatedRow` (prerequisites/enables/related) now hover-tint and swap their hint text, same
+    pattern as Aşama 20's concept rows. Still not everywhere (see below).
 
 ### Honestly still NOT built (not a short list — said plainly, not glossed over)
 
@@ -494,13 +532,16 @@ compiling or working at any point):
   What's still instant: `Field`'s text cursor/focus state has no transition, and nothing in
   the app uses `animateContentSize()` for content that changes height (e.g. an expanding
   error message) — minor, but real, residual gaps.
-- **Hover preview is one list, not the whole app**: `ConceptGraphScreen`'s own graph nodes,
-  `LabSearchScreen`'s results, and every other list besides `LabHomeScreen`'s concept rows
-  (Aşama 20) still have no hover state — a mouse or S Pen hovering them does nothing yet.
-- **The five top-level areas (§31, Aşama 26) are a flat switch, not a per-area back-stack**:
-  each area remembers only one pushed screen at a time (e.g. leaving Projeler mid-"Sınavlar"
-  and coming back resets to Projeler's home, not back to Sınavlar). A real per-area history
-  stack is more machinery than this phase's scope — honest residual, not silently dropped.
+- **Hover preview, still not everywhere**: `LabHomeScreen`'s concept rows (Aşama 20),
+  `LabSearchScreen`'s results, and `ConceptGraphScreen`'s prerequisite/enables/related rows
+  (both Aşama 27) hover now. The three new area-menu screens
+  (`LabKnowledgeHomeScreen`/`LabProjectsHomeScreen`/`LabAcademicsHomeScreen`) and
+  `MistakeJournalScreen`/`ProjectsScreen`/`ExamsScreen`'s lists still don't — same pattern,
+  just not yet applied everywhere.
+- **The visual connection graph's layout is fixed, not force-directed**: `ConnectionGraphCanvas`
+  places nodes in three fixed columns (prerequisites/center/enables) plus a capped row of up to
+  6 related concepts — correct and readable for this screen's real node counts, but it isn't a
+  general graph-layout algorithm and would not scale to a concept with dozens of connections.
 - **AI-generated curriculum preview is counts, not a rich diff**: `CurriculumGenScreen`
   shows "N birim, N kavram, N görev" before import, not a per-item list of what would be
   added — enough to sanity-check the AI didn't produce garbage, not enough to review each
@@ -509,6 +550,6 @@ compiling or working at any point):
   extra "are you sure" beyond the existing "İçe Aktar" tap.
 
 None of this is secretly done — it's the honest remainder of a 55-section spec against
-twenty-six phases in one session. What exists is real (compiles, is tested, is CI-verified, is not a
+twenty-seven phases in one session. What exists is real (compiles, is tested, is CI-verified, is not a
 mockup) for the slice it covers; the slice is a meaningful fraction, not the full vision, and
 claiming otherwise would be dishonest.

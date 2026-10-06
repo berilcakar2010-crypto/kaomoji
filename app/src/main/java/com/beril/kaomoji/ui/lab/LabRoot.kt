@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -22,6 +23,10 @@ import androidx.compose.ui.Modifier
  * §31'in istediği beş kalıcı üst-seviye alan: her biri kendi "alan ana ekranı"na sahip, rail'de
  * (bkz. `LabNavShell`) her zaman görünür ve tek dokunuşla değişir — eskiden olduğu gibi tek bir
  * "Ana Sayfa"nın üstüne yığılmış on farklı buton değil.
+ *
+ * Her alanın kendi gezinme geçmişi var (`stacks`, alan → ekran listesi) — bir alandan çıkıp
+ * geri dönmek o alanın ana ekranına sıfırlamaz, kaldığın yere döner (Aşama 26'nın "düz bir
+ * geçiş, alan-başına geçmiş yığını yok" dürüst eksiğini kapatıyor).
  */
 enum class LabArea(val label: String, val emoji: String) {
     LEARN("Öğren", "🧠"),
@@ -48,7 +53,7 @@ private sealed class LabScreen {
 @Composable
 fun LabRoot() {
     var area by remember { mutableStateOf(LabArea.LEARN) }
-    var screen by remember { mutableStateOf<LabScreen?>(null) }
+    val stacks = remember { mutableStateMapOf<LabArea, List<LabScreen>>() }
     var settingsOpen by remember { mutableStateOf(false) }
 
     // AI Ayarları beş alandan biri değil (bkz. LabArea) — hangi alanda olursan ol erişilebilir
@@ -58,8 +63,16 @@ fun LabRoot() {
         return
     }
 
-    val selectArea: (LabArea) -> Unit = { next -> area = next; screen = null }
-    val currentScreen = screen
+    val selectArea: (LabArea) -> Unit = { next -> area = next }
+    val currentScreen = stacks[area]?.lastOrNull()
+    // `a`'ya göre parametrelenmiş hal: aşağıdaki dar-ekran AnimatedContent'i geçiş animasyonu
+    // SIRASINDA eski alanı da render edebilir (`targetState` değişirken çıkan içerik hâlâ
+    // bir kare sürebilir) — o an tıklanırsa canlı `area` değil, o içeriğin GERÇEKTEN ait
+    // olduğu alan güncellenmeli, yoksa bir alanın ekranı yanlışlıkla başka birine yazılabilir.
+    val pushTo: (LabArea, LabScreen) -> Unit = { a, next -> stacks[a] = (stacks[a] ?: emptyList()) + next }
+    val popFrom: (LabArea) -> Unit = { a -> stacks[a] = (stacks[a] ?: emptyList()).dropLast(1) }
+    val push: (LabScreen) -> Unit = { next -> pushTo(area, next) }
+    val pop: () -> Unit = { popFrom(area) }
 
     BoxWithConstraints(Modifier.fillMaxSize()) {
         val wide = breakpointFor(maxWidth.value.toInt()) == LabBreakpoint.TABLET_LANDSCAPE
@@ -82,13 +95,13 @@ fun LabRoot() {
                             label = "lab-secondary-panel",
                         ) { detail ->
                             if (detail != null) {
-                                LabDetailScreen(detail, onBack = { screen = null }, onNavigate = { next -> screen = next })
+                                LabDetailScreen(detail, onBack = pop, onNavigate = push)
                             }
                         }
                     }
                 } else null,
             ) {
-                LabAreaHome(area, onNavigate = { next -> screen = next })
+                LabAreaHome(area, onNavigate = push)
             }
         } else {
             LabNavShell(
@@ -113,9 +126,9 @@ fun LabRoot() {
                     label = "lab-screen-transition",
                 ) { (a, s) ->
                     if (s == null) {
-                        LabAreaHome(a, onNavigate = { next -> screen = next })
+                        LabAreaHome(a, onNavigate = { next -> pushTo(a, next) })
                     } else {
-                        LabDetailScreen(s, onBack = { screen = null }, onNavigate = { next -> screen = next })
+                        LabDetailScreen(s, onBack = { popFrom(a) }, onNavigate = { next -> pushTo(a, next) })
                     }
                 }
             }

@@ -6,6 +6,17 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
+    <!-- targetSdk 30+'ta paket görünürlüğü kısıtlı — video izlemek için sistemin video
+         oynatıcısına ACTION_VIEW gönderiyoruz (§ videolu değerlendirme, bkz. ConceptGraphScreen/
+         LabArchiveScreen); bu olmadan intent hiçbir uygulamaya çözümlenemeyebilir. Video kaydı
+         için ayrıca gerekmiyor — ACTION_VIDEO_CAPTURE Android'in otomatik görünürlük listesinde. -->
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:mimeType="video/*" />
+        </intent>
+    </queries>
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -26,6 +37,20 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- Video anlatım kayıtları için: sistem kamera uygulamasına filesDir/recordings
+             altındaki bir dosyaya yazma izni vermek için gereken FileProvider (§ videolu
+             değerlendirme). Kamera uygulaması kendi CAMERA iznini kendi ister — bu uygulama
+             CAMERA izni istemez, sadece yazılacak dosyanın content:// Uri'sini sağlar. -->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
 
         <!-- Ana ekran widget'ı -->
         <receiver

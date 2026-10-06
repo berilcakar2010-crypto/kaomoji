@@ -1,11 +1,17 @@
 package com.beril.kaomoji.ui.lab
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
+import androidx.compose.foundation.hoverable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsHoveredAsState
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -13,7 +19,10 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.matchParentSize
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -25,8 +34,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.core.content.ContextCompat
@@ -34,6 +47,8 @@ import com.beril.kaomoji.ai.engine.AICapabilityGate
 import com.beril.kaomoji.ai.engine.AIResult
 import com.beril.kaomoji.lab.audio.LabPlayer
 import com.beril.kaomoji.lab.audio.LabRecorder
+import com.beril.kaomoji.lab.audio.newVideoFile
+import com.beril.kaomoji.lab.audio.videoFileUri
 import com.beril.kaomoji.lab.graph.EdgeBucket
 import com.beril.kaomoji.lab.graph.bucketRelationships
 import com.beril.kaomoji.lab.model.ExplanationPayload
@@ -49,12 +64,13 @@ import com.beril.kaomoji.ui.SectionLabel
 import com.beril.kaomoji.ui.Small
 import com.beril.kaomoji.ui.TitleM
 import com.beril.kaomoji.ui.nav.dpadFocusable
+import java.io.File
 
 /**
- * Bir kavramın gerçek ilişki grafiği (§16) — süs bir diyagram değil, gezilebilir bir liste:
- * hangi kavramlar bunu önkoşul olarak istiyor, bu hangilerini açıyor, hangi disiplinlerarası
- * bağlantılar var. Her satır tıklanabilir — graf burada gerçekten davranışı yönlendiriyor
- * (bir kavramdan diğerine geçmeni sağlıyor), dekoratif bir node-link çizimi değil.
+ * Bir kavramın gerçek ilişki grafiği (§16) — hem gezilebilir bir liste (her satır tıklanabilir,
+ * grafın kendisi davranışı yönlendiriyor) HEM de kullanıcının açıkça istediği görsel bir
+ * node-link çizimi (bkz. `ConnectionGraphCanvas`). İkisi birbirini dışlamıyor: liste erişilebilir
+ * etkileşimin (dpad/dokunma) asıl yolu, görsel graf "büyük resmi" bir bakışta görmek için.
  */
 @Composable
 fun ConceptGraphScreen(
@@ -94,6 +110,22 @@ fun ConceptGraphScreen(
     var busyExplanationId by remember { mutableStateOf<String?>(null) }
     var explanationsTick by remember { mutableStateOf(0) }
 
+    // Video anlatım (§ videolu değerlendirme): bu uygulama kendi kamera UI'ını yazmıyor,
+    // kaydı sistemin kamera uygulamasına devrediyor — sadece hedef dosyayı/Uri'yi hazırlıyor.
+    var pendingVideoFile by remember { mutableStateOf<File?>(null) }
+    val videoCaptureLauncher = rememberLauncherForActivityResult(ActivityResultContracts.CaptureVideo()) { success ->
+        val file = pendingVideoFile
+        pendingVideoFile = null
+        if (success && file != null && file.exists() && file.length() > 0) {
+            scope.launch {
+                repo.createVideoExplanation(conceptId, conceptTitle, file.absolutePath)
+                explanationsTick++
+            }
+        } else {
+            file?.delete()
+        }
+    }
+
     LaunchedEffect(conceptId, explanationsTick) {
         explanations = repo.explanationsFor(conceptId)
     }
@@ -130,6 +162,14 @@ fun ConceptGraphScreen(
             Text("🕸️ $conceptTitle", style = Display)
             Spacer(Modifier.height(8.dp))
             Btn("▶ Öğrenme Oturumu Başlat", { onStartSession(conceptId, conceptTitle) })
+        }
+
+        if (loaded && (prerequisites.isNotEmpty() || enables.isNotEmpty() || related.isNotEmpty())) {
+            item {
+                SectionLabel("bağlantı grafiği (görsel)", "🕸️")
+                Spacer(Modifier.height(6.dp))
+                ConnectionGraphCanvas(conceptTitle, prerequisites, enables, related, onOpenConcept)
+            }
         }
 
         item {
@@ -180,6 +220,18 @@ fun ConceptGraphScreen(
                     }
                 }, bg = J.cherry, emoji = "⏹")
             }
+            Spacer(Modifier.height(8.dp))
+            Text(
+                "Ya da kendini video ile kaydet, sonra izleyerek değerlendir — anlattığını " +
+                    "gören bir öğrenci gibi dinle (§ videolu değerlendirme).",
+                style = Small,
+            )
+            Spacer(Modifier.height(6.dp))
+            GhostBtn("Video ile Anlat", {
+                val file = newVideoFile(ctx)
+                pendingVideoFile = file
+                videoCaptureLauncher.launch(videoFileUri(ctx, file))
+            }, emoji = "📹")
         }
 
         item { SectionLabel("anlatım geçmişi", "🗂️") }
@@ -195,24 +247,36 @@ fun ConceptGraphScreen(
                         .background(J.card, RoundedCornerShape(14.dp))
                         .padding(13.dp),
                 ) {
+                    val isVideo = payload?.videoFilePath != null
                     Row(Modifier.fillMaxWidth()) {
                         Column(Modifier.weight(1f)) {
                             Text(exp.title, style = TitleM)
-                            Text("Kayıt", style = Small.copy(color = J.inkFaint))
+                            Text(if (isVideo) "Video Kayıt" else "Ses Kaydı", style = Small.copy(color = J.inkFaint))
                         }
-                        GhostBtn(
-                            if (playingId == exp.id) "Durdur" else "▶ Dinle",
-                            {
-                                val path = payload?.audioFilePath
-                                if (playingId == exp.id) {
-                                    player.stop()
-                                    playingId = null
-                                } else if (path != null) {
-                                    player.play(path) { playingId = null }
-                                    playingId = exp.id
+                        if (isVideo) {
+                            GhostBtn("▶ İzle (Video)", {
+                                val uri = videoFileUri(ctx, File(payload!!.videoFilePath!!))
+                                val intent = Intent(Intent.ACTION_VIEW).apply {
+                                    setDataAndType(uri, "video/mp4")
+                                    addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                                 }
-                            },
-                        )
+                                runCatching { ctx.startActivity(intent) }
+                            })
+                        } else {
+                            GhostBtn(
+                                if (playingId == exp.id) "Durdur" else "▶ Dinle",
+                                {
+                                    val path = payload?.audioFilePath
+                                    if (playingId == exp.id) {
+                                        player.stop()
+                                        playingId = null
+                                    } else if (path != null) {
+                                        player.play(path) { playingId = null }
+                                        playingId = exp.id
+                                    }
+                                },
+                            )
+                        }
                     }
                     if (exp.body != null) {
                         Spacer(Modifier.height(8.dp))
@@ -225,37 +289,39 @@ fun ConceptGraphScreen(
                         Text(payload.aiEvaluation, style = Small)
                     }
                     Spacer(Modifier.height(8.dp))
-                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                        if (exp.body == null) {
-                            GhostBtn(if (isBusy) "…" else "🤖 Transkribe Et", {
-                                val path = payload?.audioFilePath
-                                if (!isBusy && path != null) {
-                                    busyExplanationId = exp.id
-                                    scope.launch {
-                                        val result = gate.transcribeAudio(java.io.File(path))
-                                        if (result is AIResult.Success) {
-                                            repo.attachTranscript(exp.id, result.value)
-                                            explanationsTick++
+                    if (!isVideo) {
+                        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                            if (exp.body == null) {
+                                GhostBtn(if (isBusy) "…" else "🤖 Transkribe Et", {
+                                    val path = payload?.audioFilePath
+                                    if (!isBusy && path != null) {
+                                        busyExplanationId = exp.id
+                                        scope.launch {
+                                            val result = gate.transcribeAudio(java.io.File(path))
+                                            if (result is AIResult.Success) {
+                                                repo.attachTranscript(exp.id, result.value)
+                                                explanationsTick++
+                                            }
+                                            busyExplanationId = null
                                         }
-                                        busyExplanationId = null
                                     }
-                                }
-                            })
-                        } else if (payload?.aiEvaluation == null) {
-                            val transcript = exp.body
-                            GhostBtn(if (isBusy) "…" else "🤖 Analiz Et", {
-                                if (!isBusy) {
-                                    busyExplanationId = exp.id
-                                    scope.launch {
-                                        val result = gate.analyzeTranscript(transcript, conceptTitle)
-                                        if (result is AIResult.Success) {
-                                            repo.attachEvaluation(exp.id, result.value)
-                                            explanationsTick++
+                                })
+                            } else if (payload?.aiEvaluation == null) {
+                                val transcript = exp.body
+                                GhostBtn(if (isBusy) "…" else "🤖 Analiz Et", {
+                                    if (!isBusy) {
+                                        busyExplanationId = exp.id
+                                        scope.launch {
+                                            val result = gate.analyzeTranscript(transcript, conceptTitle)
+                                            if (result is AIResult.Success) {
+                                                repo.attachEvaluation(exp.id, result.value)
+                                                explanationsTick++
+                                            }
+                                            busyExplanationId = null
                                         }
-                                        busyExplanationId = null
                                     }
-                                }
-                            })
+                                })
+                            }
                         }
                     }
                 }
@@ -295,16 +361,19 @@ fun ConceptGraphScreen(
 
 @Composable
 private fun RelatedRow(obj: KnowledgeObjectEntity, label: String?, onOpen: (String, String) -> Unit) {
+    val hoverSource = remember { MutableInteractionSource() }
+    val hovered by hoverSource.collectIsHoveredAsState()
     Row(
         Modifier
             .fillMaxWidth()
-            .background(J.card, RoundedCornerShape(14.dp))
+            .hoverable(hoverSource)
+            .background(if (hovered) J.lime.copy(alpha = 0.3f) else J.card, RoundedCornerShape(14.dp))
             .dpadFocusable(onClick = { onOpen(obj.id, obj.title) }, shape = RoundedCornerShape(14.dp))
             .padding(13.dp),
     ) {
         Column(Modifier.fillMaxWidth()) {
             Text(obj.title, style = TitleM)
-            if (label != null) Text(label, style = Small.copy(color = J.inkFaint))
+            Text(if (hovered) "Dokun → aç" else (label ?: ""), style = Small.copy(color = J.inkFaint))
         }
     }
 }
@@ -316,4 +385,122 @@ private fun noteLabel(note: String?): String? = when (note) {
     "intuition" -> "SEZGİ / BENZETME — öğrenmeyi hızlandırır"
     "co-requisite" -> "BİRLİKTE ÇALIŞILMALI"
     else -> note
+}
+
+/**
+ * Kullanıcının isteği üzerine eklenen gerçek bir node-link çizimi (§16'nın orijinal "süs bir
+ * diyagram değil" kararını bilerek tersine çeviriyor — Aşama 25'in `generateCurriculum` kararını
+ * tersine çevirmesiyle aynı mantık: kullanıcı açıkça istedi). Konum hesaplaması basit ve sabit —
+ * önkoşullar solda, merkez ortada, "bunu açıyor" sağda, ilişkili kavramlar altta bir sırada.
+ * Gerçek bir graf-yerleşim algoritması (force-directed vb.) değil; küçük sayıda düğüm için
+ * (bu ekranın gerçek kullanımı) yeterli ve öngörülebilir.
+ */
+@Composable
+private fun ConnectionGraphCanvas(
+    centerTitle: String,
+    prerequisites: List<Pair<KnowledgeObjectEntity, String?>>,
+    enables: List<Pair<KnowledgeObjectEntity, String?>>,
+    related: List<Pair<KnowledgeObjectEntity, String?>>,
+    onOpenConcept: (String, String) -> Unit,
+) {
+    val nodeW = 104.dp
+    val nodeH = 46.dp
+    val rowGap = 10.dp
+    val colGap = 56.dp
+    val shownRelated = related.take(6)
+
+    val sideCount = maxOf(prerequisites.size, enables.size, 1)
+    val sideBlockHeight = nodeH * sideCount + rowGap * (sideCount - 1).coerceAtLeast(0)
+    val hasRelated = shownRelated.isNotEmpty()
+    val topPad = 4.dp
+    val centerY = topPad + sideBlockHeight / 2
+    val relatedY = topPad + sideBlockHeight + rowGap * 2
+    val totalHeight = relatedY + (if (hasRelated) nodeH else 0.dp) + 8.dp
+    val centerX = nodeW + colGap + nodeW / 2
+    val relatedRowWidth = nodeW * shownRelated.size + rowGap * (shownRelated.size - 1).coerceAtLeast(0)
+    val sideWidth = nodeW * 3 + colGap * 2
+    val totalWidth = if (relatedRowWidth > sideWidth) relatedRowWidth else sideWidth
+
+    Box(Modifier.width(totalWidth).height(totalHeight)) {
+        Canvas(Modifier.matchParentSize()) {
+            val cx = centerX.toPx()
+            val cy = centerY.toPx()
+            val halfNodeW = nodeW.toPx() / 2
+            prerequisites.forEachIndexed { i, _ ->
+                val y = (topPad + nodeH / 2 + i * (nodeH + rowGap)).toPx()
+                drawLine(J.inkFaint, Offset(nodeW.toPx(), y), Offset(cx - halfNodeW, cy), strokeWidth = 2.5f)
+            }
+            enables.forEachIndexed { i, _ ->
+                val y = (topPad + nodeH / 2 + i * (nodeH + rowGap)).toPx()
+                drawLine(J.inkFaint, Offset(cx + halfNodeW, cy), Offset(nodeW.toPx() * 2 + colGap.toPx(), y), strokeWidth = 2.5f)
+            }
+            if (hasRelated) {
+                val y = (relatedY + nodeH / 2).toPx()
+                shownRelated.forEachIndexed { i, _ ->
+                    val x = (i * (nodeW + rowGap) + nodeW / 2).toPx()
+                    drawLine(J.lilac, Offset(cx, cy + nodeH.toPx() / 2), Offset(x, y), strokeWidth = 2f)
+                }
+            }
+        }
+
+        prerequisites.forEachIndexed { i, (obj, _) ->
+            GraphNodeChip(
+                obj.title,
+                Modifier.offset(x = 0.dp, y = topPad + i * (nodeH + rowGap)),
+                onClick = { onOpenConcept(obj.id, obj.title) },
+                width = nodeW, height = nodeH,
+            )
+        }
+        GraphNodeChip(
+            centerTitle,
+            Modifier.offset(x = nodeW + colGap, y = centerY - nodeH / 2),
+            onClick = {}, width = nodeW, height = nodeH, highlighted = true,
+        )
+        enables.forEachIndexed { i, (obj, _) ->
+            GraphNodeChip(
+                obj.title,
+                Modifier.offset(x = nodeW * 2 + colGap * 2, y = topPad + i * (nodeH + rowGap)),
+                onClick = { onOpenConcept(obj.id, obj.title) },
+                width = nodeW, height = nodeH,
+            )
+        }
+        shownRelated.forEachIndexed { i, (obj, _) ->
+            GraphNodeChip(
+                obj.title,
+                Modifier.offset(x = i * (nodeW + rowGap), y = relatedY),
+                onClick = { onOpenConcept(obj.id, obj.title) },
+                width = nodeW, height = nodeH,
+            )
+        }
+    }
+    if (related.size > shownRelated.size) {
+        Spacer(Modifier.height(4.dp))
+        Text("+ ${related.size - shownRelated.size} ilişkili kavram daha (aşağıdaki listede)", style = Small.copy(color = J.inkFaint))
+    }
+}
+
+@Composable
+private fun GraphNodeChip(
+    title: String,
+    modifier: Modifier,
+    onClick: () -> Unit,
+    width: Dp,
+    height: Dp,
+    highlighted: Boolean = false,
+) {
+    Box(
+        modifier
+            .width(width)
+            .height(height)
+            .background(if (highlighted) J.forest else J.card, RoundedCornerShape(10.dp))
+            .then(if (highlighted) Modifier else Modifier.dpadFocusable(onClick = onClick, shape = RoundedCornerShape(10.dp)))
+            .padding(6.dp),
+        contentAlignment = Alignment.Center,
+    ) {
+        Text(
+            title,
+            style = Small.copy(color = if (highlighted) J.card else J.ink, textAlign = TextAlign.Center),
+            maxLines = 2,
+        )
+    }
 }

@@ -48,6 +48,24 @@ class LabRepositoryTest {
     }
 
     @Test
+    fun `createVideoExplanation writes an EXPLANATION with videoFilePath, no audioFilePath`() = runTest {
+        val dao = FakeLabDao()
+        val repo = LabRepository(dao)
+
+        val id = repo.createVideoExplanation("concept-1", "Kablo Teorisi", "/data/recordings/a.mp4")
+
+        val saved = dao.objects[id]
+        assertEquals(ObjectKind.EXPLANATION, saved?.kind)
+        val payload = saved?.let { ExplanationPayload.fromJson(it.payload) }
+        assertEquals("/data/recordings/a.mp4", payload?.videoFilePath)
+        assertEquals(null, payload?.audioFilePath)
+        val rel = dao.relationships.values.single()
+        assertEquals(RelationshipType.EXPLAINS, rel.type)
+        assertEquals(id, rel.fromId)
+        assertEquals("concept-1", rel.toId)
+    }
+
+    @Test
     fun `allExplanations lists recordings across every concept, newest first, with concept titles`() = runTest {
         val dao = FakeLabDao()
         val repo = LabRepository(dao)

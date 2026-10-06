@@ -1,6 +1,9 @@
 package com.beril.kaomoji.ui.lab
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.hoverable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsHoveredAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -77,16 +80,25 @@ fun LabSearchScreen(onBack: () -> Unit, onOpenConcept: (id: String, title: Strin
             item { Empty("🔎", "Eşleşme yok", "\"$query\" için bir sonuç bulunamadı.") }
         } else {
             items(results, key = { it.id }) { obj ->
+                // Fare/S Pen hover önizlemesi — Lab2HomeScreen'in kavram satırlarıyla (Aşama 20)
+                // aynı desen, artık burada da (Aşama 27'nin "hover sadece bir listede" eksiğini
+                // kapatan ilk adımı).
+                val hoverSource = remember { MutableInteractionSource() }
+                val hovered by hoverSource.collectIsHoveredAsState()
                 Row(
                     Modifier
                         .fillMaxWidth()
-                        .background(J.card, RoundedCornerShape(14.dp))
+                        .hoverable(hoverSource)
+                        .background(if (hovered) J.lime.copy(alpha = 0.3f) else J.card, RoundedCornerShape(14.dp))
                         .dpadFocusable(onClick = { onOpenConcept(obj.id, obj.title) }, shape = RoundedCornerShape(14.dp))
                         .padding(13.dp),
                 ) {
                     Column(Modifier.fillMaxWidth()) {
                         Text(obj.title, style = TitleM)
-                        Text(obj.kind.name, style = Small.copy(color = J.inkFaint))
+                        Text(
+                            if (hovered) "Dokun → aç" else obj.kind.name,
+                            style = Small.copy(color = J.inkFaint),
+                        )
                     }
                 }
             }

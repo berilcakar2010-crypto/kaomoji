@@ -294,6 +294,24 @@ class LabRepository(private val dao: LabDao) {
         return obj.id
     }
 
+    /** [createExplanation]'ın video sürümü (§ videolu değerlendirme) — kendi kendini video ile
+     *  anlatıp sonra izleyerek değerlendirmek için. AI transkripsiyon/analiz kasıtlı olarak bu
+     *  kayıtlara bağlı DEĞİL: `transcribeAudio`'nun kullandığı sağlayıcı isteği ses dosyası
+     *  olarak işaretliyor (mime_type: audio/mp4) — bir video dosyasını aynı yoldan göndermek
+     *  sessizce yanlış sonuç üretebilir, bu yüzden video kayıtları sadece izlenir, analiz
+     *  edilmez. Bu dürüst bir kapsam sınırı, unutulmuş bir adım değil. */
+    suspend fun createVideoExplanation(conceptId: String, conceptTitle: String, videoFilePath: String, language: String = "tr"): String {
+        val obj = KnowledgeObjectEntity(
+            kind = ObjectKind.EXPLANATION,
+            title = "$conceptTitle — video anlatım",
+            payload = ExplanationPayload(language = language, videoFilePath = videoFilePath).toJson(),
+            createdAt = Instant.now(), updatedAt = Instant.now(),
+        )
+        dao.upsert(obj)
+        dao.upsertRelationship(RelationshipEntity(fromId = obj.id, toId = conceptId, type = RelationshipType.EXPLAINS))
+        return obj.id
+    }
+
     /** Bir kavram için kaydedilmiş tüm anlatımlar, en yeniden en eskiye. */
     suspend fun explanationsFor(conceptId: String): List<KnowledgeObjectEntity> =
         dao.relationshipsOf(conceptId)
