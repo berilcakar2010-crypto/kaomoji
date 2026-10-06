@@ -1,7 +1,12 @@
 package com.beril.kaomoji.ui.nav
 
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -9,6 +14,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
@@ -17,13 +23,16 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.dp
 
 /**
- * 2 tuşlu (D-pad yön + onay) cihazlar için Compose odak desteği.
+ * 2 tuşlu (D-pad yön + onay) cihazlar için Compose odak desteği, dokunma için de tek bir
+ * paylaşılan basma geri bildirimi (§11/§38 — "küçük, tatmin edici hareket") verir.
  *
  * Compose'un `clickable` değiştiricisi zaten fiziksel ONAY/ENTER tuşuna ve D-pad
  * yön tuşlarıyla odak taşınmasına yerleşik olarak yanıt verir — eksik olan,
  * kullanıcının dokunmadan hangi öğenin odaklı olduğunu **görebilmesiydi**. Bu
  * modifier tek bir şeyi tüm uygulamada standartlaştırıyor: odaklanınca beliren
- * net, tutarlı bir çerçeve (mor — VOIDLAB vurgu rengiyle aynı).
+ * net, tutarlı bir çerçeve (mor — VOIDLAB vurgu rengiyle aynı) ve basılı tutulurken
+ * ufak bir küçülme — tüm `Btn`/`GhostBtn` ve odaklanabilir satırlar bunu paylaştığı
+ * için tek yerde eklenen bu geri bildirim tüm uygulamaya yayılıyor.
  */
 fun Modifier.dpadFocusable(
     onClick: () -> Unit,
@@ -32,10 +41,22 @@ fun Modifier.dpadFocusable(
     focusColor: Color = Color(0xFF9D5CFF)
 ): Modifier = composed {
     var focused by remember { mutableStateOf(false) }
+    val interactionSource = remember { MutableInteractionSource() }
+    val pressed by interactionSource.collectIsPressedAsState()
+    val scale by animateFloatAsState(
+        targetValue = if (pressed) 0.96f else 1f,
+        animationSpec = tween(100),
+        label = "dpad-press-scale",
+    )
     this
+        .scale(scale)
         .onFocusChanged { focused = it.isFocused }
         .then(if (focused) Modifier.border(2.dp, focusColor, shape) else Modifier)
-        .clickable(enabled = enabled) { onClick() }
+        .clickable(
+            interactionSource = interactionSource,
+            indication = LocalIndication.current,
+            enabled = enabled,
+        ) { onClick() }
 }
 
 /** [focusRequester] verilen bir öğeye, D-pad zincirinde belirli bir başlangıç noktası kurmak için kullanılır. */

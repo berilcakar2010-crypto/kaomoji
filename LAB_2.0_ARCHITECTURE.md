@@ -318,6 +318,14 @@ compiling or working at any point):
   deliberately scoped to navigation + list changes — it does not touch per-element micro-
   interactions (button press feedback, checkbox toggles, etc.), which stay as a residual gap
   below rather than being claimed as done.
+- **Aşama 18** — the per-element micro-interaction named as a residual gap right after Aşama
+  17 landed: `ui/nav/DpadFocus.kt`'s shared `dpadFocusable` modifier (used by `Btn`, `GhostBtn`,
+  and every focusable row in the app — one place, app-wide reach) now tracks its own press
+  state via a `MutableInteractionSource` and animates a 0.96 scale on press
+  (`animateFloatAsState`, 100ms). The existing ripple indication is preserved explicitly
+  (`indication = LocalIndication.current`) — this is additive feedback, not a replacement.
+  Because every button in Lab already goes through this one modifier, the fix is one file,
+  not forty.
 
 ### Honestly still NOT built (not a short list — said plainly, not glossed over)
 
@@ -329,11 +337,11 @@ compiling or working at any point):
   notes, practice logs, weekly reviews, project/assessment state. This is a one-time copy a
   person triggers once from "Verim", not a live sync — there is no second system to sync with
   anymore after Aşama 15.
-- **Motion/micro-interactions, narrowed (§11/§38)**: navigation and list changes animate
-  (Aşama 17), but per-element feedback (a button's press state, a checkbox's toggle, a card's
-  focus ring) is still the instant, no-animation version it always was. Closing the rest of
-  this would mean touching `Widgets.kt`'s shared `Btn`/`GhostBtn`/`Field` — real work, not
-  claimed as done here.
+- **Motion/micro-interactions, narrowed further (§11/§38)**: navigation, list changes
+  (Aşama 17), and press feedback on every `dpadFocusable` element (Aşama 18) all animate now.
+  What's still instant: `Field`'s text cursor/focus state has no transition, and nothing in
+  the app uses `animateContentSize()` for content that changes height (e.g. an expanding
+  error message) — minor, but real, residual gaps.
 - **A dedicated top-level nav area per §31** (Learn/Knowledge/Projects/Academics/Archive as
   separate rail destinations) — Lab is one screen with many sub-screens reachable from it,
   not six permanent areas. This is now a single-system gap, not a parallel-system one: there
@@ -344,6 +352,6 @@ compiling or working at any point):
   here for honesty rather than silently left unmentioned.
 
 None of this is secretly done — it's the honest remainder of a 55-section spec against
-seventeen phases in one session. What exists is real (compiles, is tested, is CI-verified, is not a
+eighteen phases in one session. What exists is real (compiles, is tested, is CI-verified, is not a
 mockup) for the slice it covers; the slice is a meaningful fraction, not the full vision, and
 claiming otherwise would be dishonest.
