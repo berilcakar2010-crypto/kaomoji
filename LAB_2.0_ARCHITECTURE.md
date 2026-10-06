@@ -281,7 +281,8 @@ compiling or working at any point):
     `applicationId` now intentionally differ (a normal, fully-supported Android/AGP pattern).
     `Theme.Kaomoji` → `Theme.Lab`, `KaomojiTheme` → `LabTheme`. The `Lab2*` prefix on internal
     classes (`Lab2Root`, `Lab2Widget`, `Lab2Breakpoint`, package `ui.lab2`) was **not** renamed
-    to drop the "2" — purely cosmetic internal naming, same reasoning.
+    to drop the "2" at this point — purely cosmetic internal naming, same reasoning (this did
+    get cleaned up later, in Aşama 26).
   - The old widget (`MissionWidget`) is gone; `Lab2Widget` is now the app's only widget, and
     absorbed `MissionWidget`'s `OpenAppAction` (the only piece of it that had a second caller).
   - `README.md` rewritten to describe Lab as it actually is today, not the old curriculum app.
@@ -446,6 +447,37 @@ compiling or working at any point):
   byte size) — no asset change was needed, only this wiring. 2 unit tests cover the happy path
   (legacy-shaped JSON imports and tags correctly) and the failure path (garbage AI output
   throws instead of silently importing nothing).
+- **Aşama 26 — three gaps from the "Honestly still NOT built" list closed at the user's
+  explicit request: the §31 top-level nav, a general recording archive, and the `Lab2*`
+  cosmetic naming debt.** All three were tackled together because the nav restructure and
+  the naming cleanup touch the same files.
+  - **Naming**: every `Lab2*` symbol is gone — `Lab2Root`→`LabRoot`, `Lab2HomeScreen`→
+    `LabHomeScreen`, `Lab2NavShell`→`LabNavShell`, `Lab2Breakpoint`→`LabBreakpoint`,
+    `Lab2Widget`/`Lab2WidgetReceiver`→`LabWidget`/`LabWidgetReceiver`, package `ui.lab2`→
+    `ui.lab`, plus the `AndroidManifest.xml` receiver entry, the `lab2_widget_info.xml`
+    resource file, and the `lab2_widget_description` string resource. Left alone on purpose:
+    `lab2_curriculum.json` (the actual asset filename) and the `"lab2-personal-curriculum"`/
+    `"lab2-yedek-…"` string identifiers — these are stable data keys and a user-facing backup
+    filename prefix, not code-naming debt; renaming them is a data-migration question, not a
+    cosmetic one, and was out of scope here.
+  - **§31 top-level nav**: `LabNavShell`'s rail is no longer a single static "Ana Sayfa"
+    item — it now shows the five permanent areas the spec names (`LabArea`: Öğren/Bilgi/
+    Projeler/Akademik/Arşiv), each with its own real home screen (`LabHomeScreen`,
+    new `LabKnowledgeHomeScreen`, `LabProjectsHomeScreen`, `LabAcademicsHomeScreen`,
+    `LabArchiveScreen`), switched with one tap, state held in `LabRoot` (`area` + a
+    per-area `screen` stack). The old mega-`LabHomeScreen` had ten buttons bolted onto it
+    (Ara, Değerlendir, Hata Defteri, Tekrar Kartları, Verim, Projeler, Sınavlar, AI Ayarları,
+    Yazım Yardımı, Belgeden Taslak Oluştur) — these moved to the area whose job they actually
+    match (Knowledge: search/writing; Projects: projects/exams/curriculum draft; Academics:
+    evaluation/mistakes/flashcards; Archive: the new recording archive + Verim). AI Ayarları
+    isn't one of the five named areas, so it got its own fixed gear icon pinned under the
+    rail instead of being smuggled into one of the five or invented as a fake sixth area.
+  - **General recording archive**: new `LabArchiveScreen` is the Arşiv area's home screen —
+    every `EXPLANATION` recording across every concept, newest first (new
+    `LabRepository.allExplanations()` / `ExplanationWithConcept`), each with the same
+    dinle/transkribe/analiz actions Aşama 23/24 built, plus a "Kavrama Git" link back to its
+    concept. Closes the exact gap named after Aşama 23: recording is no longer concept-only.
+  - 1 new unit test (`allExplanations lists recordings across every concept…`).
 
 ### Honestly still NOT built (not a short list — said plainly, not glossed over)
 
@@ -462,30 +494,21 @@ compiling or working at any point):
   What's still instant: `Field`'s text cursor/focus state has no transition, and nothing in
   the app uses `animateContentSize()` for content that changes height (e.g. an expanding
   error message) — minor, but real, residual gaps.
-- **A dedicated top-level nav area per §31** (Learn/Knowledge/Projects/Academics/Archive as
-  separate rail destinations) — Lab is one screen with many sub-screens reachable from it,
-  not six permanent areas. This is now a single-system gap, not a parallel-system one: there
-  is exactly one app, and this is about its internal nav shape, not about a second app to
-  reach it through (Aşama 15 removed that door entirely — Lab is the whole app now).
 - **Hover preview is one list, not the whole app**: `ConceptGraphScreen`'s own graph nodes,
-  `LabSearchScreen`'s results, and every other list besides `Lab2HomeScreen`'s concept rows
+  `LabSearchScreen`'s results, and every other list besides `LabHomeScreen`'s concept rows
   (Aşama 20) still have no hover state — a mouse or S Pen hovering them does nothing yet.
-- **Recording is concept-only, no general archive screen**: `ConceptGraphScreen` is the only
-  place to record or play back an explanation. There is no standalone "all my recordings"
-  list independent of a concept (the old app's `AudioLibraryScreen` had one; this doesn't,
-  on purpose, to keep Aşama 23 scoped — a concept-free recording has nowhere to attach to in
-  the current UI, only in the data model).
+- **The five top-level areas (§31, Aşama 26) are a flat switch, not a per-area back-stack**:
+  each area remembers only one pushed screen at a time (e.g. leaving Projeler mid-"Sınavlar"
+  and coming back resets to Projeler's home, not back to Sınavlar). A real per-area history
+  stack is more machinery than this phase's scope — honest residual, not silently dropped.
 - **AI-generated curriculum preview is counts, not a rich diff**: `CurriculumGenScreen`
   shows "N birim, N kavram, N görev" before import, not a per-item list of what would be
   added — enough to sanity-check the AI didn't produce garbage, not enough to review each
   task individually before committing. Re-importing under the same `packageId` also silently
   replaces the previous AI draft (by design, same as the external-package re-import), with no
   extra "are you sure" beyond the existing "İçe Aktar" tap.
-- **Internal `Lab2*` naming** (`Lab2Root`, `Lab2Widget`, `Lab2Breakpoint`, package `ui.lab2`)
-  still carries the "2" from when this coexisted with an "old Lab" — purely cosmetic, listed
-  here for honesty rather than silently left unmentioned.
 
 None of this is secretly done — it's the honest remainder of a 55-section spec against
-twenty-five phases in one session. What exists is real (compiles, is tested, is CI-verified, is not a
+twenty-six phases in one session. What exists is real (compiles, is tested, is CI-verified, is not a
 mockup) for the slice it covers; the slice is a meaningful fraction, not the full vision, and
 claiming otherwise would be dishonest.

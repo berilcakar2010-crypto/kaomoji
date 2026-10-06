@@ -12,7 +12,7 @@ import org.junit.Test
 
 /** Küçük, gerçek pakettin şemasını birebir taklit eden bir örnek — tüm 469KB'ı değil, sadece
  *  şekli. Gerçek dosya app/src/main/assets/lab2_curriculum.json'da duruyor ve çalışma zamanında
- *  (Lab2HomeScreen → "İçe Aktar") bu aynı kod yoluyla işleniyor. */
+ *  (LabHomeScreen → "İçe Aktar") bu aynı kod yoluyla işleniyor. */
 private val SAMPLE = """
     {
       "manifest": {"curriculumId": "test"},

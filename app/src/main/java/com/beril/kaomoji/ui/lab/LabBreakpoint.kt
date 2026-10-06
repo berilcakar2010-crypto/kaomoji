@@ -1,4 +1,4 @@
-package com.beril.kaomoji.ui.lab2
+package com.beril.kaomoji.ui.lab
 
 /**
  * Portrait-tablet öncelikli üç katman (mimari değerlendirme §7/§31). Saf bir genişlik→katman
@@ -10,10 +10,10 @@ package com.beril.kaomoji.ui.lab2
  * 600dp eşiği rastgele değil — Android'in kendi WindowSizeClass "medium" eşiğiyle aynı, yani
  * gerçek cihaz verisine dayanıyor, uydurma bir sayı değil.
  */
-enum class Lab2Breakpoint { COMPACT, TABLET_PORTRAIT, TABLET_LANDSCAPE }
+enum class LabBreakpoint { COMPACT, TABLET_PORTRAIT, TABLET_LANDSCAPE }
 
-fun breakpointFor(widthDp: Int): Lab2Breakpoint = when {
-    widthDp < 600 -> Lab2Breakpoint.COMPACT
-    widthDp < 900 -> Lab2Breakpoint.TABLET_PORTRAIT
-    else -> Lab2Breakpoint.TABLET_LANDSCAPE
+fun breakpointFor(widthDp: Int): LabBreakpoint = when {
+    widthDp < 600 -> LabBreakpoint.COMPACT
+    widthDp < 900 -> LabBreakpoint.TABLET_PORTRAIT
+    else -> LabBreakpoint.TABLET_LANDSCAPE
 }

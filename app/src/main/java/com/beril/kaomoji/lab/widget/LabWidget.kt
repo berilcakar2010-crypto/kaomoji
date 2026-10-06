@@ -31,7 +31,7 @@ import com.beril.kaomoji.lab.repository.LabRepository
  * "widget da görev yöneticisine indirgenmesin, ama yararlı olsun" ilkesiyle, tek bir sayı/
  * satır gösterir.
  */
-class Lab2Widget : GlanceAppWidget() {
+class LabWidget : GlanceAppWidget() {
     override suspend fun provideGlance(context: Context, id: GlanceId) {
         val repo = LabRepository(context)
         val dueCount = repo.dueFlashcards().size
@@ -39,27 +39,27 @@ class Lab2Widget : GlanceAppWidget() {
 
         provideContent {
             GlanceTheme {
-                Lab2WidgetContent(dueCount, nextExam)
+                LabWidgetContent(dueCount, nextExam)
             }
         }
     }
 }
 
-class Lab2WidgetReceiver : GlanceAppWidgetReceiver() {
-    override val glanceAppWidget: GlanceAppWidget = Lab2Widget()
+class LabWidgetReceiver : GlanceAppWidgetReceiver() {
+    override val glanceAppWidget: GlanceAppWidget = LabWidget()
 }
 
-private val Lab2Bg = Color(0xFF2B2520)
-private val Lab2Accent = Color(0xFFAEA2C6)
-private val Lab2Text = Color(0xFFF5F0E6)
+private val LabBg = Color(0xFF2B2520)
+private val LabAccent = Color(0xFFAEA2C6)
+private val LabText = Color(0xFFF5F0E6)
 
 @Composable
-private fun Lab2WidgetContent(dueCount: Int, nextExam: String?) {
+private fun LabWidgetContent(dueCount: Int, nextExam: String?) {
     Column(
         modifier = GlanceModifier
             .fillMaxSize()
             .appWidgetBackground()
-            .background(ColorProvider(Lab2Bg))
+            .background(ColorProvider(LabBg))
             .padding(10.dp)
             .clickable(androidx.glance.appwidget.action.actionRunCallback<OpenAppAction>()),
         horizontalAlignment = Alignment.Horizontal.Start,
@@ -67,16 +67,16 @@ private fun Lab2WidgetContent(dueCount: Int, nextExam: String?) {
     ) {
         Text(
             "🧪 Lab",
-            style = TextStyle(fontSize = 12.sp, fontWeight = FontWeight.Bold, color = ColorProvider(Lab2Accent)),
+            style = TextStyle(fontSize = 12.sp, fontWeight = FontWeight.Bold, color = ColorProvider(LabAccent)),
         )
         Text(
             if (dueCount > 0) "$dueCount kart vadesi geldi" else "Vadesi gelen kart yok",
-            style = TextStyle(fontSize = 13.sp, color = ColorProvider(Lab2Text)),
+            style = TextStyle(fontSize = 13.sp, color = ColorProvider(LabText)),
         )
         if (nextExam != null) {
             Text(
                 "Yaklaşan: $nextExam",
-                style = TextStyle(fontSize = 11.sp, color = ColorProvider(Lab2Text)),
+                style = TextStyle(fontSize = 11.sp, color = ColorProvider(LabText)),
                 maxLines = 1,
             )
         }

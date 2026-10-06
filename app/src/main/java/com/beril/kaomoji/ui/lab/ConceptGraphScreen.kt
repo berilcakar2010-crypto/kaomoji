@@ -1,4 +1,4 @@
-package com.beril.kaomoji.ui.lab2
+package com.beril.kaomoji.ui.lab
 
 import android.Manifest
 import android.content.pm.PackageManager

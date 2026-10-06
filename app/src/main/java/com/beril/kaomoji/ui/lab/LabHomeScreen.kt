@@ -1,4 +1,4 @@
-package com.beril.kaomoji.ui.lab2
+package com.beril.kaomoji.ui.lab
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.hoverable
@@ -45,22 +45,15 @@ import androidx.compose.material3.Text
 import kotlinx.coroutines.launch
 
 /**
- * Uygulamanın ana komut yüzeyi (§28) — kart yığını bir dashboard değil, "şu an ne önemli"
- * sorusuna cevap.
+ * "Öğren" alanının ana ekranı (§28/§31) — kart yığını bir dashboard değil, "şu an ne önemli"
+ * sorusuna cevap. Diğer sekiz eski buton (Ara, Değerlendir, Hata Defteri, Tekrar Kartları,
+ * Verim, Projeler, Sınavlar, AI Ayarları, Yazım Yardımı, Belgeden Taslak Oluştur) artık kendi
+ * alanlarının ana ekranlarında — bu ekranın işi sadece öğrenmek: kavramlar, hızlı yakalama,
+ * yaklaşan hedefler, müfredat durumu.
  */
 @Composable
-fun Lab2HomeScreen(
+fun LabHomeScreen(
     onOpenConcept: (id: String, title: String) -> Unit,
-    onOpenSearch: () -> Unit,
-    onOpenEvaluation: () -> Unit,
-    onOpenMistakes: () -> Unit,
-    onOpenFlashcards: () -> Unit,
-    onOpenData: () -> Unit,
-    onOpenProjects: () -> Unit,
-    onOpenExams: () -> Unit,
-    onOpenSettings: () -> Unit,
-    onOpenWriting: () -> Unit,
-    onOpenCurriculumGen: () -> Unit,
 ) {
     val ctx = LocalContext.current
     val repo = remember { LabRepository(ctx) }
@@ -100,24 +93,6 @@ fun Lab2HomeScreen(
         verticalArrangement = Arrangement.spacedBy(10.dp),
     ) {
         item {
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                GhostBtn("Ara", onOpenSearch, emoji = "🔎")
-                GhostBtn("Değerlendir", onOpenEvaluation, emoji = "🪞")
-                GhostBtn("Yazım Yardımı", onOpenWriting, emoji = "✍️")
-            }
-            Spacer(Modifier.height(6.dp))
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                GhostBtn("Hata Defteri", onOpenMistakes, emoji = "⚠️")
-                GhostBtn("Tekrar Kartları", onOpenFlashcards, emoji = "🃏")
-                GhostBtn("Verim", onOpenData, emoji = "📁")
-            }
-            Spacer(Modifier.height(6.dp))
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                GhostBtn("Projeler", onOpenProjects, emoji = "⚗️")
-                GhostBtn("Sınavlar", onOpenExams, emoji = "📋")
-                GhostBtn("AI Ayarları", onOpenSettings, emoji = "🤖")
-            }
-            Spacer(Modifier.height(10.dp))
             Text("🧪 Lab", style = Display)
             Text(
                 "Bilgi grafiği üzerine kurulu kişisel akademik işletim sistemi.",
@@ -165,23 +140,20 @@ fun Lab2HomeScreen(
                         style = Small,
                     )
                     Spacer(Modifier.height(6.dp))
-                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                        GhostBtn(
-                            if (importing) "Yenileniyor…" else "Müfredatı Yenile",
-                            {
-                                if (!importing) {
-                                    importing = true
-                                    scope.launch {
-                                        repo.importExternalCurriculum(ctx)
-                                        importing = false
-                                        refreshTick++
-                                    }
+                    GhostBtn(
+                        if (importing) "Yenileniyor…" else "Müfredatı Yenile",
+                        {
+                            if (!importing) {
+                                importing = true
+                                scope.launch {
+                                    repo.importExternalCurriculum(ctx)
+                                    importing = false
+                                    refreshTick++
                                 }
-                            },
-                            emoji = "📚",
-                        )
-                        GhostBtn("Belgeden Taslak Oluştur", onOpenCurriculumGen, emoji = "📄")
-                    }
+                            }
+                        },
+                        emoji = "📚",
+                    )
                 }
             }
         }

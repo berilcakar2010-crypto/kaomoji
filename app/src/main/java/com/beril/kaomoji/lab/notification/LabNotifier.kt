@@ -14,7 +14,7 @@ import com.beril.kaomoji.lab.repository.LabRepository
 
 /**
  * Kilit ekranı entegrasyonu (§44) — Android gerçek kilit ekranı widget'larını desteklemediği
- * için görünürlüğü PUBLIC, kalıcı (ongoing) bir bildirim kullanılıyor. İçerik `Lab2Widget` ile
+ * için görünürlüğü PUBLIC, kalıcı (ongoing) bir bildirim kullanılıyor. İçerik `LabWidget` ile
  * aynı veriye bakar (vadesi gelen kart sayısı + en yakın/geçmiş hedef tarihli nesne) — iki ayrı
  * sorgu yazılmadı, aynı `LabRepository` metodları paylaşılıyor.
  */
@@ -40,7 +40,7 @@ object LabNotifier {
         }
     }
 
-    /** Güncel durumu okuyup bildirimi tazeler — `Lab2Widget` ile aynı iki sorgu. */
+    /** Güncel durumu okuyup bildirimi tazeler — `LabWidget` ile aynı iki sorgu. */
     suspend fun refresh(context: Context) {
         ensureChannel(context)
         val repo = LabRepository(context)

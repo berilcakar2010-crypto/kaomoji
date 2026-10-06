@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Lab</string>
-    <string name="lab2_widget_description">Vadesi gelen tekrar kartı sayısı ve en yakın sınav/ödev.</string>
+    <string name="lab_widget_description">Vadesi gelen tekrar kartı sayısı ve en yakın sınav/ödev.</string>
     <string name="notif_channel_name">Şu An Önemli Olan</string>
     <string name="notif_channel_desc">En yakın hedef tarihli şey ve vadesi gelen kartları kilit ekranından görebilmen için.</string>
 </resources>

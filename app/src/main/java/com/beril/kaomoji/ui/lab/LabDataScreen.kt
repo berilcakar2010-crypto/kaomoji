@@ -1,4 +1,4 @@
-package com.beril.kaomoji.ui.lab2
+package com.beril.kaomoji.ui.lab
 
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult

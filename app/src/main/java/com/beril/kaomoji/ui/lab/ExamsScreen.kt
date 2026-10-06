@@ -1,4 +1,4 @@
-package com.beril.kaomoji.ui.lab2
+package com.beril.kaomoji.ui.lab
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -46,7 +46,7 @@ import java.util.Locale
 /**
  * Sınavlar / Ödevler (§20) — "bu sınav için ne önemli?" sorusuna cevap, günlük zorunlu
  * görevlere çevirmeden. Tarih [com.beril.kaomoji.lab.model.Schedule]'da — LabRepository.upcoming()
- * zaten bunu Lab2HomeScreen'in "şu an önemli olan" bölümünde gösteriyor; bu ekran yönetimi.
+ * zaten bunu LabHomeScreen'in "şu an önemli olan" bölümünde gösteriyor; bu ekran yönetimi.
  */
 @Composable
 fun ExamsScreen(onBack: () -> Unit) {

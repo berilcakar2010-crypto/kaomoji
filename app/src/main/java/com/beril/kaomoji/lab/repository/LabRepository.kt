@@ -28,8 +28,16 @@ import kotlinx.coroutines.flow.Flow
 import java.time.Instant
 import java.time.LocalDate
 
+/** [LabRepository.allExplanations]'ın tek bir satırı — bir kayıt, ve (varsa) bağlı olduğu
+ *  kavramın id/başlığı, genel kayıt arşivinden o kavrama geri dönebilmek için. */
+data class ExplanationWithConcept(
+    val explanation: KnowledgeObjectEntity,
+    val conceptId: String?,
+    val conceptTitle: String?,
+)
+
 /**
- * Uygulamanın bilgi grafiğine tek giriş noktası — `ui.lab2` paketindeki ekranlar bunu kullanır.
+ * Uygulamanın bilgi grafiğine tek giriş noktası — `ui.lab` paketindeki ekranlar bunu kullanır.
  * Eski `Store.kt` yalnızca `migrateLegacyData` için salt okunur bir göç kaynağı olarak kalır.
  */
 class LabRepository(private val dao: LabDao) {
@@ -292,6 +300,20 @@ class LabRepository(private val dao: LabDao) {
             .filter { it.type == RelationshipType.EXPLAINS && it.toId == conceptId }
             .mapNotNull { dao.getById(it.fromId) }
             .sortedByDescending { it.createdAt }
+
+    /** Tüm anlatım kayıtları, hangi kavrama bağlı olduklarından bağımsız — genel bir arşiv
+     *  görünümü için (en yeniden en eskiye). Her kayıt, bağlı olduğu kavramın id/başlığıyla
+     *  birlikte döner (EXPLAINS ilişkisi silinmiş/bozuksa ikisi de null — kayıt yine listelenir,
+     *  sadece "kavrama git" linki olmaz). */
+    suspend fun allExplanations(): List<ExplanationWithConcept> {
+        val explanations = dao.getByKind(ObjectKind.EXPLANATION).sortedByDescending { it.createdAt }
+        return explanations.map { exp ->
+            val conceptId = dao.relationshipsOf(exp.id)
+                .firstOrNull { it.type == RelationshipType.EXPLAINS && it.fromId == exp.id }
+                ?.toId
+            ExplanationWithConcept(exp, conceptId, conceptId?.let { dao.getById(it)?.title })
+        }
+    }
 
     /** AI'nin bir kaydı transkribe etmesinin sonucunu kalıcı hale getirir — transkript metni
      *  kendi söylediğin şeyin mekanik bir yazıya dökümü (dilbilgisi/netlik yardımındaki gibi

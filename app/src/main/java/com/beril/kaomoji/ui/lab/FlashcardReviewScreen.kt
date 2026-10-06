@@ -1,4 +1,4 @@
-package com.beril.kaomoji.ui.lab2
+package com.beril.kaomoji.ui.lab
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement

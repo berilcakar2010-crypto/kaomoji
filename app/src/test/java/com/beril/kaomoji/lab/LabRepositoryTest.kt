@@ -48,6 +48,25 @@ class LabRepositoryTest {
     }
 
     @Test
+    fun `allExplanations lists recordings across every concept, newest first, with concept titles`() = runTest {
+        val dao = FakeLabDao()
+        val repo = LabRepository(dao)
+
+        val concept1 = repo.createConcept("Kablo Teorisi")
+        val concept2 = repo.createConcept("Başka Kavram")
+        val older = repo.createExplanation(concept1, "Kablo Teorisi", "/a.m4a")
+        dao.objects[older] = dao.objects[older]!!.copy(createdAt = Instant.parse("2027-01-01T00:00:00Z"))
+        val newer = repo.createExplanation(concept2, "Başka Kavram", "/b.m4a")
+        dao.objects[newer] = dao.objects[newer]!!.copy(createdAt = Instant.parse("2027-01-02T00:00:00Z"))
+
+        val result = repo.allExplanations()
+        assertEquals(listOf(newer, older), result.map { it.explanation.id })
+        assertEquals("Başka Kavram", result[0].conceptTitle)
+        assertEquals(concept2, result[0].conceptId)
+        assertEquals("Kablo Teorisi", result[1].conceptTitle)
+    }
+
+    @Test
     fun `attachTranscript saves the transcript as the explanation's body, leaves payload intact`() = runTest {
         val dao = FakeLabDao()
         val repo = LabRepository(dao)

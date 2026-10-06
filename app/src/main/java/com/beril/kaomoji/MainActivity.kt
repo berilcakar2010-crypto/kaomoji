@@ -12,7 +12,7 @@ import androidx.core.view.WindowCompat
 import androidx.lifecycle.lifecycleScope
 import com.beril.kaomoji.lab.notification.LabNotifier
 import com.beril.kaomoji.ui.LabTheme
-import com.beril.kaomoji.ui.lab2.Lab2Root
+import com.beril.kaomoji.ui.lab.LabRoot
 import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
@@ -36,7 +36,7 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             LabTheme {
-                Lab2Root()
+                LabRoot()
             }
         }
     }
