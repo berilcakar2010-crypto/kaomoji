@@ -211,11 +211,15 @@ compiling or working at any point):
   status, date lives in the same `Schedule` the home screen's "upcoming" query already reads
   — creating an exam here makes it show up there with zero extra wiring). README.md now
   points to Lab 2.0 and this ledger; before this it was undiscoverable outside the app itself.
-- **Aşama 12** — the last two unused `AICapabilityGate` methods got callers: `improveWriting`
+- **Aşama 12** — two more unused `AICapabilityGate` methods got callers: `improveWriting`
   in `ProjectsScreen` (notes field — result shown separately, the user taps "Bu metni kullan"
   to adopt it, it never overwrites silently, per §5) and `proposeStudyPlan` in
   `LabEvaluationScreen` ("7 Günlük Plan Öner" — a suggestion only, nothing in this call path
-  can write to a Schedule). All five `AICapabilityGate` methods now have a real caller.
+  can write to a Schedule). **Correction (caught in Aşama 21, left here rather than quietly
+  edited away):** this entry originally claimed "all five `AICapabilityGate` methods now have
+  a real caller." That was false — `organizeResearchNotes` had none, anywhere, until Aşama 21.
+  The claim went unverified for nine phases; nothing in CI could have caught it, since a
+  missing UI caller to a working method isn't a compile error or a test failure.
 - **Aşama 13** — Lab 2.0's own home-screen widget (`Lab2Widget`/`Lab2WidgetReceiver`, new
   `lab2_widget_info.xml`): due flashcard count + nearest upcoming exam/assignment. The old
   `MissionWidget` (bound to `Store.kt`) was not touched or reused — this is a parallel widget,
@@ -355,6 +359,27 @@ compiling or working at any point):
     above a concept (no touch) tints the row and swaps its hint text, before committing to
     opening it. Scoped to the one list most people will hover over first; the concept graph's
     own nodes and other lists don't have this yet (see below).
+- **Aşama 21 — the user's actual complaint: "AI was supposed to revise my writing and give
+  advice, and this is supposed to be a full academic OS," and the app currently falls short
+  of that.** Two real problems, not one:
+  1. Until Aşama 19 (just before this), AI was configurable nowhere, so every AI call
+     returned `Offline` regardless of what was wired up — anyone who tried the writing/advice
+     features before that fix would have seen exactly nothing happen. That's now fixed; it
+     requires the person to actually open "🤖 AI Ayarları" and enter a key.
+  2. Separately, and this is the fix in this phase: `improveWriting` was wired into exactly
+     one place (`ProjectsScreen`'s notes field) and `organizeResearchNotes` into zero places —
+     "AI will revise my writing" was never true as a general capability, only as a buried
+     corner of the project-notes editor. New `WritingAssistScreen` (reachable from
+     `Lab2HomeScreen`'s "✍️ Yazım Yardımı"): paste or write ANY text — an essay draft, a
+     captured note, anything — and run either `improveWriting` (clarity/grammar, meaning
+     preserved) or `organizeResearchNotes` (organize/summarize, never fabricates a source or
+     result) against it, result shown separately as always, "Bu metni kullan" to adopt it.
+     No new AI-call path — both methods already existed in `AICapabilityGate` — the fix is
+     purely giving them a general-purpose front door instead of one narrow or nonexistent one.
+  This does not make Lab "a full academic OS" in the sense the original 55-section spec
+  describes — see the gap list below, which is long. It makes the two AI capabilities the
+  user named ("revise my writing," "give advice") actually reachable and actually working,
+  which they were not, for two different reasons, until this phase.
 
 ### Honestly still NOT built (not a short list — said plainly, not glossed over)
 
@@ -384,6 +409,6 @@ compiling or working at any point):
   here for honesty rather than silently left unmentioned.
 
 None of this is secretly done — it's the honest remainder of a 55-section spec against
-twenty phases in one session. What exists is real (compiles, is tested, is CI-verified, is not a
+twenty-one phases in one session. What exists is real (compiles, is tested, is CI-verified, is not a
 mockup) for the slice it covers; the slice is a meaningful fraction, not the full vision, and
 claiming otherwise would be dishonest.
