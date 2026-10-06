@@ -398,6 +398,21 @@ compiling or working at any point):
   authors curriculum content" is a stated design principle (§ on curriculum authorship in
   the original assessment), and a working "AI writes your curriculum" button would directly
   contradict it.
+- **Aşama 23 — audio recording, rebuilt on the new model.** Closes the gap Aşama 22 found
+  (and, with it, unblocks `analyzeTranscript`/`transcribeAudio` for a future phase, though
+  neither is wired yet — this phase is the recording feature itself, not the AI analysis on
+  top of it). New `lab/audio/LabAudio.kt` (`LabRecorder`/`LabPlayer`, `MediaRecorder`/
+  `MediaPlayer`, app-private storage under `filesDir/recordings`) — independent from the old,
+  deleted `audio/Audio.kt`, never touches it, never reuses its files. `LabRepository` got
+  `createExplanation(conceptId, conceptTitle, audioFilePath)` (an `EXPLANATION` object linked
+  to its concept via the existing `EXPLAINS` relationship type — this is why no payload schema
+  change was needed, `ExplanationPayload.audioFilePath` already existed from Aşama 1, unused
+  until now) and `explanationsFor(conceptId)` (newest first). `ConceptGraphScreen` got a new
+  "🎙️ Anlat (Feynman tekniği)" section: request mic permission, record, stop-and-save, and a
+  list of past recordings for that concept with play/stop. `RECORD_AUDIO` (removed in Aşama
+  15 along with the rest of the old audio code) came back — this time for a feature Lab
+  actually has, not a port of anything. 2 unit tests cover the repository methods
+  (`LabRepositoryTest`).
 
 ### Honestly still NOT built (not a short list — said plainly, not glossed over)
 
@@ -422,17 +437,21 @@ compiling or working at any point):
 - **Hover preview is one list, not the whole app**: `ConceptGraphScreen`'s own graph nodes,
   `LabSearchScreen`'s results, and every other list besides `Lab2HomeScreen`'s concept rows
   (Aşama 20) still have no hover state — a mouse or S Pen hovering them does nothing yet.
-- **No audio recording on the new model** (Aşama 22 finding): `analyzeTranscript` and
-  `transcribeAudio` exist in `AICapabilityGate` with no caller and no realistic one until a
-  real recording feature is built in Lab — microphone capture, playback, file storage. The
-  old app had exactly this (`audio/Audio.kt`'s `Recorder`/`Player`), and Aşama 15 deleted it
-  along with everything else old; it was never rebuilt on the new model. This is a genuinely
-  missing feature, not a wiring gap like the others in this list.
+- **Recording exists now (Aşama 23), but transcription/AI-analysis on top of it still
+  doesn't**: `analyzeTranscript` and `transcribeAudio` still have no caller — recording a
+  concept explanation does not transcribe it or evaluate it, it only saves the audio and
+  lets you play it back. Wiring those two in is now a realistic next phase (the recording
+  they need finally exists), not blocked on a missing feature anymore.
+- **Recording is concept-only, no general archive screen**: `ConceptGraphScreen` is the only
+  place to record or play back an explanation. There is no standalone "all my recordings"
+  list independent of a concept (the old app's `AudioLibraryScreen` had one; this doesn't,
+  on purpose, to keep Aşama 23 scoped — a concept-free recording has nowhere to attach to in
+  the current UI, only in the data model).
 - **Internal `Lab2*` naming** (`Lab2Root`, `Lab2Widget`, `Lab2Breakpoint`, package `ui.lab2`)
   still carries the "2" from when this coexisted with an "old Lab" — purely cosmetic, listed
   here for honesty rather than silently left unmentioned.
 
 None of this is secretly done — it's the honest remainder of a 55-section spec against
-twenty-two phases in one session. What exists is real (compiles, is tested, is CI-verified, is not a
+twenty-three phases in one session. What exists is real (compiles, is tested, is CI-verified, is not a
 mockup) for the slice it covers; the slice is a meaningful fraction, not the full vision, and
 claiming otherwise would be dishonest.

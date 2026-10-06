@@ -1,7 +1,9 @@
 package com.beril.kaomoji.lab
 
+import com.beril.kaomoji.lab.model.ExplanationPayload
 import com.beril.kaomoji.lab.model.KnowledgeObjectEntity
 import com.beril.kaomoji.lab.model.ObjectKind
+import com.beril.kaomoji.lab.model.RelationshipType
 import com.beril.kaomoji.lab.model.Schedule
 import com.beril.kaomoji.lab.model.ScheduleStatus
 import com.beril.kaomoji.lab.repository.LabRepository
@@ -13,6 +15,37 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class LabRepositoryTest {
+
+    @Test
+    fun `createExplanation writes an EXPLANATION object linked to its concept via EXPLAINS`() = runTest {
+        val dao = FakeLabDao()
+        val repo = LabRepository(dao)
+
+        val id = repo.createExplanation("concept-1", "Kablo Teorisi", "/data/recordings/a.m4a")
+
+        val saved = dao.objects[id]
+        assertEquals(ObjectKind.EXPLANATION, saved?.kind)
+        assertEquals("/data/recordings/a.m4a", saved?.let { ExplanationPayload.fromJson(it.payload).audioFilePath })
+        val rel = dao.relationships.values.single()
+        assertEquals(RelationshipType.EXPLAINS, rel.type)
+        assertEquals(id, rel.fromId)
+        assertEquals("concept-1", rel.toId)
+    }
+
+    @Test
+    fun `explanationsFor returns only this concept's recordings, newest first`() = runTest {
+        val dao = FakeLabDao()
+        val repo = LabRepository(dao)
+
+        val older = repo.createExplanation("concept-1", "Kablo Teorisi", "/a.m4a")
+        dao.objects[older] = dao.objects[older]!!.copy(createdAt = Instant.parse("2027-01-01T00:00:00Z"))
+        val newer = repo.createExplanation("concept-1", "Kablo Teorisi", "/b.m4a")
+        dao.objects[newer] = dao.objects[newer]!!.copy(createdAt = Instant.parse("2027-01-02T00:00:00Z"))
+        repo.createExplanation("concept-2", "Başka Kavram", "/c.m4a")
+
+        val result = repo.explanationsFor("concept-1").map { it.id }
+        assertEquals(listOf(newer, older), result)
+    }
 
     @Test
     fun `quickCapture writes an IDEA object with no schedule, no forced classification`() = runTest {

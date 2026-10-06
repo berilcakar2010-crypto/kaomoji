@@ -12,6 +12,7 @@ import com.beril.kaomoji.lab.migration.MigrationSummary
 import com.beril.kaomoji.lab.learning.LearningDiscipline
 import com.beril.kaomoji.lab.learning.LearningSessionState
 import com.beril.kaomoji.lab.model.ExamPayload
+import com.beril.kaomoji.lab.model.ExplanationPayload
 import com.beril.kaomoji.lab.model.FlashcardPayload
 import com.beril.kaomoji.lab.model.KnowledgeObjectEntity
 import com.beril.kaomoji.lab.model.LearningSessionPayload
@@ -256,6 +257,29 @@ class LabRepository(private val dao: LabDao) {
         dao.relationshipsOf(examId)
             .filter { it.type == RelationshipType.ASSESSES && it.fromId == examId }
             .mapNotNull { dao.getById(it.toId) }
+
+    // ── Anlatım arşivi / Feynman tekniği (§44 kaydı, §9 ilişkisi) ──
+    /** Bir kavram için gerçek bir ses kaydı (kendi sesinle, defter/kitaba bakmadan anlatma)
+     *  oluşturur ve EXPLAINS ilişkisiyle o kavrama bağlar. `audioFilePath` [LabRecorder]'ın
+     *  ürettiği dosyanın mutlak yolu. */
+    suspend fun createExplanation(conceptId: String, conceptTitle: String, audioFilePath: String, language: String = "tr"): String {
+        val obj = KnowledgeObjectEntity(
+            kind = ObjectKind.EXPLANATION,
+            title = "$conceptTitle — anlatım",
+            payload = ExplanationPayload(language = language, audioFilePath = audioFilePath).toJson(),
+            createdAt = Instant.now(), updatedAt = Instant.now(),
+        )
+        dao.upsert(obj)
+        dao.upsertRelationship(RelationshipEntity(fromId = obj.id, toId = conceptId, type = RelationshipType.EXPLAINS))
+        return obj.id
+    }
+
+    /** Bir kavram için kaydedilmiş tüm anlatımlar, en yeniden en eskiye. */
+    suspend fun explanationsFor(conceptId: String): List<KnowledgeObjectEntity> =
+        dao.relationshipsOf(conceptId)
+            .filter { it.type == RelationshipType.EXPLAINS && it.toId == conceptId }
+            .mapNotNull { dao.getById(it.fromId) }
+            .sortedByDescending { it.createdAt }
 
     /** Eski `Store.kt` verisini (hatalar, tekrar kartları, anlatımlar, Brain Inbox, projeler,
      *  sınavlar, pratik günlükleri, haftalık değerlendirmeler) Lab 2.0'ın grafiğine kopyalar.

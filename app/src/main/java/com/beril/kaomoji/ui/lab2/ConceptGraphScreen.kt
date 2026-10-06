@@ -1,5 +1,9 @@
 package com.beril.kaomoji.ui.lab2
 
+import android.Manifest
+import android.content.pm.PackageManager
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -10,11 +14,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.weight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -24,10 +30,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.core.content.ContextCompat
 import com.beril.kaomoji.ai.engine.AICapabilityGate
 import com.beril.kaomoji.ai.engine.AIResult
+import com.beril.kaomoji.lab.audio.LabPlayer
+import com.beril.kaomoji.lab.audio.LabRecorder
 import com.beril.kaomoji.lab.graph.EdgeBucket
 import com.beril.kaomoji.lab.graph.bucketRelationships
+import com.beril.kaomoji.lab.model.ExplanationPayload
 import com.beril.kaomoji.lab.model.KnowledgeObjectEntity
 import com.beril.kaomoji.lab.repository.LabRepository
 import kotlinx.coroutines.launch
@@ -67,6 +77,26 @@ fun ConceptGraphScreen(
     var conceptBody by remember { mutableStateOf<String?>(null) }
     var explanation by remember { mutableStateOf<AIResult<String>?>(null) }
     var explaining by remember { mutableStateOf(false) }
+
+    var hasAudioPermission by remember {
+        mutableStateOf(
+            ContextCompat.checkSelfPermission(ctx, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED,
+        )
+    }
+    val audioPermissionLauncher = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
+        hasAudioPermission = granted
+    }
+    val recorder = remember { LabRecorder(ctx) }
+    val player = remember { LabPlayer() }
+    DisposableEffect(Unit) { onDispose { recorder.cancel(); player.stop() } }
+    var isRecording by remember { mutableStateOf(false) }
+    var explanations by remember { mutableStateOf<List<KnowledgeObjectEntity>>(emptyList()) }
+    var playingId by remember { mutableStateOf<String?>(null) }
+    var explanationsTick by remember { mutableStateOf(0) }
+
+    LaunchedEffect(conceptId, explanationsTick) {
+        explanations = repo.explanationsFor(conceptId)
+    }
 
     LaunchedEffect(conceptId) {
         conceptBody = repo.getById(conceptId)?.body
@@ -121,6 +151,68 @@ fun ConceptGraphScreen(
             }, enabled = !explaining, emoji = "🤖")
             Spacer(Modifier.height(6.dp))
             AiResultView(explanation) { text -> Text(text, style = Small) }
+        }
+
+        item {
+            SectionLabel("anlat (feynman tekniği)", "🎙️")
+            Text(
+                "Bu kavramı kendi sesinle, defter/kitaba bakmadan anlat — nerede tıkandığın " +
+                    "tam olarak bilmediğin yeri gösterir.",
+                style = Small,
+            )
+            Spacer(Modifier.height(6.dp))
+            when {
+                !hasAudioPermission -> Btn("Mikrofon İzni Ver", {
+                    audioPermissionLauncher.launch(Manifest.permission.RECORD_AUDIO)
+                }, emoji = "🎙️")
+                !isRecording -> Btn("Anlatmaya Başla", {
+                    recorder.start()
+                    isRecording = true
+                }, emoji = "🎙️")
+                else -> Btn("Durdur ve Kaydet", {
+                    val file = recorder.stop()
+                    isRecording = false
+                    if (file != null) {
+                        scope.launch {
+                            repo.createExplanation(conceptId, conceptTitle, file.absolutePath)
+                            explanationsTick++
+                        }
+                    }
+                }, bg = J.cherry, emoji = "⏹")
+            }
+        }
+
+        item { SectionLabel("anlatım geçmişi", "🗂️") }
+        if (explanations.isEmpty()) {
+            item { Empty("🎙️", "Henüz bir anlatım yok", "Yukarıdan ilk anlatımını kaydet.") }
+        } else {
+            items(explanations, key = { it.id }) { exp ->
+                val payload = runCatching { ExplanationPayload.fromJson(exp.payload) }.getOrNull()
+                Row(
+                    Modifier
+                        .fillMaxWidth()
+                        .background(J.card, RoundedCornerShape(14.dp))
+                        .padding(13.dp),
+                ) {
+                    Column(Modifier.weight(1f)) {
+                        Text(exp.title, style = TitleM)
+                        Text("Kayıt", style = Small.copy(color = J.inkFaint))
+                    }
+                    GhostBtn(
+                        if (playingId == exp.id) "Durdur" else "▶ Dinle",
+                        {
+                            val path = payload?.audioFilePath
+                            if (playingId == exp.id) {
+                                player.stop()
+                                playingId = null
+                            } else if (path != null) {
+                                player.play(path) { playingId = null }
+                                playingId = exp.id
+                            }
+                        },
+                    )
+                }
+            }
         }
 
         item { SectionLabel("önce bunları bilmen gerekiyor", "←") }
