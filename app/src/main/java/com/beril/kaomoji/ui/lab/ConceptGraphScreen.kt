@@ -19,7 +19,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.matchParentSize
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -427,17 +426,17 @@ private fun ConnectionGraphCanvas(
             val cy = centerY.toPx()
             val halfNodeW = nodeW.toPx() / 2
             prerequisites.forEachIndexed { i, _ ->
-                val y = (topPad + nodeH / 2 + i * (nodeH + rowGap)).toPx()
+                val y = (topPad + nodeH / 2 + (nodeH + rowGap) * i).toPx()
                 drawLine(J.inkFaint, Offset(nodeW.toPx(), y), Offset(cx - halfNodeW, cy), strokeWidth = 2.5f)
             }
             enables.forEachIndexed { i, _ ->
-                val y = (topPad + nodeH / 2 + i * (nodeH + rowGap)).toPx()
+                val y = (topPad + nodeH / 2 + (nodeH + rowGap) * i).toPx()
                 drawLine(J.inkFaint, Offset(cx + halfNodeW, cy), Offset(nodeW.toPx() * 2 + colGap.toPx(), y), strokeWidth = 2.5f)
             }
             if (hasRelated) {
                 val y = (relatedY + nodeH / 2).toPx()
                 shownRelated.forEachIndexed { i, _ ->
-                    val x = (i * (nodeW + rowGap) + nodeW / 2).toPx()
+                    val x = ((nodeW + rowGap) * i + nodeW / 2).toPx()
                     drawLine(J.lilac, Offset(cx, cy + nodeH.toPx() / 2), Offset(x, y), strokeWidth = 2f)
                 }
             }
@@ -446,7 +445,7 @@ private fun ConnectionGraphCanvas(
         prerequisites.forEachIndexed { i, (obj, _) ->
             GraphNodeChip(
                 obj.title,
-                Modifier.offset(x = 0.dp, y = topPad + i * (nodeH + rowGap)),
+                Modifier.offset(x = 0.dp, y = topPad + (nodeH + rowGap) * i),
                 onClick = { onOpenConcept(obj.id, obj.title) },
                 width = nodeW, height = nodeH,
             )
@@ -459,7 +458,7 @@ private fun ConnectionGraphCanvas(
         enables.forEachIndexed { i, (obj, _) ->
             GraphNodeChip(
                 obj.title,
-                Modifier.offset(x = nodeW * 2 + colGap * 2, y = topPad + i * (nodeH + rowGap)),
+                Modifier.offset(x = nodeW * 2 + colGap * 2, y = topPad + (nodeH + rowGap) * i),
                 onClick = { onOpenConcept(obj.id, obj.title) },
                 width = nodeW, height = nodeH,
             )
@@ -467,7 +466,7 @@ private fun ConnectionGraphCanvas(
         shownRelated.forEachIndexed { i, (obj, _) ->
             GraphNodeChip(
                 obj.title,
-                Modifier.offset(x = i * (nodeW + rowGap), y = relatedY),
+                Modifier.offset(x = (nodeW + rowGap) * i, y = relatedY),
                 onClick = { onOpenConcept(obj.id, obj.title) },
                 width = nodeW, height = nodeH,
             )
