@@ -242,8 +242,8 @@ compiling or working at any point):
     `ui/CurriculumEditScreen.kt`, `ui/CurriculumGenScreen.kt`, `ui/EvaluationScreen.kt`,
     `ui/FlashcardsScreen.kt`, `ui/BridgeGraphScreen.kt`, `ui/StatsScreen.kt`,
     `audio/Audio.kt` (Recorder/Player), `storage/FileVault.kt`, `storage/DocumentTextExtractor.kt`,
-    `widget/MissionWidget.kt`, `widget/MissionNotifier.kt`, `data/Mission.kt`, `data/SM2.kt`
-    (old, millisecond-based), `ai/AiClient.kt` (superseded by `ai/engine/AIProvider`).
+    `widget/MissionWidget.kt`, `widget/MissionNotifier.kt`, `data/Mission.kt`,
+    `ai/AiClient.kt` (superseded by `ai/engine/AIProvider`).
     Dead decorative helpers only those screens used (`TaskRow`, `Checkbox`, `Sheet`, `Chip`,
     `Sticker`, `Card`, `subjectColor`, `BodySoft`, `gingham`, `dashed`) were removed from
     `Widgets.kt`/`Theme.kt` too. `RECORD_AUDIO` and `POST_NOTIFICATIONS` permissions, the
@@ -254,9 +254,15 @@ compiling or working at any point):
     aren't), but because `LegacyDataMigrator` (Aşama 14) needs a working `Store(context)` to
     read old on-device data from. This is the one remaining purpose of the entire old data
     layer: a one-time, read-only migration source for people upgrading from the pre-cutover
-    app. `ai/AiProvider.kt` (enum), `ai/GeminiClient.kt`, `ai/GroqClient.kt`, `ai/ApiKeyStore.kt`,
-    `ai/CurriculumPrompt.kt` were kept because `ai/engine/*` (the new, capability-gated AI
-    layer) wraps them directly — these were never old-UI-only code.
+    app. `data/SM2.kt` (old, millisecond-based) also had to be kept, for a sharper reason than
+    the others: a first attempt at this cutover deleted it, assuming (wrongly) that only the
+    deleted `FlashcardsScreen` called it — `Store.kt`'s own `reviewFlashcard()` calls
+    `SM2.hesapla(...)` directly, unqualified, in the same package, which a qualifier-based
+    grep (`data.SM2`) missed. CI caught the resulting `Unresolved reference 'SM2'` immediately;
+    the file was restored from git history rather than touched. `ai/AiProvider.kt` (enum),
+    `ai/GeminiClient.kt`, `ai/GroqClient.kt`, `ai/ApiKeyStore.kt`, `ai/CurriculumPrompt.kt` were
+    kept because `ai/engine/*` (the new, capability-gated AI layer) wraps them directly — these
+    were never old-UI-only code.
   - **`MainActivity`** rewritten from scratch: no more `Store`/`Recorder`/`Player`/permission
     dance — it does nothing but `setContent { LabTheme { Lab2Root() } }`. `Lab2Root()` lost its
     `onExit` parameter (there is no other app to exit to); `Lab2HomeScreen` lost its "Geri"
