@@ -139,8 +139,12 @@ fun Lab2HomeScreen(
                 )
             }
         } else {
-            items(pastTarget, key = { "past-${it.id}" }) { obj -> KnowledgeRow(obj, label = "HEDEF TARİHİ GEÇTİ — seçenek, hata değil") }
-            items(upcoming, key = { "up-${it.id}" }) { obj -> KnowledgeRow(obj, label = statusLabel(obj)) }
+            items(pastTarget, key = { "past-${it.id}" }) { obj ->
+                KnowledgeRow(obj, label = "HEDEF TARİHİ GEÇTİ — seçenek, hata değil", modifier = Modifier.animateItem())
+            }
+            items(upcoming, key = { "up-${it.id}" }) { obj ->
+                KnowledgeRow(obj, label = statusLabel(obj), modifier = Modifier.animateItem())
+            }
         }
 
         item {
@@ -202,6 +206,7 @@ fun Lab2HomeScreen(
             items(filteredConcepts, key = { "concept-${it.id}" }) { c ->
                 Row(
                     Modifier
+                        .animateItem()
                         .fillMaxWidth()
                         .background(J.card, RoundedCornerShape(14.dp))
                         .dpadFocusable(onClick = { onOpenConcept(c.id, c.title) }, shape = RoundedCornerShape(14.dp))
@@ -225,7 +230,7 @@ fun Lab2HomeScreen(
                 )
             }
         } else {
-            items(recent, key = { it.id }) { obj -> KnowledgeRow(obj, label = obj.kind.name) }
+            items(recent, key = { it.id }) { obj -> KnowledgeRow(obj, label = obj.kind.name, modifier = Modifier.animateItem()) }
         }
     }
 }
@@ -241,8 +246,8 @@ private fun QuickCapture(value: String, onChange: (String) -> Unit, onCapture: (
 }
 
 @Composable
-private fun KnowledgeRow(obj: KnowledgeObjectEntity, label: String) {
-    Row(Modifier.fillMaxWidth().padding(vertical = 4.dp)) {
+private fun KnowledgeRow(obj: KnowledgeObjectEntity, label: String, modifier: Modifier = Modifier) {
+    Row(modifier.fillMaxWidth().padding(vertical = 4.dp)) {
         Column(Modifier.fillMaxWidth()) {
             Text(obj.title, style = TitleM)
             Text(label, style = Small.copy(color = J.inkFaint))

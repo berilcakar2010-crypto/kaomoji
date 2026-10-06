@@ -1,5 +1,12 @@
 package com.beril.kaomoji.ui.lab2
 
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
@@ -39,7 +46,17 @@ fun Lab2Root() {
             // listeyi GİZLEMEZ — ikisi yan yana durur, "nereden geldin" her zaman görünür kalır.
             Lab2NavShell(
                 secondaryPanel = if (showSecondary) {
-                    { Lab2DetailScreen(currentDetail, onBack = { screen = Lab2Screen.Home }, onNavigate = { next -> screen = next }) }
+                    {
+                        // Detaylar arası (örn. bir kavramdan diğerine) sessiz bir çapraz
+                        // geçişle değişir — §11/§38'in istediği "küçük, tatmin edici hareket".
+                        AnimatedContent(
+                            targetState = currentDetail,
+                            transitionSpec = { fadeIn(tween(200)) togetherWith fadeOut(tween(120)) },
+                            label = "lab2-secondary-panel",
+                        ) { detail ->
+                            Lab2DetailScreen(detail, onBack = { screen = Lab2Screen.Home }, onNavigate = { next -> screen = next })
+                        }
+                    }
                 } else null,
             ) {
                 Lab2HomeScreen(
@@ -55,18 +72,35 @@ fun Lab2Root() {
             }
         } else {
             Lab2NavShell {
-                when (val s = screen) {
-                    is Lab2Screen.Home -> Lab2HomeScreen(
-                        onOpenConcept = { id, title -> screen = Lab2Screen.Graph(id, title) },
-                        onOpenSearch = { screen = Lab2Screen.Search },
-                        onOpenEvaluation = { screen = Lab2Screen.Evaluation },
-                        onOpenMistakes = { screen = Lab2Screen.Mistakes },
-                        onOpenFlashcards = { screen = Lab2Screen.Flashcards },
-                        onOpenData = { screen = Lab2Screen.Data },
-                        onOpenProjects = { screen = Lab2Screen.Projects },
-                        onOpenExams = { screen = Lab2Screen.Exams },
-                    )
-                    else -> Lab2DetailScreen(s, onBack = { screen = Lab2Screen.Home }, onNavigate = { next -> screen = next })
+                // Ana sayfadan bir detaya gidiş sağdan kayarak girer (ileri gidiş hissi),
+                // geri dönüş soldan — klasik, tahmin edilebilir bir yön dili. Şıklık için değil,
+                // §38'in "nereden geldiğini hissettir" ilkesi için (§11 — küçük, tatmin edici).
+                AnimatedContent(
+                    targetState = screen,
+                    transitionSpec = {
+                        if (targetState !is Lab2Screen.Home) {
+                            (slideInHorizontally(tween(220)) { it / 4 } + fadeIn(tween(220))) togetherWith
+                                fadeOut(tween(140))
+                        } else {
+                            fadeIn(tween(200)) togetherWith
+                                (slideOutHorizontally(tween(200)) { it / 4 } + fadeOut(tween(140)))
+                        }
+                    },
+                    label = "lab2-screen-transition",
+                ) { s ->
+                    when (s) {
+                        is Lab2Screen.Home -> Lab2HomeScreen(
+                            onOpenConcept = { id, title -> screen = Lab2Screen.Graph(id, title) },
+                            onOpenSearch = { screen = Lab2Screen.Search },
+                            onOpenEvaluation = { screen = Lab2Screen.Evaluation },
+                            onOpenMistakes = { screen = Lab2Screen.Mistakes },
+                            onOpenFlashcards = { screen = Lab2Screen.Flashcards },
+                            onOpenData = { screen = Lab2Screen.Data },
+                            onOpenProjects = { screen = Lab2Screen.Projects },
+                            onOpenExams = { screen = Lab2Screen.Exams },
+                        )
+                        else -> Lab2DetailScreen(s, onBack = { screen = Lab2Screen.Home }, onNavigate = { next -> screen = next })
+                    }
                 }
             }
         }

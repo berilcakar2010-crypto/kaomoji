@@ -305,6 +305,19 @@ compiling or working at any point):
     Aşama 15 along with the rest of the old `MissionNotifier`) came back — this is genuinely
     new functionality built on the new model, not a port of old code; the old
     `widget/MissionNotifier.kt` file itself stays deleted.
+- **Aşama 17** — motion/micro-interactions, closing the §11/§38 gap. `Lab2Root`'s screen
+  switch (narrow width: Home ↔ detail; wide width: the secondary panel's own content) now
+  uses `AnimatedContent` instead of an instant cut — forward navigation slides in from the
+  trailing edge and fades, back navigation reverses it, and detail-to-detail transitions
+  (e.g. one concept to another in the wide secondary panel) cross-fade. Direction is decided
+  by one condition (`targetState !is Lab2Screen.Home`), nothing fancier. `Lab2HomeScreen`'s
+  four lists (past-target/upcoming/concepts/recent) got `Modifier.animateItem()` so adding a
+  concept, capturing a note, or importing a curriculum animates the list instead of snapping.
+  `androidx.compose.animation:animation` was added as an explicit dependency (previously only
+  available transitively through Foundation/Material3, never used directly). This is
+  deliberately scoped to navigation + list changes — it does not touch per-element micro-
+  interactions (button press feedback, checkbox toggles, etc.), which stay as a residual gap
+  below rather than being claimed as done.
 
 ### Honestly still NOT built (not a short list — said plainly, not glossed over)
 
@@ -316,8 +329,11 @@ compiling or working at any point):
   notes, practice logs, weekly reviews, project/assessment state. This is a one-time copy a
   person triggers once from "Verim", not a live sync — there is no second system to sync with
   anymore after Aşama 15.
-- **Motion/micro-interactions** (§11/§38) — screens render instantly with no transition design;
-  the spec's "small, satisfying animations" are not implemented.
+- **Motion/micro-interactions, narrowed (§11/§38)**: navigation and list changes animate
+  (Aşama 17), but per-element feedback (a button's press state, a checkbox's toggle, a card's
+  focus ring) is still the instant, no-animation version it always was. Closing the rest of
+  this would mean touching `Widgets.kt`'s shared `Btn`/`GhostBtn`/`Field` — real work, not
+  claimed as done here.
 - **A dedicated top-level nav area per §31** (Learn/Knowledge/Projects/Academics/Archive as
   separate rail destinations) — Lab is one screen with many sub-screens reachable from it,
   not six permanent areas. This is now a single-system gap, not a parallel-system one: there
@@ -327,7 +343,7 @@ compiling or working at any point):
   still carries the "2" from when this coexisted with an "old Lab" — purely cosmetic, listed
   here for honesty rather than silently left unmentioned.
 
-None of this is secretly done — it's the honest remainder of a 55-section spec against sixteen
-phases in one session. What exists is real (compiles, is tested, is CI-verified, is not a
+None of this is secretly done — it's the honest remainder of a 55-section spec against
+seventeen phases in one session. What exists is real (compiles, is tested, is CI-verified, is not a
 mockup) for the slice it covers; the slice is a meaningful fraction, not the full vision, and
 claiming otherwise would be dishonest.
