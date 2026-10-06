@@ -127,6 +127,18 @@ class LabRepository(private val dao: LabDao) {
         ExternalCurriculumAdapter.import(raw, dao)
     }
 
+    /** AI'nin ("📄 Belgeden Müfredat Taslağı") bir belgeden ürettiği taslak müfredat JSON'unu
+     *  içe aktarır. AI çıktısı eski/legacy şemada (phases→units→tasks) olduğu için
+     *  [LegacyCurriculumAdapter] üzerinden geçer — aynı köprü, kaynağı farklı. Lab kendi
+     *  müfredatını AI'ye YAZDIRMIYOR (§ müfredat yazarlığı ilkesi): AI sadece bir TASLAK
+     *  üretir, kullanıcı gözden geçirip açıkça "İçe Aktar" demeden hiçbir şey kalıcı olmaz —
+     *  tıpkı bir AI yazım önerisinin "Bu metni kullan" demeden uygulanmaması gibi (§5).
+     *  Geçersiz/eksik bir JSON gelirse `org.json.JSONException` fırlatır, çağıran taraf
+     *  kullanıcıya okunabilir hata gösterir. */
+    suspend fun importGeneratedCurriculum(rawJson: String, packageId: String = "ai-generated-curriculum") {
+        importer.import(LegacyCurriculumAdapter.toContractPackage(rawJson, packageId))
+    }
+
     /** Bu paketten gelen nesne sayısı — içe aktarma gerçekten olmuş mu, kaç nesne var,
      *  bir "İçe Aktarıldı (123)" göstergesi için. */
     suspend fun countFromPackage(packageId: String): Int = dao.getBySourcePackage(packageId).size

@@ -32,6 +32,7 @@ private sealed class Lab2Screen {
     data object Exams : Lab2Screen()
     data object Settings : Lab2Screen()
     data object Writing : Lab2Screen()
+    data object CurriculumGen : Lab2Screen()
 }
 
 @Composable
@@ -72,6 +73,7 @@ fun Lab2Root() {
                     onOpenExams = { screen = Lab2Screen.Exams },
                     onOpenSettings = { screen = Lab2Screen.Settings },
                     onOpenWriting = { screen = Lab2Screen.Writing },
+                    onOpenCurriculumGen = { screen = Lab2Screen.CurriculumGen },
                 )
             }
         } else {
@@ -104,6 +106,7 @@ fun Lab2Root() {
                             onOpenExams = { screen = Lab2Screen.Exams },
                             onOpenSettings = { screen = Lab2Screen.Settings },
                             onOpenWriting = { screen = Lab2Screen.Writing },
+                            onOpenCurriculumGen = { screen = Lab2Screen.CurriculumGen },
                         )
                         else -> Lab2DetailScreen(s, onBack = { screen = Lab2Screen.Home }, onNavigate = { next -> screen = next })
                     }
@@ -140,6 +143,7 @@ private fun Lab2DetailScreen(screen: Lab2Screen, onBack: () -> Unit, onNavigate:
         is Lab2Screen.Exams -> ExamsScreen(onBack = onBack)
         is Lab2Screen.Settings -> AiSettingsScreen(onBack = onBack)
         is Lab2Screen.Writing -> WritingAssistScreen(onBack = onBack)
+        is Lab2Screen.CurriculumGen -> CurriculumGenScreen(onBack = onBack)
         is Lab2Screen.Home -> Unit
     }
 }

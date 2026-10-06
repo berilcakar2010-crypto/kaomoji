@@ -393,11 +393,11 @@ compiling or working at any point):
   bigger piece of new work: both need an audio recording, and Aşama 15 deleted the only
   recording feature this app ever had. Building that back (microphone capture, playback,
   file storage) is a real, separate feature, not a wiring fix — left as a residual gap, not
-  silently ignored. `generateCurriculum` is **deliberately** left unwired, not a gap at all:
-  Lab's whole curriculum model is built on an external Curriculum Contract — "the app never
-  authors curriculum content" is a stated design principle (§ on curriculum authorship in
-  the original assessment), and a working "AI writes your curriculum" button would directly
-  contradict it.
+  silently ignored. `generateCurriculum` is left unwired for now (reversed in Aşama 25, at
+  the user's explicit request — see below): Lab's curriculum model is built on an external
+  Curriculum Contract, "the app never silently authors curriculum content" is the actual
+  design principle, and a working "AI writes your curriculum" button only contradicts that
+  principle if its output gets written without the user explicitly reviewing and importing it.
 - **Aşama 23 — audio recording, rebuilt on the new model.** Closes the gap Aşama 22 found
   (and, with it, unblocks `analyzeTranscript`/`transcribeAudio` for a future phase, though
   neither is wired yet — this phase is the recording feature itself, not the AI analysis on
@@ -424,6 +424,28 @@ compiling or working at any point):
   `ExplanationPayload.aiEvaluation` via new `attachEvaluation`). No new AI-call path — both
   methods already existed; the fix is the same shape as Aşama 21/22's: a missing front door.
   2 more unit tests cover `attachTranscript`/`attachEvaluation`.
+- **Aşama 25 — `generateCurriculum` wired, reversing Aşama 22's decision at the user's
+  explicit request** ("generate curriculum da bağlansın" — connect generateCurriculum too).
+  Schema mismatch found while wiring it: `CurriculumPrompt.SYSTEM`, the system prompt both
+  AI clients use for `generateCurriculum`, outputs the OLD legacy `phases→units→tasks` schema
+  (the one `LegacyCurriculumAdapter` already bridges for the old on-disk curriculum), not
+  Contract v1 — so AI output must go through `LegacyCurriculumAdapter.toContractPackage`, not
+  `CurriculumContractParser` directly, or it would fail to parse every time. New
+  `CurriculumGenScreen` (reachable from `Lab2HomeScreen`'s "📄 Belgeden Taslak Oluştur", next
+  to the existing "Müfredatı Yenile"): paste a syllabus/ders programı/any source text, call
+  `generateCurriculum`, the raw AI output is parsed through the same adapter as a *preview*
+  (unit/concept/task counts, or a readable error if the AI's JSON doesn't parse) — nothing is
+  written to the knowledge graph until the user taps "İçe Aktar", the same explicit-action
+  gate as `improveWriting`'s "Bu metni kullan" (§5). New `LabRepository.importGeneratedCurriculum`
+  does the actual import, tagging written objects with its own `sourcePackageId`
+  (`"ai-generated-curriculum"` by default) so it never collides with or overwrites the real
+  123-object external package. This does NOT make Lab author curricula silently — the AI
+  produces a draft, the user decides whether to keep it, same as every other AI capability in
+  this app. The re-sent `curriculum.json` from this request was verified byte-identical to the
+  already-bundled asset (`app/src/main/assets/lab2_curriculum.json`, same 123 objects, same
+  byte size) — no asset change was needed, only this wiring. 2 unit tests cover the happy path
+  (legacy-shaped JSON imports and tags correctly) and the failure path (garbage AI output
+  throws instead of silently importing nothing).
 
 ### Honestly still NOT built (not a short list — said plainly, not glossed over)
 
@@ -453,11 +475,17 @@ compiling or working at any point):
   list independent of a concept (the old app's `AudioLibraryScreen` had one; this doesn't,
   on purpose, to keep Aşama 23 scoped — a concept-free recording has nowhere to attach to in
   the current UI, only in the data model).
+- **AI-generated curriculum preview is counts, not a rich diff**: `CurriculumGenScreen`
+  shows "N birim, N kavram, N görev" before import, not a per-item list of what would be
+  added — enough to sanity-check the AI didn't produce garbage, not enough to review each
+  task individually before committing. Re-importing under the same `packageId` also silently
+  replaces the previous AI draft (by design, same as the external-package re-import), with no
+  extra "are you sure" beyond the existing "İçe Aktar" tap.
 - **Internal `Lab2*` naming** (`Lab2Root`, `Lab2Widget`, `Lab2Breakpoint`, package `ui.lab2`)
   still carries the "2" from when this coexisted with an "old Lab" — purely cosmetic, listed
   here for honesty rather than silently left unmentioned.
 
 None of this is secretly done — it's the honest remainder of a 55-section spec against
-twenty-four phases in one session. What exists is real (compiles, is tested, is CI-verified, is not a
+twenty-five phases in one session. What exists is real (compiles, is tested, is CI-verified, is not a
 mockup) for the slice it covers; the slice is a meaningful fraction, not the full vision, and
 claiming otherwise would be dishonest.

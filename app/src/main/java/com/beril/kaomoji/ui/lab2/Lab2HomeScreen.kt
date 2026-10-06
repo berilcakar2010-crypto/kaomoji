@@ -60,6 +60,7 @@ fun Lab2HomeScreen(
     onOpenExams: () -> Unit,
     onOpenSettings: () -> Unit,
     onOpenWriting: () -> Unit,
+    onOpenCurriculumGen: () -> Unit,
 ) {
     val ctx = LocalContext.current
     val repo = remember { LabRepository(ctx) }
@@ -164,20 +165,23 @@ fun Lab2HomeScreen(
                         style = Small,
                     )
                     Spacer(Modifier.height(6.dp))
-                    GhostBtn(
-                        if (importing) "Yenileniyor…" else "Müfredatı Yenile",
-                        {
-                            if (!importing) {
-                                importing = true
-                                scope.launch {
-                                    repo.importExternalCurriculum(ctx)
-                                    importing = false
-                                    refreshTick++
+                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        GhostBtn(
+                            if (importing) "Yenileniyor…" else "Müfredatı Yenile",
+                            {
+                                if (!importing) {
+                                    importing = true
+                                    scope.launch {
+                                        repo.importExternalCurriculum(ctx)
+                                        importing = false
+                                        refreshTick++
+                                    }
                                 }
-                            }
-                        },
-                        emoji = "📚",
-                    )
+                            },
+                            emoji = "📚",
+                        )
+                        GhostBtn("Belgeden Taslak Oluştur", onOpenCurriculumGen, emoji = "📄")
+                    }
                 }
             }
         }

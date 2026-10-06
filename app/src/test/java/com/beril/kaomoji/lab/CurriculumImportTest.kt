@@ -6,6 +6,7 @@ import com.beril.kaomoji.lab.curriculum.CurriculumImporter
 import com.beril.kaomoji.lab.curriculum.LegacyCurriculumAdapter
 import com.beril.kaomoji.lab.model.ObjectKind
 import com.beril.kaomoji.lab.model.RelationshipType
+import com.beril.kaomoji.lab.repository.LabRepository
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
@@ -115,5 +116,31 @@ class CurriculumImportTest {
         val dao = FakeLabDao()
         CurriculumImporter(dao).import(pkg)
         assertEquals(ObjectKind.QUESTION, dao.objects["t1"]?.kind)
+    }
+
+    @Test
+    fun `LabRepository importGeneratedCurriculum writes an AI-drafted legacy-shaped JSON tagged with its packageId`() = runTest {
+        val dao = FakeLabDao()
+        val repo = LabRepository(dao)
+
+        repo.importGeneratedCurriculum(legacyJson, packageId = "ai-generated-test")
+
+        assertEquals(ObjectKind.QUESTION, dao.objects["t1"]?.kind)
+        dao.objects.values.forEach { assertEquals("ai-generated-test", it.sourcePackageId) }
+    }
+
+    @Test
+    fun `LabRepository importGeneratedCurriculum throws on garbage AI output instead of silently importing nothing`() = runTest {
+        val dao = FakeLabDao()
+        val repo = LabRepository(dao)
+
+        var threw = false
+        try {
+            repo.importGeneratedCurriculum("this is not json")
+        } catch (_: Exception) {
+            threw = true
+        }
+        assertTrue(threw)
+        assertTrue(dao.objects.isEmpty())
     }
 }
